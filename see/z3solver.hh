@@ -4,6 +4,8 @@
 #include<memory>
 #include <stack>
 #include<string>
+#include <vector>
+#include <utility>
 
 #include "solver.hh"
 #include "z3++.h"
@@ -49,6 +51,14 @@ class Z3InputMaker : public ASTVisitor {
         z3::expr makeZ3Input(Expr* expr);
 	    vector<z3::expr> getVariables();
         z3::context& getContext() { return ctx; }
+
+        // Bind a global (map-typed) variable to its CURRENTLY KNOWN concrete content —
+        // e.g. the real entries sigma has observed for "U" after prior API calls actually
+        // ran — instead of leaving it as an unconstrained free array. Every map in this
+        // tool's specs is string-keyed/string-valued (verified across every *Spec.cpp), so
+        // this binds both the value array and the domain-tracking array as String sorts.
+        // Must be called BEFORE converting an expression that references varName.
+        void bindKnownMap(const string& varName, const vector<pair<string,string>>& entries);
 
     protected:
         // Expression visitor methods (protected, called by base class)
@@ -98,5 +108,11 @@ class Z3Solver : public Solver {
     public:
         Z3Solver(TypeMap* typeMap = nullptr);
         Result solve(unique_ptr<Expr>) const;
+
+        // Same as solve(), but grounds every named global map in `knownMaps` to its
+        // actual current concrete content (key -> vector<pair<key,value>>) before checking
+        // satisfiability — used to ask "is this precondition satisfiable given the REAL
+        // state observed so far", rather than against an unconstrained/free state.
+        Result solve(unique_ptr<Expr> formula, const map<string, vector<pair<string,string>>>& knownMaps) const;
 };
 #endif

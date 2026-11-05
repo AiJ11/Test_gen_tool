@@ -190,9 +190,9 @@ std::unique_ptr<Spec> makeTripVaultSpec() {
             Response(nullptr)
         );
 
-        // POST: tripId in dom(Trips')
+        // POST: _result in dom(Trips')
         vector<unique_ptr<Expr>> inArgs2;
-        inArgs2.push_back(make_unique<Var>("tripId"));
+        inArgs2.push_back(make_unique<Var>("_result"));
         vector<unique_ptr<Expr>> tripsPrimeArgs;
         tripsPrimeArgs.push_back(make_unique<Var>("Trips"));
         vector<unique_ptr<Expr>> domPrimeArgs;
@@ -537,9 +537,9 @@ std::unique_ptr<Spec> makeTripVaultSpec() {
             Response(nullptr)
         );
 
-        // POST: expenseId in dom(E')
+        // POST: _result in dom(E')
         vector<unique_ptr<Expr>> inArgs3;
-        inArgs3.push_back(make_unique<Var>("expenseId"));
+        inArgs3.push_back(make_unique<Var>("_result"));
         vector<unique_ptr<Expr>> ePrimeArgs;
         ePrimeArgs.push_back(make_unique<Var>("E"));
         vector<unique_ptr<Expr>> domPrimeArgs;
@@ -746,9 +746,9 @@ std::unique_ptr<Spec> makeTripVaultSpec() {
             Response(nullptr)
         );
 
-        // POST: proposalId in dom(Proposals')
+        // POST: _result in dom(Proposals')
         vector<unique_ptr<Expr>> inArgs3;
-        inArgs3.push_back(make_unique<Var>("proposalId"));
+        inArgs3.push_back(make_unique<Var>("_result"));
         vector<unique_ptr<Expr>> propPrimeArgs;
         propPrimeArgs.push_back(make_unique<Var>("Proposals"));
         vector<unique_ptr<Expr>> domPrimeArgs;

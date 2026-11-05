@@ -6,8 +6,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
 
-# Make data base, printed on Thu Jan 15 20:30:03 2026
+# Make data base, printed on Thu Nov  5 21:08:45 2026
 
 # Variables
 
@@ -21,14 +22,20 @@ OPAM_SWITCH_PREFIX = /Users/apple/.opam/5.1.0
 OCAML_TOPLEVEL_PATH = /Users/apple/.opam/5.1.0/lib/toplevel
 # environment
 VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
+# makefile (from `makefile', line 36)
+TARGET = test_libapplication
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
+# makefile (from `makefile', line 22)
+INCLUDES = -I$(BREW_PREFIX)/include
+# makefile (from `makefile', line 18)
+BREW_PREFIX := /usr/local
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /Users/apple/Desktop/test OG 5
+CURDIR := /Users/apple/Desktop/TestgenTool
 # makefile
 SHELL = /bin/sh
 # environment
@@ -37,26 +44,30 @@ VSCODE_NLS_CONFIG = {"userLocale":"en-gb","osLocale":"en-in","resolvedLanguage":
 _ = /usr/bin/make
 # makefile (from `makefile', line 1)
 MAKEFILE_LIST :=  makefile
-# makefile (from `makefile', line 4)
-CXXFLAGS = -std=c++17 -Wall -Wextra -I. -g -O2
+# makefile (from `makefile', line 6)
+CXXFLAGS = -std=c++17 -Wall -I. -Isee -Itester -Ispecs -Wno-delete-non-abstract-non-virtual-dtor -Wno-unqualified-std-cast-call -Wno-reorder-ctor -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
+USER = apple
+# environment
 VSCODE_CWD = /
 # environment
-PATH = /Users/apple/.opam/5.1.0/bin:/usr/local/opt/bison/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/TeX/texbin:/Users/apple/Library/Application Support/org.dfinity.dfx/bin:/Users/apple/.cargo/bin
-# makefile (from `makefile', line 8)
-SYMBOLIC_SOURCES = SymbolicEngine/TestGenSymbolicEnv.cpp SymbolicEngine/TestGenSymbolicVisitor.cpp SymbolicEngine/TestGenDriver.cpp
+PATH = /Users/apple/.opam/5.1.0/bin:/usr/local/opt/bison/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/TeX/texbin:/Users/apple/Library/Application Support/org.dfinity.dfx/bin:/Users/apple/.cargo/bin:/Users/apple/.docker/bin
+# environment
+VSCODE_NODE_COMPILE_CACHE_ROOT = /Users/apple/Desktop/Visual Studio Code.app/Contents/Resources/app/node-compile-cache
 # environment
 ELECTRON_RUN_AS_NODE = 1
+# makefile (from `makefile', line 26)
+LDFLAGS = -L$(BREW_PREFIX)/lib -L$(BREW_PREFIX)/opt/curl/lib
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.TstNS04VDM/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.6b39tvfbGT/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
-PWD = /Users/apple/Desktop/test OG 5
+PWD = /Users/apple/Desktop/TestgenTool
 # environment
 MANPATH = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/share/man:/Library/Developer/CommandLineTools/usr/share/man:/Library/Developer/CommandLineTools/Toolchains/XcodeDefault.xctoolchain/usr/share/man:
 # environment
@@ -64,7 +75,7 @@ HOME = /Users/apple
 # default
 MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/apple/Library/Application Support/Code/CachedData/94e8ae2b28cb5cc932b86e1070569c4463565c37
+VSCODE_CODE_CACHE_PATH = /Users/apple/Library/Application Support/Code/CachedData/2c33b50b16c472efe58357d1d2a8a5414bc23fbf
 # environment
 LOGNAME = apple
 # environment
@@ -81,6 +92,8 @@ XPC_FLAGS = 0x0
 MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
+# makefile (from `makefile', line 39)
+SRCS = test_libapplication.cpp algo.cpp ast.cc astvisitor.cc printvisitor.cc clonevisitor.cc rewrite_globals_visitor.cc symvar.cc env.cc typemap.cc specs/RestaurantSpec.cpp specs/EcommerceSpec.cpp specs/LibrarySpec.cpp specs/TripVaultSpec.cpp specs/GhostSocketSpec.cpp specs/ServeezSpec.cpp specs/ReservationSpec.cpp see/see.cc see/solver.cc see/z3solver.cc see/functionfactory.cc see/httpclient.cc see/restaurantfunctionfactory.cc see/ecommercefunctionfactory.cc see/libraryfunctionfactory.cc see/tripvaultfunctionfactory.cc see/ghostsocketfunctionfactory.cc see/serveezfunctionfactory.cc see/reservationfunctionfactory.cc tester/tester.cc
 # environment
 SHLVL = 1
 # environment
@@ -90,15 +103,19 @@ JAVA_HOME = /Users/apple/Library/Java/JavaVirtualMachines/openjdk-23.0.2/Content
 # default
 MAKE_VERSION := 3.81
 # environment
-USER = apple
+COPILOT_OTEL_FILE_EXPORTER_PATH = /dev/null
 # environment
 CAML_LD_LIBRARY_PATH = /Users/apple/.opam/5.1.0/lib/stublibs:/Users/apple/.opam/5.1.0/lib/ocaml/stublibs:/Users/apple/.opam/5.1.0/lib/ocaml
 # makefile
-.DEFAULT_GOAL := basic
+.DEFAULT_GOAL := all
 # environment
 APPLICATION_INSIGHTS_NO_STATSBEAT = true
+# environment
+NoDefaultCurrentDirectoryInExePath = 1
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
+# environment
+MACH_PORT_RENDEZVOUS_PEER_VALDATION = 1
 # default
 MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
 # default
@@ -108,7 +125,7 @@ TMPDIR = /var/folders/s8/f5g2tsvx62jdr7wg1k_fczsr0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/apple/Library/Application Support/Code/1.10-main.sock
+VSCODE_IPC_HOOK = /Users/apple/Library/Application Support/Code/1.14-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -118,15 +135,13 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.41255575.41255581
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.55888764.55888770
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
 VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 +F = $(notdir $+)
-# makefile (from `makefile', line 6)
-CORE_SOURCES = test_libapplication.cpp jsCodeGenerator/jsCodeGen.cpp
 # environment
 __CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x0
 # environment
@@ -135,10 +150,12 @@ COMMAND_MODE = unix2003
 MAKEFILES := 
 # automatic
 <F = $(notdir $<)
-# makefile (from `makefile', line 2)
+# makefile (from `makefile', line 5)
 CXX = g++
 # environment
 LC_ALL = C
+# makefile (from `makefile', line 33)
+LIBS = -lz3 -lcurl
 # automatic
 ^F = $(notdir $^)
 # default
@@ -150,9 +167,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 9921
+VSCODE_PID = 38508
 # variable set hash-table stats:
-# Load=70/1024=7%, Rehash=0, Collisions=1/97=1%
+# Load=78/1024=8%, Rehash=0, Collisions=2/112=2%
 
 # Pattern-specific Variable Values
 
@@ -160,9 +177,9 @@ VSCODE_PID = 9921
 
 # Directories
 
-# . (device 16777222, inode 40378265): 81 files, no impossibilities.
+# . (device 16777222, inode 48746004): 51 files, no impossibilities.
 
-# 81 files, no impossibilities in 1 directories.
+# 51 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -171,30 +188,135 @@ VSCODE_PID = 9921
 # Files
 
 # Not a target:
-SymbolicEngine/TestGenSymbolicVisitor.cpp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-# Not a target:
-all:
-#  Command-line target.
+printvisitor.cc:
 #  Implicit rule search has been done.
-#  File does not exist.
-#  File has not been updated.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-.PHONY: basic symbolic clean help
+run-reservation: test_libapplication
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `makefile', line 84):
+	./$(TARGET) reservation
+	
+
+# Not a target:
+see/see.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-10-15 15:24:00
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+env.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+all: test_libapplication
+#  Phony target (prerequisite of .PHONY).
+#  Command-line target.
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+specs/GhostSocketSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+specs/RestaurantSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+.PHONY: all run clean rebuild help
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
+symvar.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+typemap.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/z3solver.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-10-15 15:35:27
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+algo.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+specs/TripVaultSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/solver.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
 test_libapplication.cpp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+#  Implicit rule search has been done.
+#  Last modified 2026-10-14 21:01:22
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
 .SUFFIXES:
@@ -202,56 +324,127 @@ test_libapplication.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-makefile:
-#  Implicit rule search has been done.
-#  Last modified 2025-09-07 17:46:58
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
-
-basic: testgen_basic
+rebuild: clean all
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
 
 # Not a target:
-SymbolicEngine/TestGenSymbolicEnv.cpp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+see/functionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/serveezfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  Last modified 2026-10-14 21:04:31
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/libraryfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+clonevisitor.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+tester/tester.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-10-15 15:34:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+astvisitor.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 help:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 28):
-	@echo "make basic     - Build basic TestGen"
-	@echo "make symbolic  - Build TestGen + SymbolicEngine"
+#  commands to execute (from `makefile', line 95):
+	@echo "TestGen Makefile"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make          - Build the project"
+	@echo "  make run      - Build and run the project (ARGS=<backend> to pick one)"
+	@echo "  make run-reservation - Build and run the Reservations API suite"
+	@echo "  make clean    - Remove build artifacts"
+	@echo "  make rebuild  - Clean and rebuild"
+	@echo "  make help     - Show this help message"
 	
 
 # Not a target:
-SymbolicEngine/TestGenDriver.cpp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-testgen_symbolic: test_libapplication.cpp jsCodeGenerator/jsCodeGen.cpp SymbolicEngine/TestGenSymbolicEnv.cpp SymbolicEngine/TestGenSymbolicVisitor.cpp SymbolicEngine/TestGenDriver.cpp
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `makefile', line 20):
-	$(CXX) $(CXXFLAGS) -ISymbolicEngine -DUSE_SYMBOLIC_ENGINE $^ -o $@
-	
+specs/ReservationSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-09-13 22:22:03
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
-jsCodeGenerator/jsCodeGen.cpp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+specs/ServeezSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/httpclient.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+specs/LibrarySpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
 .DEFAULT:
@@ -259,12 +452,51 @@ jsCodeGenerator/jsCodeGen.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-testgen_basic: test_libapplication.cpp jsCodeGenerator/jsCodeGen.cpp
+# Not a target:
+see/ghostsocketfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/restaurantfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+test_libapplication: test_libapplication.cpp algo.cpp ast.cc astvisitor.cc printvisitor.cc clonevisitor.cc rewrite_globals_visitor.cc symvar.cc env.cc typemap.cc specs/RestaurantSpec.cpp specs/EcommerceSpec.cpp specs/LibrarySpec.cpp specs/TripVaultSpec.cpp specs/GhostSocketSpec.cpp specs/ServeezSpec.cpp specs/ReservationSpec.cpp see/see.cc see/solver.cc see/z3solver.cc see/functionfactory.cc see/httpclient.cc see/restaurantfunctionfactory.cc see/ecommercefunctionfactory.cc see/libraryfunctionfactory.cc see/tripvaultfunctionfactory.cc see/ghostsocketfunctionfactory.cc see/serveezfunctionfactory.cc see/reservationfunctionfactory.cc tester/tester.cc
 #  Implicit rule search has not been done.
-#  Modification time never checked.
+#  Last modified 2026-10-15 15:36:25
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `makefile', line 75):
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SRCS) $(LDFLAGS) $(LIBS) -o $(TARGET)
+	
+
+# Not a target:
+see/reservationfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-09-13 22:01:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+run: test_libapplication
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 14):
-	$(CXX) $(CXXFLAGS) $^ -o $@
+#  commands to execute (from `makefile', line 80):
+	./$(TARGET) $(ARGS)
 	
 
 clean:
@@ -272,18 +504,57 @@ clean:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 24):
-	rm -f testgen_basic testgen_symbolic .o jsCodeGenerator/.o SymbolicEngine/*.o
+#  commands to execute (from `makefile', line 88):
+	rm -f $(TARGET)
 	
 
-symbolic: testgen_symbolic
-#  Phony target (prerequisite of .PHONY).
-#  Implicit rule search has not been done.
-#  File does not exist.
-#  File has not been updated.
+# Not a target:
+see/ecommercefunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+ast.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+specs/EcommerceSpec.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+rewrite_globals_visitor.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+see/tripvaultfunctionfactory.cc:
+#  Implicit rule search has been done.
+#  Last modified 2026-06-20 22:51:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # files hash-table stats:
-# Load=16/1024=2%, Rehash=0, Collisions=0/41=0%
+# Load=41/1024=4%, Rehash=0, Collisions=4/94=4%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -295,8 +566,6 @@ symbolic: testgen_symbolic
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Thu Jan 15 20:30:03 2026
+# Finished Make data base on Thu Nov  5 21:08:45 2026
 
  
-make: *** No rule to make target `all'.  Stop.
-

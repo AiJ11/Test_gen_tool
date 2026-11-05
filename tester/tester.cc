@@ -5,6 +5,7 @@
 #include "../printvisitor.hh"
 #include <iostream>
 #include <set>
+#include <algorithm>
 
 static const std::map<std::string, std::set<std::string>> operationProducesState = {
 
@@ -185,6 +186,28 @@ static const std::map<std::string, std::set<std::string>> operationProducesState
     {"getListingReviewsOk",         {}},
     {"createListingUnauthErr",      {}},
     {"createBookingAsProviderErr",  {}},
+
+    // ========================================
+    // RESERVATIONS APP OPERATIONS
+    // ========================================
+    {"registerOk",                       {"U", "Em", "Roles"}},
+    {"registerDuplicateUsernameErr",     {}},
+    {"registerDuplicateEmailErr",        {}},
+    {"loginOk",                          {"T"}},
+    {"loginAdminOk",                     {"T"}},
+    {"loginBadCredentialsErr",           {}},
+    {"createReservationOk",              {"Res", "ResFrom", "ResTo"}},
+    {"createReservationDateOrderErr",    {}},
+    {"createReservationPastDateErr",     {}},
+    {"createReservationOverlapErr",      {}},
+    {"updateReservationOk",              {}}, // mutates existing ResFrom/ResTo entries, doesn't grow the map's domain
+    {"updateReservationNotFoundErr",     {}},
+    {"updateReservationSelfOverlapErr",  {}},
+    {"deleteReservationOk",              {}},
+    {"deleteReservationNonexistentOk",   {}},
+    {"getAllReservationsForUserOk",      {}},
+    {"getAllReservationsOk",             {}},
+    {"getAllReservationsForbiddenErr",   {}},
 };
 
 // Mapping: Operation -> State variables that MUST be non-empty before this op
@@ -331,6 +354,30 @@ static const std::map<std::string, std::set<std::string>> operationRequiresState
     {"getListingReviewsOk",         {"L"}},
     {"createListingUnauthErr",      {"C"}},
     {"createBookingAsProviderErr",  {"P", "L"}},
+
+    // ========================================
+    // RESERVATIONS APP REQUIREMENTS
+    // ========================================
+    // NOTE: registerOk/registerDuplicate*Err/loginOk/loginAdminOk/loginBadCredentialsErr are
+    // deliberately NOT listed here. Unlike every other app in this tool, ReservationSpec.cpp
+    // pre-seeds U/Em/Roles with fixture accounts (admin/foo/bar) directly in its Init block
+    // (see the ⚠ ASSUMPTION comment there) instead of starting them empty, specifically so the
+    // ADMIN-only get-all-reservations path is reachable even though register() can never
+    // produce an ADMIN account. That means U/Em/Roles are available from the start of ANY
+    // sequence, with no producing op required — listing them here would make
+    // isSequenceTrulyUnsat() wrongly reject a valid stand-alone loginOk/loginAdminOk sequence.
+    {"createReservationOk",              {"T"}},
+    {"createReservationDateOrderErr",    {"T"}},
+    {"createReservationPastDateErr",     {"T"}},
+    {"createReservationOverlapErr",      {"T", "Res"}},
+    {"updateReservationOk",              {"T", "Res"}},
+    {"updateReservationNotFoundErr",     {"T"}},
+    {"updateReservationSelfOverlapErr",  {"T", "Res"}},
+    {"deleteReservationOk",              {"T", "Res"}},
+    {"deleteReservationNonexistentOk",   {"T"}},
+    {"getAllReservationsForUserOk",      {"T"}},
+    {"getAllReservationsOk",             {"T"}},
+    {"getAllReservationsForbiddenErr",   {"T"}},
 };
 /**
  * Check if the operation sequence has all required dependencies.
@@ -580,6 +627,11 @@ bool needsSigmaLookup(const string &baseName)
     if (baseName == "productId" ||
         baseName == "cartId" ||
         baseName == "reviewId")
+    {
+        return true;
+    }
+    // Reservations app IDs
+    if (baseName == "existingUuid")
     {
         return true;
     }
@@ -1152,6 +1204,308 @@ Expr *Tester::generateValueForBaseName(const string &baseName, const string &var
         static int svzListingCounter = 0;
         value = new String("TestListing" + to_string(++svzListingCounter));
     }
+    else if (baseName == "catId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_C_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] catId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_CATEGORY_ID__");
+                cout << "    [DEFERRED] catId - no category in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_CATEGORY_ID__");
+        }
+    }
+    else if (baseName == "listingId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_L_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] listingId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_LISTING_ID__");
+                cout << "    [DEFERRED] listingId - no listing in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_LISTING_ID__");
+        }
+    }
+    else if (baseName == "bookingId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_B_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] bookingId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_BOOKING_ID__");
+                cout << "    [DEFERRED] bookingId - no booking in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_BOOKING_ID__");
+        }
+    }
+
+    // ========================================
+    // TRIPVAULT APP VARIABLES
+    // ========================================
+    else if (baseName == "userPassword" || baseName == "user2Password")
+    {
+        value = new String("TestPassword123!");
+    }
+    else if (baseName == "user2Email" || baseName == "memberEmail")
+    {
+        static int tvUser2Counter = 0;
+        value = new String("tvuser2_" + to_string(++tvUser2Counter) + "@tripvault.com");
+    }
+    else if (baseName == "tripName")
+    {
+        static int tvTripNameCounter = 0;
+        value = new String("Test Trip " + to_string(++tvTripNameCounter));
+    }
+    else if (baseName == "destination")
+    {
+        value = new String("Test Destination");
+    }
+    else if (baseName == "expenseTitle")
+    {
+        static int tvExpenseTitleCounter = 0;
+        value = new String("Test Expense " + to_string(++tvExpenseTitleCounter));
+    }
+    else if (baseName == "amount")
+    {
+        value = new Num(500);
+    }
+    else if (baseName == "proposalTitle")
+    {
+        static int tvProposalTitleCounter = 0;
+        value = new String("Test Proposal " + to_string(++tvProposalTitleCounter));
+    }
+    else if (baseName == "proposalType")
+    {
+        value = new String("discussion");
+    }
+    else if (baseName == "tripId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_Trips_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] tripId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_TRIP_ID__");
+                cout << "    [DEFERRED] tripId - no trip in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_TRIP_ID__");
+        }
+    }
+    else if (baseName == "expenseId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_E_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] expenseId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_EXPENSE_ID__");
+                cout << "    [DEFERRED] expenseId - no expense in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_EXPENSE_ID__");
+        }
+    }
+    else if (baseName == "proposalId")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_Proposals_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] proposalId = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_PROPOSAL_ID__");
+                cout << "    [DEFERRED] proposalId - no proposal in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_PROPOSAL_ID__");
+        }
+    }
+
+    // ========================================
+    // RESERVATIONS APP VARIABLES
+    // ========================================
+    else if (baseName == "username")
+    {
+        static int resUserCounter = 0;
+        value = new String("resuser" + to_string(++resUserCounter));
+    }
+    else if (baseName == "email")
+    {
+        static int resEmailCounter = 0;
+        value = new String("resuser" + to_string(++resEmailCounter) + "@example.com");
+    }
+    else if (baseName == "password")
+    {
+        static int resPasswordCounter = 0;
+        value = new String("ResPass" + to_string(++resPasswordCounter) + "!");
+    }
+    else if (baseName == "username2")
+    {
+        static int resUser2Counter = 0;
+        value = new String("resuser2_" + to_string(++resUser2Counter));
+    }
+    else if (baseName == "email2")
+    {
+        static int resEmail2Counter = 0;
+        value = new String("resuser2_" + to_string(++resEmail2Counter) + "@example.com");
+    }
+    else if (baseName == "password2")
+    {
+        static int resPassword2Counter = 0;
+        value = new String("ResPass2_" + to_string(++resPassword2Counter) + "!");
+    }
+    // Pre-seeded fixture accounts (see ReservationSpec.cpp's Init block / init.json) — used
+    // by registerDuplicateUsernameErr/registerDuplicateEmailErr so those blocks are
+    // satisfiable stand-alone, without depending on a prior registerOk in the same sequence.
+    else if (baseName == "existingUsername")
+    {
+        value = new String("foo");
+    }
+    else if (baseName == "existingEmail")
+    {
+        value = new String("foo@foo.com");
+    }
+    // The ONLY account that can ever reach ADMIN-gated endpoints — register() always assigns
+    // USER, so this must match the seeded fixture exactly, not be freshly generated.
+    else if (baseName == "adminUsername")
+    {
+        value = new String("admin");
+    }
+    else if (baseName == "adminPassword")
+    {
+        value = new String("bar123");
+    }
+    // NOTE: "wrongPassword" needs no entry here — it's already handled near the top of this
+    // function ("WrongPass123!"), shared with RestaurantSpec's login-failure blocks.
+    else if (baseName == "reservationFor")
+    {
+        static int resForCounter = 0;
+        value = new String("Guest" + to_string(++resForCounter));
+    }
+    // Date format is "yyyy-MM-dd HH:mm:ss" (DateTimeAware.DATE_TIME_FORMAT) — space-separated,
+    // NO "T", NO milliseconds, unlike the ISO-ish strings used elsewhere in this file. Distinct
+    // reservationFrom/reservationTo use unconditionally different months (March vs June 2027)
+    // so reservationFrom < reservationTo holds structurally regardless of how their two
+    // independent counters happen to line up (mirrors this file's existing startDate/endDate
+    // pattern, which has the same independent-counter looseness).
+    else if (baseName == "reservationFrom")
+    {
+        static int resFromCounter = 0;
+        int day = 10 + (resFromCounter++ % 15);
+        value = new String("2027-03-" + (day < 10 ? string("0") : string("")) + to_string(day) + " 09:00:00");
+    }
+    else if (baseName == "reservationTo")
+    {
+        static int resToCounter = 0;
+        int day = 10 + (resToCounter++ % 15);
+        value = new String("2027-06-" + (day < 10 ? string("0") : string("")) + to_string(day) + " 11:00:00");
+    }
+    // updateReservationOk's fresh window — different months again (September/December 2027)
+    // so it can't accidentally collide with createReservationOk's March/June window either.
+    else if (baseName == "updatedReservationFrom")
+    {
+        static int resUpdFromCounter = 0;
+        int day = 10 + (resUpdFromCounter++ % 15);
+        value = new String("2027-09-" + (day < 10 ? string("0") : string("")) + to_string(day) + " 09:00:00");
+    }
+    else if (baseName == "updatedReservationTo")
+    {
+        static int resUpdToCounter = 0;
+        int day = 10 + (resUpdToCounter++ % 15);
+        value = new String("2027-12-" + (day < 10 ? string("0") : string("")) + to_string(day) + " 11:00:00");
+    }
+    else if (baseName == "createdAt")
+    {
+        // Client-supplied and unvalidated (confirmed in CreateReservationRequest/
+        // ReservationServiceImpl) — any well-formed value in the same format is accepted.
+        value = new String("2024-01-01 00:00:00");
+    }
+    // existingUuid: an actual reservation's Mongo-assigned id, resolved from sigma the same
+    // way productId/restaurantId/etc. are (see needsSigmaLookup()); falls back to a deferred
+    // placeholder resolved later by SEE::findReservationUuidFromSigma() (see.cc) if no
+    // reservation exists in sigma yet at generation time.
+    else if (baseName == "existingUuid")
+    {
+        if (lookupFromSigma)
+        {
+            string realId = findKeyFromMapInSigma("tmp_Res_");
+            if (!realId.empty())
+            {
+                value = new String(realId);
+                cout << "    [RESOLVED from sigma] existingUuid = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                value = new String("__NEEDS_RESERVATION_UUID__");
+                cout << "    [DEFERRED] existingUuid - no reservation in sigma yet" << endl;
+            }
+        }
+        else
+        {
+            value = new String("__NEEDS_RESERVATION_UUID__");
+        }
+    }
+    // nonexistentUuid: syntactically a valid Mongo ObjectId-shaped string (Reservation.uuid is
+    // a plain @Id String with no UUID-format generator — MapStruct ignores it on create and
+    // Mongo assigns its default ObjectId hex string) that is virtually certain never to have
+    // been assigned to a real document.
+    else if (baseName == "nonexistentUuid")
+    {
+        static int resMissingCounter = 0;
+        string suffix = to_string(++resMissingCounter);
+        while (suffix.length() < 2) suffix = "0" + suffix;
+        value = new String("ffffffffffffffffffffff" + suffix);
+    }
 
     // ========================================
     // GENERIC FALLBACK (MUST BE LAST!)
@@ -1350,6 +1704,92 @@ void resolvePlaceholdersInPlace(vector<Expr *> &concreteVals,
                 cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
             }
         }
+        // SERVEEZ CHECK
+        else if (strVal->value == "__NEEDS_CATEGORY_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_C_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
+        else if (strVal->value == "__NEEDS_LISTING_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_L_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
+        else if (strVal->value == "__NEEDS_BOOKING_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_B_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
+        // TRIPVAULT CHECK
+        else if (strVal->value == "__NEEDS_TRIP_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_Trips_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
+        else if (strVal->value == "__NEEDS_EXPENSE_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_E_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
+        else if (strVal->value == "__NEEDS_PROPOSAL_ID__")
+        {
+            string realId = tester->findKeyFromMapInSigma("tmp_Proposals_");
+            if (!realId.empty())
+            {
+                delete concreteVals[i];
+                concreteVals[i] = new String(realId);
+                cout << "    [RESOLVED] " << varNames[i] << " = \"" << realId << "\"" << endl;
+            }
+            else
+            {
+                cout << "    [STILL PENDING] " << varNames[i] << " - keeping placeholder for next iteration" << endl;
+            }
+        }
     }
 }
 
@@ -1456,6 +1896,56 @@ void resolvePlaceholdersInProgram(Program &prog, Tester *tester)
                             newValue = "no_loan_available";
                         }
                     }
+                    // SERVEEZ IDs
+                    else if (str->value == "__NEEDS_CATEGORY_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_C_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_category_available";
+                        }
+                    }
+                    else if (str->value == "__NEEDS_LISTING_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_L_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_listing_available";
+                        }
+                    }
+                    else if (str->value == "__NEEDS_BOOKING_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_B_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_booking_available";
+                        }
+                    }
+                    // TRIPVAULT IDs
+                    else if (str->value == "__NEEDS_TRIP_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_Trips_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_trip_available";
+                        }
+                    }
+                    else if (str->value == "__NEEDS_EXPENSE_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_E_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_expense_available";
+                        }
+                    }
+                    else if (str->value == "__NEEDS_PROPOSAL_ID__")
+                    {
+                        newValue = tester->findKeyFromMapInSigma("tmp_Proposals_");
+                        if (newValue.empty())
+                        {
+                            newValue = "no_proposal_available";
+                        }
+                    }
 
                     if (!newValue.empty())
                     {
@@ -1473,7 +1963,280 @@ void resolvePlaceholdersInProgram(Program &prog, Tester *tester)
         }
     }
 }
-bool isPathConstraintUnsat(SEE &see, const std::vector<std::string> &sequence)
+// Collect every API block's PRE-condition in the sequence, in its original, symbolic
+// (un-concretized) form — i.e. the expression of every Assume statement in the ATC.
+// Trivial preconditions (bare Num/BoolConst "true", used by blocks with no real PRE,
+// e.g. public endpoints) are skipped: they can never be the source of a concrete-false
+// path constraint entry, and they aren't even boolean-sorted in Z3 (Num converts to an
+// int_val), so handing one to the solver would be both pointless and unsafe.
+//
+// We deliberately check ALL of them rather than guessing which one is "the" failing
+// block positionally — a later block in the sequence can have a trivially-true
+// precondition (so it's the textual last Assume) while an EARLIER block is the one that
+// actually failed. Checking every non-trivial precondition and treating ANY of them
+// being Z3-UNSAT as sufficient avoids needing precise statement-to-pathConstraint-index
+// correlation (which conditional Assert pushes make ambiguous without re-evaluating).
+vector<Expr *> collectNonTrivialAssumeExprs(const Program &prog)
+{
+    vector<Expr *> result;
+    for (const auto &stmt : prog.statements)
+    {
+        if (stmt->statementType != StmtType::ASSUME)
+            continue;
+        Assume *a = dynamic_cast<Assume *>(stmt.get());
+        if (!a || !a->expr)
+            continue;
+        if (a->expr->exprType == ExprType::FUNCCALL)
+        {
+            result.push_back(a->expr.get());
+        }
+    }
+    return result;
+}
+
+// ============================================================================
+// INTENDED-EFFECTS STATE (backend-independent grounding for Z3)
+// ============================================================================
+// ⚠ SUPERSEDES an earlier version of this function that grounded Z3 against sigma's
+// ACTUALLY OBSERVED state (fetched via live get_G() HTTP calls). That approach was
+// correctness-unsound as the sole UNSAT authority: every global in this tool's generated
+// programs is refreshed by a real get_<Global>() call (rewrite_globals_visitor.cc's
+// "tmp := get_G()" step), so when the backend is unreachable, sigma looks empty/wrong
+// regardless of whether the TEST SEQUENCE is actually well-formed — Z3 would then call
+// almost everything UNSAT purely from infrastructure unavailability, not from any real
+// precondition problem (verified: this regressed Restaurant 17->3 COMPLETE, TripVault
+// 21->0, purely from backend downtime). Grounding against live state also makes the
+// verdict literally change depending on whether a backend happens to be running, which
+// cannot be what "Z3 determines satisfiability" should mean.
+//
+// This function instead reconstructs what EVERY map SHOULD contain if each prior block's
+// own POST-condition took effect, using only the CONCRETE VALUES actually chosen for this
+// run — entirely independent of whether any HTTP call actually succeeded. It works by a
+// single forward scan of the REWRITTEN (concretized) program:
+//   - An ASSIGN of a string literal records that variable's chosen concrete value.
+//   - An ASSIGN of a map literal (Init statements, e.g. ReservationSpec.cpp's pre-seeded
+//     U/Em/Roles) seeds that map's starting content directly.
+//   - An ASSERT matching the structural pattern "MapVar[KeyExpr] = ValueExpr" (optionally
+//     AND-combined) is read as "this block claims it added KeyExpr->ValueExpr to MapVar" —
+//     exactly what a POST-condition like registerOk's "U'[username]=password" asserts —
+//     and is recorded regardless of whether that ASSERT concretely evaluated true or false
+//     when actually run (that's the whole point: independent of live execution outcome).
+//   - An ASSERT matching "KeyExpr not_in dom(MapVar)" is read as a deletion (e.g.
+//     deleteReservationOk's postcondition) and removes any matching entry.
+// A key or value that's a bare Var with no recorded concrete value (e.g. a server-generated
+// id held in "_result3", or a role/status literal like USER) falls back to using the Var's
+// own name as a sentinel — sufficient for Z3 to treat it as SOME determinate value that a
+// later block's dom()-membership check can be satisfied against, which is all a
+// feasibility check needs (not the literal real id).
+//
+// Keys are the EXACT versioned map name as RewriteGlobalsVisitor renamed it in this
+// specific ASSERT (e.g. "tmp_U_1"), which is exactly what a later block's PRE-condition
+// Var references too — no separate name translation needed.
+
+static string resolveToConcreteOrSentinel(Expr *e, const map<string, string> &concreteValues)
+{
+    if (!e)
+        return "";
+    if (e->exprType == ExprType::STRING)
+        return dynamic_cast<String *>(e)->value;
+    if (e->exprType == ExprType::VAR)
+    {
+        const string &name = dynamic_cast<Var *>(e)->name;
+        auto it = concreteValues.find(name);
+        return it != concreteValues.end() ? it->second : name; // sentinel fallback
+    }
+    return "";
+}
+
+static void applyPostEffect(Expr *e, const map<string, string> &concreteValues,
+                             map<string, vector<pair<string, string>>> &state)
+{
+    if (!e || e->exprType != ExprType::FUNCCALL)
+        return;
+    FuncCall *fc = dynamic_cast<FuncCall *>(e);
+    if (!fc)
+        return;
+
+    if (fc->name == "AND" || fc->name == "And" || fc->name == "and" || fc->name == "&&")
+    {
+        for (const auto &arg : fc->args)
+            applyPostEffect(arg.get(), concreteValues, state);
+        return;
+    }
+
+    // "MapVar[KeyExpr] = ValueExpr" — claims an addition
+    if ((fc->name == "=" || fc->name == "Eq" || fc->name == "==") && fc->args.size() == 2)
+    {
+        Expr *lhs = fc->args[0].get();
+        if (lhs->exprType != ExprType::FUNCCALL)
+            return;
+        FuncCall *idx = dynamic_cast<FuncCall *>(lhs);
+        if (!idx || idx->name != "[]" || idx->args.size() != 2 || idx->args[0]->exprType != ExprType::VAR)
+            return;
+
+        string mapName = dynamic_cast<Var *>(idx->args[0].get())->name;
+        string key = resolveToConcreteOrSentinel(idx->args[1].get(), concreteValues);
+        string val = resolveToConcreteOrSentinel(fc->args[1].get(), concreteValues);
+        if (!key.empty())
+            state[mapName].push_back({key, val});
+        return;
+    }
+
+    // "KeyExpr not_in dom(MapVar)" — claims a deletion
+    if ((fc->name == "not_in" || fc->name == "not_member" || fc->name == "not_contains") && fc->args.size() == 2)
+    {
+        Expr *rhs = fc->args[1].get();
+        if (rhs->exprType != ExprType::FUNCCALL)
+            return;
+        FuncCall *domCall = dynamic_cast<FuncCall *>(rhs);
+        if (!domCall || domCall->name != "dom" || domCall->args.size() != 1 ||
+            domCall->args[0]->exprType != ExprType::VAR)
+            return;
+
+        string mapName = dynamic_cast<Var *>(domCall->args[0].get())->name;
+        string key = resolveToConcreteOrSentinel(fc->args[0].get(), concreteValues);
+        auto it = state.find(mapName);
+        if (it != state.end())
+        {
+            auto &vec = it->second;
+            vec.erase(std::remove_if(vec.begin(), vec.end(),
+                                      [&](const pair<string, string> &p) { return p.first == key; }),
+                      vec.end());
+        }
+        return;
+    }
+
+    // "KeyExpr in dom(MapVar)" — claims an addition to the map's DOMAIN only (e.g.
+    // createRestaurantOk's "_result in dom(R')", createProductOk's "_result in dom(P')").
+    // This is just as common as the "MapVar[Key]=Value" pattern above and was the actual
+    // cause of a real regression: without this case, a map ONLY ever written via "in
+    // dom(...)" postconditions (never via "[]=") never accumulated any entries at all, so
+    // e.g. Restaurant's createRestaurantOk looked like it added nothing to R, and the next
+    // block's "restaurantId in dom(R)" precondition was wrongly judged UNSAT.
+    //
+    // This pattern doesn't specify an associated VALUE, only that the key now exists — so
+    // push an EMPTY-STRING marker rather than guessing one. bindKnownMap (z3solver.cc)
+    // treats that marker specially: it marks the key present in the domain array but
+    // deliberately does NOT constrain the value array for it, leaving Z3 free to choose any
+    // value there. That matters for a real case this surfaced: createOrderOk only ever
+    // asserts "_result in dom(O')" (no value), but createReviewOk's PRE later checks
+    // "O[orderId] = buyerEmail" — an actual value equality. Using the key itself (or any
+    // other fixed guess) as a fake value made that check provably UNSAT every time (a real
+    // regression caught by testing against live Ecommerce: Tests 17/18/21 wrongly flipped
+    // from passing to UNSAT). Leaving it genuinely free lets Z3 satisfy that later equality
+    // correctly instead of contradicting a value we never actually knew.
+    if ((fc->name == "in" || fc->name == "member" || fc->name == "contains") && fc->args.size() == 2)
+    {
+        Expr *rhs = fc->args[1].get();
+        if (rhs->exprType != ExprType::FUNCCALL)
+            return;
+        FuncCall *domCall = dynamic_cast<FuncCall *>(rhs);
+        if (!domCall || domCall->name != "dom" || domCall->args.size() != 1 ||
+            domCall->args[0]->exprType != ExprType::VAR)
+            return;
+
+        string mapName = dynamic_cast<Var *>(domCall->args[0].get())->name;
+        string key = resolveToConcreteOrSentinel(fc->args[0].get(), concreteValues);
+        if (!key.empty())
+            state[mapName].push_back({key, ""}); // "" = present in domain, value left free
+        return;
+    }
+    // Other postcondition shapes (non-map equalities like "_result = 200", etc.) don't
+    // assert new map content — nothing to record.
+}
+
+// "tmp_U_2" -> "U"; a bare/unversioned name ("U") maps to itself.
+static string baseGlobalName(const string &versionedName)
+{
+    if (versionedName.rfind("tmp_", 0) == 0)
+    {
+        size_t lastUnderscore = versionedName.rfind('_');
+        if (lastUnderscore != string::npos && lastUnderscore > 4)
+        {
+            string suffix = versionedName.substr(lastUnderscore + 1);
+            bool allDigits = !suffix.empty() &&
+                              std::all_of(suffix.begin(), suffix.end(), [](unsigned char c) { return std::isdigit(c); });
+            if (allDigits)
+                return versionedName.substr(4, lastUnderscore - 4);
+        }
+    }
+    return versionedName;
+}
+
+map<string, vector<pair<string, string>>> buildIntendedMapState(const Program &rewrittenProg)
+{
+    map<string, vector<pair<string, string>>> result;
+    map<string, string> concreteValues;
+    // base global name (e.g. "U") -> most recent versioned key seen for it (e.g. "tmp_U_1")
+    map<string, string> latestVersionForBaseName;
+
+    for (const auto &stmt : rewrittenProg.statements)
+    {
+        if (stmt->statementType == StmtType::ASSIGN)
+        {
+            Assign *a = dynamic_cast<Assign *>(stmt.get());
+            if (a && a->left->exprType == ExprType::VAR)
+            {
+                const string &leftName = dynamic_cast<Var *>(a->left.get())->name;
+
+                if (a->right->exprType == ExprType::STRING)
+                {
+                    concreteValues[leftName] = dynamic_cast<String *>(a->right.get())->value;
+                }
+                else if (a->right->exprType == ExprType::MAP)
+                {
+                    // Init-literal map ("U := {...}", possibly pre-seeded — e.g.
+                    // ReservationSpec.cpp's U/Em/Roles) — seed this version directly.
+                    Map *m = dynamic_cast<Map *>(a->right.get());
+                    vector<pair<string, string>> entries;
+                    for (const auto &kv : m->value)
+                    {
+                        if (kv.second && kv.second->exprType == ExprType::STRING)
+                        {
+                            entries.push_back({kv.first->name, dynamic_cast<String *>(kv.second.get())->value});
+                        }
+                    }
+                    result[leftName] = entries;
+                    latestVersionForBaseName[baseGlobalName(leftName)] = leftName;
+                }
+                else if (a->right->exprType == ExprType::FUNCCALL)
+                {
+                    FuncCall *fc = dynamic_cast<FuncCall *>(a->right.get());
+                    // "tmp_X_N := get_X()" — a fresh snapshot read of global X, not itself
+                    // a mutation. Without this, a version that's only ever READ (used to
+                    // check a PRE-condition) and never the subject of a later POST-write
+                    // assertion would stay entirely unbound in Z3 — exactly the type-error
+                    // bug this propagation step fixes. Carry forward whatever the most
+                    // recently known version of the same base name holds; a later ASSERT
+                    // (via applyPostEffect, below) appends onto this copy if THIS version
+                    // turns out to be the one a mutation's postcondition writes to.
+                    if (fc && fc->name.rfind("get_", 0) == 0)
+                    {
+                        string base = baseGlobalName(leftName);
+                        auto it = latestVersionForBaseName.find(base);
+                        result[leftName] = (it != latestVersionForBaseName.end()) ? result[it->second]
+                                                                                   : vector<pair<string, string>>{};
+                        latestVersionForBaseName[base] = leftName;
+                    }
+                }
+            }
+            continue;
+        }
+
+        if (stmt->statementType != StmtType::ASSERT)
+            continue;
+        Assert *asrt = dynamic_cast<Assert *>(stmt.get());
+        if (asrt && asrt->expr)
+        {
+            applyPostEffect(asrt->expr.get(), concreteValues, result);
+        }
+    }
+
+    return result;
+}
+
+bool isPathConstraintUnsat(SEE &see, const std::vector<std::string> &sequence, Program *atc,
+                            Program *rewrittenProgram, Z3Solver &solver)
 {
     vector<Expr *> &pc = see.getPathConstraint();
 
@@ -1508,9 +2271,67 @@ bool isPathConstraintUnsat(SEE &see, const std::vector<std::string> &sequence)
         return false; // No false in path constraint - not UNSAT
     }
 
-    // Path constraint has false - but is it TRULY unsat?
-    // Check if the sequence has proper dependencies
-    std::cout << "\n[UNSAT-CHECK] Path constraint contains FALSE - checking dependencies..." << std::endl;
+    std::cout << "\n[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative "
+              << "verdict, grounded in this run's intended (backend-independent) effects..." << std::endl;
+
+    // Z3's verdict is now the SOLE AUTHORITY on the UNSAT decision below, matching what the
+    // paper describes (Section III-E / V-C: the theorem prover determines satisfiability and
+    // infeasible sequences are rejected through UNSAT detection). This is safe to do now
+    // because `buildIntendedMapState` grounds the check in what each prior block's OWN
+    // POST-condition claims it did (using this run's actual chosen concrete values),
+    // independent of whether any HTTP call actually succeeded — unlike grounding against
+    // live-observed sigma state, this doesn't regress when a backend is unreachable or
+    // down. The heuristic dependency table (isSequenceTrulyUnsat) is kept ONLY as a
+    // fallback for the rare case Z3 cannot evaluate an expression at all (an exception, not
+    // a verdict) — it is no longer consulted when Z3 successfully returns SAT or UNSAT.
+    vector<Expr *> assumeExprs = atc ? collectNonTrivialAssumeExprs(*atc) : vector<Expr *>{};
+
+    if (!assumeExprs.empty() && rewrittenProgram)
+    {
+        map<string, vector<pair<string, string>>> knownMaps = buildIntendedMapState(*rewrittenProgram);
+        bool z3EvaluatedCleanly = true;
+
+        for (Expr *preExpr : assumeExprs)
+        {
+            try
+            {
+                CloneVisitor cloner;
+                unique_ptr<Expr> preClone = cloner.cloneExpr(preExpr);
+                Result z3result = solver.solve(std::move(preClone), knownMaps);
+
+                std::cout << "[Z3 VERDICT] This precondition is "
+                          << (z3result.isSat ? "SAT" : "UNSAT")
+                          << " given this run's intended effects." << std::endl;
+
+                if (!z3result.isSat)
+                {
+                    std::cout << "[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE "
+                              << "(authoritative)." << std::endl;
+                    return true;
+                }
+            }
+            catch (const exception &e)
+            {
+                std::cout << "[UNSAT-CHECK] Z3 could not evaluate one precondition (" << e.what()
+                          << ") - falling back to the heuristic dependency table." << std::endl;
+                z3EvaluatedCleanly = false;
+                break;
+            }
+        }
+
+        if (z3EvaluatedCleanly)
+        {
+            std::cout << "[UNSAT-CHECK] Z3 CONFIRMS every precondition in this sequence is "
+                      << "satisfiable (authoritative) - not UNSAT." << std::endl;
+            return false;
+        }
+    }
+    else
+    {
+        std::cout << "[UNSAT-CHECK] No non-trivial symbolic preconditions available to check via Z3 - "
+                  << "falling back to the heuristic dependency table." << std::endl;
+    }
+
     return isSequenceTrulyUnsat(sequence);
 }
 unique_ptr<Program> Tester::generateCTC(unique_ptr<Program> atc, vector<Expr *> ConcreteVals, ValueEnvironment *ve)
@@ -1540,8 +2361,11 @@ unique_ptr<Program> Tester::generateCTC(unique_ptr<Program> atc, vector<Expr *> 
     SymbolTable st(nullptr);
     see.execute(*rewritten, st);
 
-    // NEW: STEP 2a - Check if path constraint is satisfiable
-    if (isPathConstraintUnsat(see, currentApiSequence))
+    // STEP 2a - Check if path constraint is satisfiable. Z3's verdict (grounded in this
+    // run's intended, backend-independent effects — see buildIntendedMapState) is the
+    // authoritative answer; the heuristic dependency table is only a fallback for the rare
+    // case Z3 can't evaluate an expression at all.
+    if (isPathConstraintUnsat(see, currentApiSequence, atc.get(), rewritten.get(), solver))
     {
         cout << "\n>>> generateCTC: UNSAT DETECTED!" << endl;
         cout << ">>> Precondition cannot be satisfied with current database state." << endl;

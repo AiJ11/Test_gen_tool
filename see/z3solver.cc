@@ -123,6 +123,39 @@ pair<z3::expr, z3::expr> Z3InputMaker::makeEmptyMapWithDomain(z3::sort keySort, 
     return make_pair(valueArray, domainArray);
 }
 
+void Z3InputMaker::bindKnownMap(const string& varName, const vector<pair<string,string>>& entries) {
+    z3::sort keySort = getStringSort();
+    z3::sort valSort = getStringSort();
+
+    // Default value is named PER MAP ("_unused_default_<varName>"), not shared across
+    // calls — ctx.constant(name, sort) returns the SAME underlying Z3 symbol for a repeated
+    // name, so a shared name would wrongly force every unconstrained entry across EVERY
+    // bound map to be equal to each other.
+    z3::expr defaultVal = ctx.constant(("_unused_default_" + varName).c_str(), valSort);
+    z3::expr valueArray = z3::const_array(keySort, defaultVal);
+    z3::expr domainArray = z3::const_array(keySort, ctx.bool_val(false));
+
+    for (const auto& kv : entries) {
+        // An empty-string value is the caller's marker for "this key is present, but its
+        // value is genuinely unknown" (e.g. tester.cc's buildIntendedMapState for a
+        // postcondition like "_result in dom(O')" that asserts domain membership only, with
+        // no associated value). Only the DOMAIN array gets updated for it — the value array
+        // is deliberately left at its free default, so a later value-equality check against
+        // this key (e.g. "O[orderId] = buyerEmail") can still be satisfied by Z3 rather than
+        // being forced to contradict a value we never actually knew.
+        domainArray = z3::store(domainArray, ctx.string_val(kv.first), ctx.bool_val(true));
+        if (!kv.second.empty()) {
+            valueArray = z3::store(valueArray, ctx.string_val(kv.first), ctx.string_val(kv.second));
+        }
+    }
+
+    namedVarMap[varName] = new z3::expr(valueArray);
+    domainVarMap[varName] = new z3::expr(domainArray);
+
+    cout << "[Z3] Bound known map '" << varName << "' to its real current content ("
+         << entries.size() << " entries)" << endl;
+}
+
 bool Z3InputMaker::isMapVariable(const string& varName) {
     if (!typeMap || !typeMap->hasValue(varName)) {
         return false;
@@ -263,9 +296,16 @@ void Z3InputMaker::visitVar(const Var &node) {
     }
     
     // ======================================================
-    // No type info - default to int sort
+    // No type info - default to string sort.
+    // ⚠ DESIGN NOTE: every free/input leaf variable actually referenced in a
+    // PRE-condition across all of this tool's *Spec.cpp files (usernames, emails,
+    // passwords, ids/uuids, role and status literals like "USER"/"ADMIN") is a
+    // string — verified directly: no *Spec.cpp uses a numeric comparison operator
+    // (<, >, <=, >=) in any PRE or POST block. String is therefore the correct
+    // default here, not int (which was the previous, never-exercised default —
+    // Z3Solver::solve() had no callers before this was wired into Tester).
     // ======================================================
-    z3::sort varSort = ctx.int_sort(); // Default
+    z3::sort varSort = ctx.string_sort(); // Default
     z3::expr* z3Var = new z3::expr(ctx.constant(node.name.c_str(), varSort));
     namedVarMap[node.name] = z3Var;
     variables.push_back(*z3Var);
@@ -457,15 +497,22 @@ void Z3InputMaker::visitFuncCall(const FuncCall &node) {
     }
     
     // ========== Logical Operations ==========
-    else if ((node.name == "And" || node.name == "and" || node.name == "&&" || node.name == "AND") && node.args.size() == 2) {
-        z3::expr left = convertArg(node.args[0]);
-        z3::expr right = convertArg(node.args[1]);
-        theStack.push(left && right);
+    // N-ary, not just binary: every *Spec.cpp builds AND(...)/OR(...) by pushing an
+    // arbitrary number of conjuncts/disjuncts into one FuncCall (e.g. addToCartOk's PRE
+    // has 3), not nested pairwise calls — folding over args.size() >= 1 covers that.
+    else if ((node.name == "And" || node.name == "and" || node.name == "&&" || node.name == "AND") && node.args.size() >= 1) {
+        z3::expr result = convertArg(node.args[0]);
+        for (size_t i = 1; i < node.args.size(); i++) {
+            result = result && convertArg(node.args[i]);
+        }
+        theStack.push(result);
     }
-    else if ((node.name == "Or" || node.name == "or" || node.name == "||" || node.name == "OR") && node.args.size() == 2) {
-        z3::expr left = convertArg(node.args[0]);
-        z3::expr right = convertArg(node.args[1]);
-        theStack.push(left || right);
+    else if ((node.name == "Or" || node.name == "or" || node.name == "||" || node.name == "OR") && node.args.size() >= 1) {
+        z3::expr result = convertArg(node.args[0]);
+        for (size_t i = 1; i < node.args.size(); i++) {
+            result = result || convertArg(node.args[i]);
+        }
+        theStack.push(result);
     }
     else if ((node.name == "Not" || node.name == "not" || node.name == "!") && node.args.size() == 1) {
         z3::expr arg = convertArg(node.args[0]);
@@ -862,61 +909,95 @@ void Z3InputMaker::visitProgram(const Program &node) {
 
 Z3Solver::Z3Solver(TypeMap* tm) : typeMap(tm) {}
 
+// Shared by both solve() overloads: read back concrete values for every variable
+// Z3InputMaker collected into a SAT model.
+static map<string, unique_ptr<ResultValue>> extractModel(z3::model& m, z3::context& ctx, vector<z3::expr>& vars) {
+    map<string, unique_ptr<ResultValue>> var_values;
+
+    for (const auto& var : vars) {
+        z3::expr val = m.eval(var, true);
+        string varName = var.to_string();
+
+        if (val.is_numeral()) {
+            int intVal;
+            if (val.is_int() && Z3_get_numeral_int(ctx, val, &intVal)) {
+                cout << "[Z3Solver] " << varName << " = " << intVal << endl;
+                var_values[varName] = make_unique<IntResultValue>(intVal);
+            }
+        } else if (val.is_string_value()) {
+            string strVal = val.get_string();
+            cout << "[Z3Solver] " << varName << " = \"" << strVal << "\"" << endl;
+            var_values[varName] = make_unique<StringResultValue>(strVal);
+        } else if (val.is_bool()) {
+            bool boolVal = val.is_true();
+            cout << "[Z3Solver] " << varName << " = " << (boolVal ? "true" : "false") << endl;
+            var_values[varName] = make_unique<BoolResultValue>(boolVal);
+        } else if (val.is_array()) {
+            // For arrays (sets/maps), store as string representation
+            cout << "[Z3Solver] " << varName << " = " << val << " (array)" << endl;
+            var_values[varName] = make_unique<StringResultValue>(val.to_string());
+        } else {
+            cout << "[Z3Solver] " << varName << " = " << val << " (unknown type)" << endl;
+            var_values[varName] = make_unique<StringResultValue>(val.to_string());
+        }
+    }
+
+    return var_values;
+}
+
 Result Z3Solver::solve(unique_ptr<Expr> formula) const {
     Z3InputMaker inputMaker(typeMap);
-    
+
     // Convert the formula to Z3 format
     z3::expr z3Formula = inputMaker.makeZ3Input(formula);
-    
+
     // Create solver and add the constraint
     z3::solver s(inputMaker.getContext());
     s.add(z3Formula);
-    
+
     cout << "[Z3Solver] Checking satisfiability..." << endl;
     cout << "[Z3Solver] Formula: " << z3Formula << endl;
-    
+
     if(s.check() == z3::sat) {
         cout << "[Z3Solver] SAT - Model found!" << endl;
         z3::model m = s.get_model();
-        
-        // Extract variable values from the model
-        map<string, unique_ptr<ResultValue>> var_values;
-        
-        // Get all variables that were used
         vector<z3::expr> vars = inputMaker.getVariables();
-        for (const auto& var : vars) {
-            z3::expr val = m.eval(var, true);
-            string varName = var.to_string();
-            
-            // Handle different types of values
-            if (val.is_numeral()) {
-                int intVal;
-                if (val.is_int() && Z3_get_numeral_int(inputMaker.getContext(), val, &intVal)) {
-                    cout << "[Z3Solver] " << varName << " = " << intVal << endl;
-                    var_values[varName] = make_unique<IntResultValue>(intVal);
-                }
-            } else if (val.is_string_value()) {
-                string strVal = val.get_string();
-                cout << "[Z3Solver] " << varName << " = \"" << strVal << "\"" << endl;
-                var_values[varName] = make_unique<StringResultValue>(strVal);
-            } else if (val.is_bool()) {
-                bool boolVal = val.is_true();
-                cout << "[Z3Solver] " << varName << " = " << (boolVal ? "true" : "false") << endl;
-                var_values[varName] = make_unique<BoolResultValue>(boolVal);
-            } else if (val.is_array()) {
-                // For arrays (sets/maps), store as string representation
-                cout << "[Z3Solver] " << varName << " = " << val << " (array)" << endl;
-                var_values[varName] = make_unique<StringResultValue>(val.to_string());
-            } else {
-                cout << "[Z3Solver] " << varName << " = " << val << " (unknown type)" << endl;
-                var_values[varName] = make_unique<StringResultValue>(val.to_string());
-            }
-        }
-        
+        auto var_values = extractModel(m, inputMaker.getContext(), vars);
         return Result(true, std::move(var_values));
     }
     else {
         cout << "[Z3Solver] UNSAT - No solution exists" << endl;
+        return Result(false, map<string, unique_ptr<ResultValue>>());
+    }
+}
+
+Result Z3Solver::solve(unique_ptr<Expr> formula, const map<string, vector<pair<string,string>>>& knownMaps) const {
+    Z3InputMaker inputMaker(typeMap);
+
+    // Ground every known global map to its REAL current content BEFORE converting the
+    // formula, so dom(X)/X[key] references resolve against actual observed state instead
+    // of an unconstrained free array.
+    for (const auto& entry : knownMaps) {
+        inputMaker.bindKnownMap(entry.first, entry.second);
+    }
+
+    z3::expr z3Formula = inputMaker.makeZ3Input(formula);
+
+    z3::solver s(inputMaker.getContext());
+    s.add(z3Formula);
+
+    cout << "[Z3Solver] Checking satisfiability (grounded in " << knownMaps.size()
+         << " known map(s) from live state)..." << endl;
+    cout << "[Z3Solver] Formula: " << z3Formula << endl;
+
+    if (s.check() == z3::sat) {
+        cout << "[Z3Solver] SAT - Model found!" << endl;
+        z3::model m = s.get_model();
+        vector<z3::expr> vars = inputMaker.getVariables();
+        auto var_values = extractModel(m, inputMaker.getContext(), vars);
+        return Result(true, std::move(var_values));
+    } else {
+        cout << "[Z3Solver] UNSAT - No solution exists given the real current state" << endl;
         return Result(false, map<string, unique_ptr<ResultValue>>());
     }
 }

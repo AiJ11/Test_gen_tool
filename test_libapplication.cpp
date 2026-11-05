@@ -13,6 +13,7 @@
 #include "see/tripvaultfunctionfactory.hh"
 #include "see/ghostsocketfunctionfactory.hh"
 #include "see/serveezfunctionfactory.hh"
+#include "see/reservationfunctionfactory.hh"
 #include "see/see.hh"
 
 // Import webapp-specific specs
@@ -22,6 +23,7 @@
 #include "specs/TripVaultSpec.hpp"
 #include "specs/GhostSocketSpec.hpp"
 #include "specs/ServeezSpec.hpp"
+#include "specs/ReservationSpec.hpp"
 
 using namespace std;
 
@@ -392,6 +394,134 @@ private:
         SymbolTable *symbolTable = new SymbolTable(nullptr);
 
         auto factory = make_unique<Ecommerce::EcommerceFunctionFactory>(backendUrl);
+        Tester tester(factory.get());
+
+        unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
+
+        vector<Expr *> inputVars;
+        ValueEnvironment *valueEnv = new ValueEnvironment(nullptr);
+
+        unique_ptr<Program> ctc = tester.generateCTC(
+            std::move(testApiATC),
+            inputVars,
+            valueEnv);
+
+        if (!ctc)
+        {
+            cout << "\n[RESULT] UNSAT - Test preconditions cannot be satisfied" << endl;
+            delete symbolTable;
+            delete valueEnv;
+            throw runtime_error("UNSAT: Preconditions not satisfiable");
+        }
+
+        cout << "\n[FINAL CTC]" << endl;
+        PrintVisitor printer;
+        printer.visitProgram(*ctc);
+
+        delete symbolTable;
+        delete valueEnv;
+    }
+};
+
+// ============================================
+// RESERVATION TEST EXECUTOR
+// ============================================
+
+class ReservationTestExecutor
+{
+private:
+    TestMode mode;
+    string backendUrl;
+
+public:
+    ReservationTestExecutor(TestMode m, const string &url = "http://localhost:8080")
+        : mode(m), backendUrl(url) {}
+
+    void runTest(
+        const string &testName,
+        unique_ptr<Spec> spec,
+        const vector<string> &testSequence)
+    {
+        cout << "\n========================================" << endl;
+        cout << "TEST: " << testName << endl;
+        cout << "MODE: " << getModeString() << endl;
+        cout << "DEPTH: " << testSequence.size() << " API calls" << endl;
+        cout << "========================================\n"
+             << endl;
+
+        try
+        {
+            switch (mode)
+            {
+            case TestMode::ORIGINAL:
+                runOriginal(std::move(spec), testSequence);
+                break;
+            case TestMode::REWRITE_ONLY:
+                runRewriteOnly(std::move(spec), testSequence);
+                break;
+            case TestMode::FULL_PIPELINE:
+                runFullPipeline(std::move(spec), testSequence);
+                break;
+            }
+            cout << "\n✓ " << testName << " COMPLETE!\n"
+                 << endl;
+        }
+        catch (const runtime_error &e)
+        {
+            string errorMsg = e.what();
+            if (errorMsg.find("UNSAT") != string::npos)
+            {
+                cout << "\n⊘ " << testName << " UNSAT: Preconditions not satisfiable\n"
+                     << endl;
+            }
+            else
+            {
+                cout << "\n✗ " << testName << " FAILED: " << errorMsg << "\n"
+                     << endl;
+            }
+        }
+        catch (const exception &e)
+        {
+            cout << "\n✗ " << testName << " FAILED: " << e.what() << "\n"
+                 << endl;
+        }
+    }
+
+private:
+    string getModeString()
+    {
+        switch (mode)
+        {
+        case TestMode::ORIGINAL:
+            return "Original (No Rewrite)";
+        case TestMode::REWRITE_ONLY:
+            return "Rewrite Only (No Backend)";
+        case TestMode::FULL_PIPELINE:
+            return "Full Pipeline (With Backend)";
+        }
+        return "Unknown";
+    }
+
+    void runOriginal(unique_ptr<Spec> spec, const vector<string> &ts)
+    {
+        Program atc = genATC(*spec, ts);
+        PrintVisitor printer;
+        printer.visitProgram(atc);
+    }
+
+    void runRewriteOnly(unique_ptr<Spec> spec, const vector<string> &ts)
+    {
+        auto factory = make_unique<Reservation::ReservationFunctionFactory>(backendUrl);
+        Tester tester(factory.get());
+
+        unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
+    }
+
+    void runFullPipeline(unique_ptr<Spec> spec, const vector<string> &ts)
+    {
+        SymbolTable *symbolTable = new SymbolTable(nullptr);
+
+        auto factory = make_unique<Reservation::ReservationFunctionFactory>(backendUrl);
         Tester tester(factory.get());
 
         unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
@@ -2308,6 +2438,216 @@ namespace EcommerceTests
 }
 
 // ============================================
+// RESERVATIONS API TEST SUITE
+// Backend: http://localhost:8080 (real Spring Boot benchmark — see
+// EMB/jdk_11_gradle/cs/rest/reservations-api/, fronted by the mitmproxy in
+// EMB/dockerfiles/reservations-api.yaml). Unlike every other suite above, this backend has
+// no "/api/test/reset" endpoint, so re-running this suite without restarting the
+// docker-compose stack will accumulate users/reservations across runs — that's expected and
+// harmless (usernames/emails are counter-suffixed to stay unique), it just means a fresh
+// Mongo volume is what gives you a truly clean slate.
+// ============================================
+
+namespace ReservationTests
+{
+    // ╔════════════════════════════════════════════════════════════╗
+    // ║  CORE SAT FLOWS                                            ║
+    // ╚════════════════════════════════════════════════════════════╝
+
+    // Test 01: Register (Depth=1)
+    void test01_register(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 01: Register (Depth=1)",
+            makeReservationSpec(),
+            {"registerOk"});
+    }
+
+    // Test 02: Register -> Login (Depth=2)
+    void test02_registerLogin(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 02: Register -> Login (Depth=2)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk"});
+    }
+
+    // Test 03: Register -> Login -> Create Reservation (Depth=3)
+    void test03_createReservation(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 03: Register -> Login -> Create Reservation (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk"});
+    }
+
+    // Test 04: Create -> Update Reservation with fresh dates (Depth=4)
+    void test04_updateReservation(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 04: Create -> Update Reservation (Depth=4)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "updateReservationOk"});
+    }
+
+    // Test 05: Create -> Delete Reservation (Depth=4)
+    void test05_deleteReservation(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 05: Create -> Delete Reservation (Depth=4)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "deleteReservationOk"});
+    }
+
+    // Test 06: Create -> Get Own Reservations (Depth=4)
+    void test06_getOwnReservations(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 06: Create -> Get Own Reservations (Depth=4)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "getAllReservationsForUserOk"});
+    }
+
+    // Test 07: Full lifecycle - Create -> Update -> Get -> Delete (Depth=6)
+    void test07_fullLifecycle(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 07: Full Lifecycle Create->Update->Get->Delete (Depth=6)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk",
+             "updateReservationOk", "getAllReservationsForUserOk", "deleteReservationOk"});
+    }
+
+    // Test 08: Two reservations by the same user (Depth=5)
+    void test08_multipleReservations(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 08: Register -> Login -> Create 2 Reservations -> Get All (Depth=5)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "createReservationOk",
+             "getAllReservationsForUserOk"});
+    }
+
+    // ╔════════════════════════════════════════════════════════════╗
+    // ║  BUSINESS-RULE / AUTHORIZATION SAT TESTS (the call is       ║
+    // ║  expected to be rejected — PRE is still satisfiable)       ║
+    // ╚════════════════════════════════════════════════════════════╝
+
+    // Test 09: Duplicate username — satisfiable stand-alone against the seeded fixture (Depth=1)
+    void test09_registerDuplicateUsername(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 09: Register Duplicate Username (Depth=1)",
+            makeReservationSpec(),
+            {"registerDuplicateUsernameErr"});
+    }
+
+    // Test 10: Duplicate email — satisfiable stand-alone against the seeded fixture (Depth=1)
+    void test10_registerDuplicateEmail(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 10: Register Duplicate Email (Depth=1)",
+            makeReservationSpec(),
+            {"registerDuplicateEmailErr"});
+    }
+
+    // Test 11: Bad login credentials — satisfiable stand-alone against the seeded fixture (Depth=1)
+    void test11_loginBadCredentials(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 11: Login Bad Credentials (Depth=1)",
+            makeReservationSpec(),
+            {"loginBadCredentialsErr"});
+    }
+
+    // Test 12: reservationFrom after reservationTo -> 422 (Depth=3)
+    void test12_createReservationDateOrder(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 12: Create Reservation - Date Order Violation (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationDateOrderErr"});
+    }
+
+    // Test 13: reservationFrom in the past -> 422 (Depth=3)
+    void test13_createReservationPastDate(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 13: Create Reservation - Past Date (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationPastDateErr"});
+    }
+
+    // Test 14: New reservation overlapping an existing one -> 422 (Depth=4)
+    void test14_createReservationOverlap(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 14: Create Reservation - Overlaps Existing (Depth=4)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "createReservationOverlapErr"});
+    }
+
+    // Test 15: Delete a uuid that never existed -> silent 200 (Depth=3)
+    void test15_deleteReservationNonexistent(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 15: Delete Nonexistent Reservation (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "deleteReservationNonexistentOk"});
+    }
+
+    // Test 16: Admin login -> admin-only get-all (Depth=2)
+    void test16_adminGetAllReservations(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 16: Admin Login -> Get All Reservations (Depth=2)",
+            makeReservationSpec(),
+            {"loginAdminOk", "getAllReservationsOk"});
+    }
+
+    // Test 17: Plain USER hitting the ADMIN-only get-all endpoint -> 403 (Depth=3)
+    void test17_getAllReservationsForbidden(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[SAT] Test 17: Non-Admin Get-All Forbidden (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "getAllReservationsForbiddenErr"});
+    }
+
+    // ╔════════════════════════════════════════════════════════════╗
+    // ║  KNOWN BUG DETECTION TESTS                                 ║
+    // ║  Postconditions encode the EXPECTED-CORRECT behavior, so a  ║
+    // ║  mismatch against the live backend's actual response is    ║
+    // ║  exactly the fault signal (same pattern as                 ║
+    // ║  deleteProductByBuyerErr in EcommerceSpec.cpp).             ║
+    // ╚════════════════════════════════════════════════════════════╝
+
+    // BUG #1: update a non-existent uuid should be a clean 404, but
+    // ReservationServiceImpl.updateReservation has no null-check on findByUuid, so MapStruct's
+    // generated setter call on a null @MappingTarget NPEs -> unhandled -> 500.
+    // Expect this test to FAIL against the real (buggy) backend: _result ends up 500, not 404.
+    void bug01_updateReservationNotFound(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[BUG #1] Update Non-Existent Reservation Should Be 404, Not 500 (Depth=3)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "updateReservationNotFoundErr"});
+    }
+
+    // BUG #2: resubmitting a reservation's own unchanged dates on update should succeed (200),
+    // but validateDates' overlap check (findAllBetween) doesn't exclude the record being
+    // updated, so it always finds itself as an "overlap" and rejects with 422.
+    // Expect this test to FAIL against the real (buggy) backend: _result ends up 422, not 200.
+    void bug02_updateReservationSelfOverlap(ReservationTestExecutor &executor)
+    {
+        executor.runTest(
+            "[BUG #2] Update With Unchanged Dates Should Be 200, Not 422 Self-Overlap (Depth=4)",
+            makeReservationSpec(),
+            {"registerOk", "loginOk", "createReservationOk", "updateReservationSelfOverlapErr"});
+    }
+}
+
+// ============================================
 // BUG DETECTION TESTS (8 Mutation Bugs)
 // Backend: http://localhost:5002
 // ============================================
@@ -2654,7 +2994,8 @@ namespace LibraryBugTests
 
 int main(int argc, char* argv[])
 {
-    // backend = "restaurant" | "ecommerce" | "library"  (default: library)
+    // backend = "restaurant" | "ecommerce" | "ghostsocket" | "serveez" | "tripvault" |
+    //           "reservation" | "library"  (default: library)
     string backend = (argc > 1) ? string(argv[1]) : "library";
 
     try
@@ -2859,6 +3200,37 @@ int main(int argc, char* argv[])
             TripVaultTests::test25_deleteTripWithoutAuth(tvExecutor);
             cout << "\n╔════════════════════════════════════════╗" << endl;
             cout << "║  ALL TRIPVAULT TESTS COMPLETE          ║" << endl;
+            cout << "╚════════════════════════════════════════╝\n" << endl;
+        }
+        else if (backend == "reservation")
+        {
+            string resUrl = "http://localhost:8080";
+            ReservationTestExecutor resExecutor(mode, resUrl);
+            cout << "\n╔════════════════════════════════════════╗" << endl;
+            cout << "║  TESTGEN - RESERVATIONS TEST SUITE     ║" << endl;
+            cout << "║  Total Tests: 19 (17 flows, 2 bugs)    ║" << endl;
+            cout << "╚════════════════════════════════════════╝\n" << endl;
+            ReservationTests::test01_register(resExecutor);
+            ReservationTests::test02_registerLogin(resExecutor);
+            ReservationTests::test03_createReservation(resExecutor);
+            ReservationTests::test04_updateReservation(resExecutor);
+            ReservationTests::test05_deleteReservation(resExecutor);
+            ReservationTests::test06_getOwnReservations(resExecutor);
+            ReservationTests::test07_fullLifecycle(resExecutor);
+            ReservationTests::test08_multipleReservations(resExecutor);
+            ReservationTests::test09_registerDuplicateUsername(resExecutor);
+            ReservationTests::test10_registerDuplicateEmail(resExecutor);
+            ReservationTests::test11_loginBadCredentials(resExecutor);
+            ReservationTests::test12_createReservationDateOrder(resExecutor);
+            ReservationTests::test13_createReservationPastDate(resExecutor);
+            ReservationTests::test14_createReservationOverlap(resExecutor);
+            ReservationTests::test15_deleteReservationNonexistent(resExecutor);
+            ReservationTests::test16_adminGetAllReservations(resExecutor);
+            ReservationTests::test17_getAllReservationsForbidden(resExecutor);
+            ReservationTests::bug01_updateReservationNotFound(resExecutor);
+            ReservationTests::bug02_updateReservationSelfOverlap(resExecutor);
+            cout << "\n╔════════════════════════════════════════╗" << endl;
+            cout << "║  ALL RESERVATIONS TESTS COMPLETE       ║" << endl;
             cout << "╚════════════════════════════════════════╝\n" << endl;
         }
         else // library (default)

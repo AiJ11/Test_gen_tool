@@ -1,5 +1,5 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/apple/Desktop/test OG 5'
-g++ -std=c++17 -Wall -Wextra -I. -g -O2 test_libapplication.cpp jsCodeGenerator/jsCodeGen.cpp -o testgen_basic
-make: Leaving directory `/Users/apple/Desktop/test OG 5'
+make: Entering directory `/Users/apple/Desktop/TestgenTool'
+g++ -std=c++17 -Wall -I. -Isee -Itester -Ispecs -Wno-delete-non-abstract-non-virtual-dtor -Wno-unqualified-std-cast-call -Wno-reorder-ctor -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field -I/usr/local/include test_libapplication.cpp algo.cpp ast.cc astvisitor.cc printvisitor.cc clonevisitor.cc rewrite_globals_visitor.cc symvar.cc env.cc typemap.cc specs/RestaurantSpec.cpp specs/EcommerceSpec.cpp specs/LibrarySpec.cpp specs/TripVaultSpec.cpp specs/GhostSocketSpec.cpp specs/ServeezSpec.cpp specs/ReservationSpec.cpp see/see.cc see/solver.cc see/z3solver.cc see/functionfactory.cc see/httpclient.cc see/restaurantfunctionfactory.cc see/ecommercefunctionfactory.cc see/libraryfunctionfactory.cc see/tripvaultfunctionfactory.cc see/ghostsocketfunctionfactory.cc see/serveezfunctionfactory.cc see/reservationfunctionfactory.cc tester/tester.cc -L/usr/local/lib -L/usr/local/opt/curl/lib -lz3 -lcurl -o test_libapplication
+make: Leaving directory `/Users/apple/Desktop/TestgenTool'
  

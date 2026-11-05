@@ -176,7 +176,7 @@ std::unique_ptr<Spec> makeServeezSpec() {
             Response(nullptr)
         );
 
-        auto post = inDomPrime("catId", "C");
+        auto post = inDomPrime("_result", "C");
 
         blocks.push_back(make_unique<API>(
             std::move(pre), std::move(call), Response(std::move(post)), "createCategoryOk"
@@ -201,7 +201,7 @@ std::unique_ptr<Spec> makeServeezSpec() {
             Response(nullptr)
         );
 
-        auto post = inDomPrime("listingId", "L");
+        auto post = inDomPrime("_result", "L");
 
         blocks.push_back(make_unique<API>(
             std::move(pre), std::move(call), Response(std::move(post)), "createListingOk"
@@ -270,7 +270,7 @@ std::unique_ptr<Spec> makeServeezSpec() {
             Response(nullptr)
         );
 
-        auto post = inDomPrime("bookingId", "B");
+        auto post = inDomPrime("_result", "B");
 
         blocks.push_back(make_unique<API>(
             std::move(pre), std::move(call), Response(std::move(post)), "createBookingOk"

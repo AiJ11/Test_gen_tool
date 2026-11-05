@@ -4,7 +4,23 @@
 #include "functionfactory.hh"
 #include <iostream>
 #include <set>
+#include <algorithm>
+#include <cctype>
 using namespace std;
+
+// Case-insensitive ASCII string compare — used for role/status CONSTANT comparisons
+// (see the "=" operator handling below).
+static bool equalsCaseInsensitive(const string &a, const string &b)
+{
+    if (a.size() != b.size())
+        return false;
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        if (std::tolower(static_cast<unsigned char>(a[i])) != std::tolower(static_cast<unsigned char>(b[i])))
+            return false;
+    }
+    return true;
+}
 
 //  Helper to check if an expression is concrete (i.e., Num, String, Set, Map)
 static bool isConcrete(Expr *expr)
@@ -903,6 +919,53 @@ string SEE::findLoanIdFromSigma()
 {
     return findKeyFromMapInSigma("tmp_Loans_");
 }
+
+// ========================================
+// RESERVATIONS API ID RESOLUTION HELPER
+// ========================================
+
+string SEE::findReservationUuidFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_Res_");
+}
+
+// ========================================
+// SERVEEZ ID RESOLUTION HELPERS
+// ========================================
+
+string SEE::findCatIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_C_");
+}
+
+string SEE::findListingIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_L_");
+}
+
+string SEE::findBookingIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_B_");
+}
+
+// ========================================
+// TRIPVAULT ID RESOLUTION HELPERS
+// ========================================
+
+string SEE::findTripIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_Trips_");
+}
+
+string SEE::findExpenseIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_E_");
+}
+
+string SEE::findProposalIdFromSigma()
+{
+    return findKeyFromMapInSigma("tmp_Proposals_");
+}
 Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st)
 {
     CloneVisitor cloner;
@@ -1168,9 +1231,82 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st)
                 return new BoolConst(result);
             }
 
+            // Role/status CONSTANT comparison: a bare Var that's still unresolved at this
+            // point (e.g. BUYER, SELLER, ADMIN, PENDING) is never a genuine free variable —
+            // every real input variable is already concrete by the time a postcondition is
+            // evaluated here. It's this tool's convention for a categorical constant, and
+            // different backends spell the same category with different casing (e.g. the
+            // Ecommerce backend returns "Buyer", the spec says BUYER). Compare
+            // case-insensitively so specs don't have to encode each backend's exact casing
+            // convention, while still catching a genuinely wrong value.
+            if ((left->exprType == ExprType::STRING && right->exprType == ExprType::VAR) ||
+                (left->exprType == ExprType::VAR && right->exprType == ExprType::STRING))
+            {
+                const string &strVal = (left->exprType == ExprType::STRING)
+                                           ? dynamic_cast<String *>(left)->value
+                                           : dynamic_cast<String *>(right)->value;
+                const string &constName = (left->exprType == ExprType::VAR)
+                                              ? dynamic_cast<Var *>(left)->name
+                                              : dynamic_cast<Var *>(right)->name;
+                bool result = equalsCaseInsensitive(strVal, constName);
+                cout << "    [EVAL] Case-insensitive constant Eq (\"" << strVal << "\" vs " << constName
+                     << "): " << (result ? "true" : "false") << endl;
+                return new BoolConst(result);
+            }
+
             // Return symbolic comparison
             cout << "    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)" << endl;
             return new BinaryOpExpr(BinOp::EQ, cloner.cloneExpr(left), cloner.cloneExpr(right));
+        }
+
+        // Handle != (inequality) — mirrors "=" above (including the case-insensitive
+        // constant rule), negated. Needed for real blocks like loginBadCredentialsErr
+        // (ReservationSpec) and loginWrongPasswordErr (RestaurantSpec); before this, "!="
+        // had no case here at all and silently fell through to the generic "stay symbolic"
+        // fallback at the bottom of this function, so these PRE-conditions could never
+        // concretely evaluate to true or false.
+        if ((fc.name == "!=" || fc.name == "Neq" || fc.name == "<>") && fc.args.size() == 2)
+        {
+            cout << "    [EVAL] Inequality: Neq" << endl;
+            Expr *left = evaluateExpr(*fc.args[0], st);
+            Expr *right = evaluateExpr(*fc.args[1], st);
+
+            if (left->exprType == ExprType::STRING && right->exprType == ExprType::STRING)
+            {
+                bool result = dynamic_cast<String *>(left)->value != dynamic_cast<String *>(right)->value;
+                cout << "    [EVAL] Neq result: " << (result ? "true" : "false") << endl;
+                return new BoolConst(result);
+            }
+            if (left->exprType == ExprType::NUM && right->exprType == ExprType::NUM)
+            {
+                bool result = dynamic_cast<Num *>(left)->value != dynamic_cast<Num *>(right)->value;
+                cout << "    [EVAL] Neq result: " << (result ? "true" : "false") << endl;
+                return new BoolConst(result);
+            }
+            if (left->exprType == ExprType::BOOL_CONST && right->exprType == ExprType::BOOL_CONST)
+            {
+                bool result = dynamic_cast<BoolConst *>(left)->value != dynamic_cast<BoolConst *>(right)->value;
+                cout << "    [EVAL] Neq result: " << (result ? "true" : "false") << endl;
+                return new BoolConst(result);
+            }
+            if ((left->exprType == ExprType::STRING && right->exprType == ExprType::VAR) ||
+                (left->exprType == ExprType::VAR && right->exprType == ExprType::STRING))
+            {
+                const string &strVal = (left->exprType == ExprType::STRING)
+                                           ? dynamic_cast<String *>(left)->value
+                                           : dynamic_cast<String *>(right)->value;
+                const string &constName = (left->exprType == ExprType::VAR)
+                                              ? dynamic_cast<Var *>(left)->name
+                                              : dynamic_cast<Var *>(right)->name;
+                bool result = !equalsCaseInsensitive(strVal, constName);
+                cout << "    [EVAL] Case-insensitive constant Neq (\"" << strVal << "\" vs " << constName
+                     << "): " << (result ? "true" : "false") << endl;
+                return new BoolConst(result);
+            }
+
+            cout << "    [EVAL] Symbolic Neq, returning UnaryOpExpr(NOT(BinaryOpExpr(EQ)))" << endl;
+            return new UnaryOpExpr(UnOp::NOT,
+                                    make_unique<BinaryOpExpr>(BinOp::EQ, cloner.cloneExpr(left), cloner.cloneExpr(right)));
         }
 
         // Handle AND (n-ary)
@@ -1427,6 +1563,21 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st)
                     }
                 }
                 // ========================================
+                // RESERVATIONS API PLACEHOLDER RESOLUTION
+                // ========================================
+                else if (strVal->value == "__NEEDS_RESERVATION_UUID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_RESERVATION_UUID__, attempting runtime resolution" << endl;
+                    string resolvedId = findReservationUuidFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                // ========================================
                 // LIBRARY PLACEHOLDER RESOLUTION
                 // ========================================
                 else if (strVal->value == "__NEEDS_BOOK_CODE__")
@@ -1469,6 +1620,84 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st)
                 {
                     cout << "    [EVAL] Found placeholder __NEEDS_LOAN_ID__, attempting runtime resolution" << endl;
                     string resolvedId = findLoanIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                // ========================================
+                // SERVEEZ PLACEHOLDER RESOLUTION
+                // ========================================
+                else if (strVal->value == "__NEEDS_CATEGORY_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_CATEGORY_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findCatIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                else if (strVal->value == "__NEEDS_LISTING_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_LISTING_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findListingIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                else if (strVal->value == "__NEEDS_BOOKING_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_BOOKING_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findBookingIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                // ========================================
+                // TRIPVAULT PLACEHOLDER RESOLUTION
+                // ========================================
+                else if (strVal->value == "__NEEDS_TRIP_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_TRIP_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findTripIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                else if (strVal->value == "__NEEDS_EXPENSE_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_EXPENSE_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findExpenseIdFromSigma();
+                    if (!resolvedId.empty())
+                    {
+                        cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                        String *resolved = new String(resolvedId);
+                        sigma.setValue(v.name, resolved);
+                        return resolved;
+                    }
+                }
+                else if (strVal->value == "__NEEDS_PROPOSAL_ID__")
+                {
+                    cout << "    [EVAL] Found placeholder __NEEDS_PROPOSAL_ID__, attempting runtime resolution" << endl;
+                    string resolvedId = findProposalIdFromSigma();
                     if (!resolvedId.empty())
                     {
                         cout << "    [EVAL] Resolved to: " << resolvedId << endl;
@@ -1574,6 +1803,78 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st)
                     {
                         cout << "    [EVAL] Found placeholder __NEEDS_LOAN_ID__, attempting runtime resolution" << endl;
                         string resolvedId = findLoanIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_CATEGORY_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_CATEGORY_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findCatIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_LISTING_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_LISTING_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findListingIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_BOOKING_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_BOOKING_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findBookingIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_TRIP_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_TRIP_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findTripIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_EXPENSE_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_EXPENSE_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findExpenseIdFromSigma();
+                        if (!resolvedId.empty())
+                        {
+                            cout << "    [EVAL] Resolved to: " << resolvedId << endl;
+                            String *resolved = new String(resolvedId);
+                            sigma.setValue(suffixedName, resolved);
+                            return resolved;
+                        }
+                    }
+                    else if (strVal->value == "__NEEDS_PROPOSAL_ID__")
+                    {
+                        cout << "    [EVAL] Found placeholder __NEEDS_PROPOSAL_ID__, attempting runtime resolution" << endl;
+                        string resolvedId = findProposalIdFromSigma();
                         if (!resolvedId.empty())
                         {
                             cout << "    [EVAL] Resolved to: " << resolvedId << endl;
