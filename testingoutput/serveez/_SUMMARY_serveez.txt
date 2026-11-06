@@ -1,0 +1,43 @@
+TESTING SUMMARY - SERVEEZ
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - SERVEEZ TEST SUITE          ║
+║  Total Tests: 25 (21 SAT, 4 UNSAT)    ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 25
+  PASS (assertions succeeded):        21
+  UNSAT (correctly rejected by Z3):   4
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Register_USER_Depth_1.txt                         Register USER (Depth=1)
+02   SAT    PASS                       test02_sat_Register_PROVIDER_Depth_1.txt                     Register PROVIDER (Depth=1)
+03   SAT    PASS                       test03_sat_Register_ADMIN_Depth_1.txt                        Register ADMIN (Depth=1)
+04   SAT    PASS                       test04_sat_Admin_CreateCategory_Depth_2.txt                  Admin → CreateCategory (Depth=2)
+05   SAT    PASS                       test05_sat_Admin_Category_Provider_Listing_Depth_4.txt       Admin → Category → Provider → Listing (Depth=4)
+06   SAT    PASS                       test06_sat_Admin_Category_Provider_Listing_GetListings_Depth_5.txt Admin → Category → Provider → Listing → GetListings (Depth=5)
+07   SAT    PASS                       test07_sat_Admin_Category_Provider_Listing_GetListingById_Depth_5.txt Admin → Category → Provider → Listing → GetListingById (Depth=5)
+08   SAT    PASS                       test08_sat_Admin_Category_Provider_Listing_User_Booking_Depth_6.txt Admin → Category → Provider → Listing → User → Booking (Depth=6)
+09   SAT    PASS                       test09_sat_Booking_GetMyBookings_Depth_7.txt                 ... → Booking → GetMyBookings (Depth=7)
+10   SAT    PASS                       test10_sat_Booking_ConfirmBooking_Depth_7.txt                ... → Booking → ConfirmBooking (Depth=7)
+11   SAT    PASS                       test11_sat_Booking_Confirm_Complete_Depth_8.txt              ... → Booking → Confirm → Complete (Depth=8)
+12   SAT    PASS                       test12_sat_Confirm_Complete_Review_Depth_9.txt               ... → Confirm → Complete → Review (Depth=9)
+13   SAT    PASS                       test13_sat_Review_GetListingReviews_Depth_10.txt             ... → Review → GetListingReviews (Depth=10)
+14   SAT    PASS                       test14_sat_Booking_CancelBooking_Depth_7.txt                 ... → Booking → CancelBooking (Depth=7)
+15   SAT    PASS                       test15_sat_Admin_Category_CreateListingUnauth_Depth_3.txt    Admin → Category → CreateListingUnauth (Depth=3)
+16   SAT    PASS                       test16_sat_Admin_Category_Provider_Listing_CreateBookingAsProvider_Depth_5.txt Admin → Category → Provider → Listing → CreateBookingAsProvider (Depth=5)
+17   SAT    PASS                       test17_sat_Admin_Category_Provider_Listing1_Listing2_Depth_5.txt Admin → Category → Provider → Listing1 → Listing2 (Depth=5)
+18   SAT    PASS                       test18_sat_Full_booking_lifecycle_Depth_8.txt                Full booking lifecycle (Depth=8)
+19   SAT    PASS                       test19_sat_Two_users_book_same_listing_Depth_8.txt           Two users book same listing (Depth=8)
+20   SAT    PASS                       test20_sat_Book_GetMyBookings_Cancel_Depth_8.txt             Book → GetMyBookings → Cancel (Depth=8)
+21   SAT    PASS                       test21_sat_Listing_GetById_Book_Confirm_Depth_8.txt          Listing → GetById → Book → Confirm (Depth=8)
+22   UNSAT  UNSAT (rejected by solver) test22_unsat_createCategory_alone_no_admin_Expected_UNSAT.txt createCategory alone — no admin (Expected UNSAT)
+23   UNSAT  UNSAT (rejected by solver) test23_unsat_createListing_alone_no_provider_category_Expected_UNSAT.txt createListing alone — no provider/category (Expected UNSAT)
+24   UNSAT  UNSAT (rejected by solver) test24_unsat_createBooking_alone_no_user_listing_Expected_UNSAT.txt createBooking alone — no user/listing (Expected UNSAT)
+25   UNSAT  UNSAT (rejected by solver) test25_unsat_confirmBooking_alone_no_booking_Expected_UNSAT.txt confirmBooking alone — no booking (Expected UNSAT)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

@@ -6,6 +6,7 @@
 #include<string>
 #include <vector>
 #include <utility>
+#include <set>
 
 #include "solver.hh"
 #include "z3++.h"
@@ -59,6 +60,15 @@ class Z3InputMaker : public ASTVisitor {
         // this binds both the value array and the domain-tracking array as String sorts.
         // Must be called BEFORE converting an expression that references varName.
         void bindKnownMap(const string& varName, const vector<pair<string,string>>& entries);
+
+        // A SymVar carries no type of its own (input() is untyped end-to-end — see
+        // algo.cpp's makeInputStmt), so convertArg()/makeZ3Input() default every SymVar to
+        // Z3's Int sort. That default is wrong for a free-form STRING input (e.g. email):
+        // comparing an Int const against a Z3 string literal throws a sort-mismatch
+        // exception. Call this BEFORE converting any expression that mentions SymVar `num`
+        // to pre-register it with String sort instead, when the caller already knows (from
+        // the concrete seed's own type) that this particular free input is string-valued.
+        void bindSymVarAsString(unsigned int num);
 
     protected:
         // Expression visitor methods (protected, called by base class)
@@ -114,5 +124,12 @@ class Z3Solver : public Solver {
         // satisfiability — used to ask "is this precondition satisfiable given the REAL
         // state observed so far", rather than against an unconstrained/free state.
         Result solve(unique_ptr<Expr> formula, const map<string, vector<pair<string,string>>>& knownMaps) const;
+
+        // Same as solve(), but treats every SymVar number in `stringSymVars` as String sort
+        // rather than the usual Int default (see bindSymVarAsString). Used for genuine
+        // solver-driven generation/verification of free-form string inputs: callers that
+        // already know (from the field's expected type) that a given free input is a
+        // string pass its SymVar number here so Z3 can reason about it correctly.
+        Result solve(unique_ptr<Expr> formula, const set<unsigned int>& stringSymVars) const;
 };
 #endif

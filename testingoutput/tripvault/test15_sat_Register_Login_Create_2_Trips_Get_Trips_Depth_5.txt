@@ -1,0 +1,1241 @@
+========================================
+TEST: [SAT] Test 15: Register → Login → Create 2 Trips → Get Trips (Depth=5)
+MODE: Full Pipeline (With Backend)
+DEPTH: 5 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: E Members Proposals T Trips U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: userEmail0 := input()
+Statement 2: userPassword0 := input()
+Statement 3: tmp_U_0 := get_U()
+Statement 4: U_old := tmp_U_0
+Statement 5: tmp_U_1 := get_U()
+Statement 6: assume(not_in(userEmail, dom(tmp_U_1)))
+Statement 7: _result0 := registerUser(userEmail, userPassword)
+Statement 8: tmp_U_2 := get_U()
+Statement 9: assert(in(userEmail, dom(tmp_U_2)))
+Statement 10: userEmail1 := input()
+Statement 11: tmp_T_0 := get_T()
+Statement 12: T_old := tmp_T_0
+Statement 13: tmp_U_3 := get_U()
+Statement 14: assume(in(userEmail, dom(tmp_U_3)))
+Statement 15: _result1 := loginUser(userEmail)
+Statement 16: tmp_T_1 := get_T()
+Statement 17: assert(in(userEmail, dom(tmp_T_1)))
+Statement 18: userEmail2 := input()
+Statement 19: tripName2 := input()
+Statement 20: destination2 := input()
+Statement 21: tmp_Trips_0 := get_Trips()
+Statement 22: Trips_old := tmp_Trips_0
+Statement 23: tmp_T_2 := get_T()
+Statement 24: assume(in(userEmail, dom(tmp_T_2)))
+Statement 25: _result2 := createTrip(userEmail, tripName, destination)
+Statement 26: tmp_Trips_1 := get_Trips()
+Statement 27: assert(in(_result2, dom(tmp_Trips_1)))
+Statement 28: userEmail3 := input()
+Statement 29: tripName3 := input()
+Statement 30: destination3 := input()
+Statement 31: tmp_Trips_2 := get_Trips()
+Statement 32: Trips_old := tmp_Trips_2
+Statement 33: tmp_T_3 := get_T()
+Statement 34: assume(in(userEmail, dom(tmp_T_3)))
+Statement 35: _result3 := createTrip(userEmail, tripName, destination)
+Statement 36: tmp_Trips_3 := get_Trips()
+Statement 37: assert(in(_result3, dom(tmp_Trips_3)))
+Statement 38: userEmail4 := input()
+Statement 39: tmp_T_4 := get_T()
+Statement 40: assume(in(userEmail, dom(tmp_T_4)))
+Statement 41: _result4 := getUserTrips(userEmail)
+Statement 42: assert(1)
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: userEmail0 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X148
+[ASSIGN] Result: userEmail0 := X148
+
+[ASSIGN] Evaluating: userPassword0 := input()
+[SEE] Mapping base name 'userPassword' -> 'userPassword0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X149
+[ASSIGN] Result: userPassword0 := X149
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_0 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_0'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_0
+[ASSIGN] Result: tmp_U_0 := {}
+
+[ASSIGN] Evaluating: U_old := tmp_U_0
+  [EVAL] Var lookup: tmp_U_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: U_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_1 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_1'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_1
+[ASSIGN] Result: tmp_U_1 := {}
+
+[ASSUME] Evaluating: not_in(userEmail, dom(tmp_U_1))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X148
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerUser' with symbolic arguments - interruption point
+[SEE] Interruption at statement 7
+
+[ASSIGN] Evaluating: _result0 := registerUser(userEmail, userPassword)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X148
+  [EVAL] Var lookup: userPassword
+    [EVAL] Resolved base name 'userPassword' -> 'userPassword0'
+    [EVAL] Found in sigma: X149
+[API_CALL] registerUser has symbolic arguments - skipping actual execution
+  [API_ARG 0] X148 (symbolic: 1)
+  [API_ARG 1] X149 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_2 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_2'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_2
+[ASSIGN] Result: tmp_U_2 := {}
+
+[ASSERT] Evaluating: in(userEmail, dom(tmp_U_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X148
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X148
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: userEmail1 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X150
+[ASSIGN] Result: userEmail1 := X150
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_0 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_0'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_0
+[ASSIGN] Result: tmp_T_0 := {}
+
+[ASSIGN] Evaluating: T_old := tmp_T_0
+  [EVAL] Var lookup: tmp_T_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: T_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_3 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_3'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_3
+[ASSIGN] Result: tmp_U_3 := {}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_U_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: X150
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X150
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'loginUser' with symbolic arguments - interruption point
+[SEE] Interruption at statement 15
+
+[ASSIGN] Evaluating: _result1 := loginUser(userEmail)
+[SEE] Mapping base name '_result' -> '_result1'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: X150
+[API_CALL] loginUser has symbolic arguments - skipping actual execution
+  [API_ARG 0] X150 (symbolic: 1)
+[ASSIGN] Result: _result1 := -1 (symbolic placeholder)
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_1 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_1'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_1
+[ASSIGN] Result: tmp_T_1 := {}
+
+[ASSERT] Evaluating: in(userEmail, dom(tmp_T_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: X150
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X150
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: userEmail2 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X151
+[ASSIGN] Result: userEmail2 := X151
+
+[ASSIGN] Evaluating: tripName2 := input()
+[SEE] Mapping base name 'tripName' -> 'tripName2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X152
+[ASSIGN] Result: tripName2 := X152
+
+[ASSIGN] Evaluating: destination2 := input()
+[SEE] Mapping base name 'destination' -> 'destination2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X153
+[ASSIGN] Result: destination2 := X153
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_0 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_0'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Trips_0
+[ASSIGN] Result: tmp_Trips_0 := {}
+
+[ASSIGN] Evaluating: Trips_old := tmp_Trips_0
+  [EVAL] Var lookup: tmp_Trips_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Trips_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_2 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_2'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_2
+[ASSIGN] Result: tmp_T_2 := {}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail2'
+    [EVAL] Found in sigma: X151
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X151
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'createTrip' with symbolic arguments - interruption point
+[SEE] Interruption at statement 25
+
+[ASSIGN] Evaluating: _result2 := createTrip(userEmail, tripName, destination)
+[SEE] Mapping base name '_result' -> '_result2'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail2'
+    [EVAL] Found in sigma: X151
+  [EVAL] Var lookup: tripName
+    [EVAL] Resolved base name 'tripName' -> 'tripName2'
+    [EVAL] Found in sigma: X152
+  [EVAL] Var lookup: destination
+    [EVAL] Resolved base name 'destination' -> 'destination2'
+    [EVAL] Found in sigma: X153
+[API_CALL] createTrip has symbolic arguments - skipping actual execution
+  [API_ARG 0] X151 (symbolic: 1)
+  [API_ARG 1] X152 (symbolic: 1)
+  [API_ARG 2] X153 (symbolic: 1)
+[ASSIGN] Result: _result2 := -1 (symbolic placeholder)
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_1 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_1'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Trips_1
+[ASSIGN] Result: tmp_Trips_1 := {}
+
+[ASSERT] Evaluating: in(_result2, dom(tmp_Trips_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Trips_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: userEmail3 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X154
+[ASSIGN] Result: userEmail3 := X154
+
+[ASSIGN] Evaluating: tripName3 := input()
+[SEE] Mapping base name 'tripName' -> 'tripName3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X155
+[ASSIGN] Result: tripName3 := X155
+
+[ASSIGN] Evaluating: destination3 := input()
+[SEE] Mapping base name 'destination' -> 'destination3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X156
+[ASSIGN] Result: destination3 := X156
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_2 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_2'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Trips_2
+[ASSIGN] Result: tmp_Trips_2 := {}
+
+[ASSIGN] Evaluating: Trips_old := tmp_Trips_2
+  [EVAL] Var lookup: tmp_Trips_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Trips_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_3 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_3'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_3
+[ASSIGN] Result: tmp_T_3 := {}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail3'
+    [EVAL] Found in sigma: X154
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X154
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'createTrip' with symbolic arguments - interruption point
+[SEE] Interruption at statement 35
+
+[ASSIGN] Evaluating: _result3 := createTrip(userEmail, tripName, destination)
+[SEE] Mapping base name '_result' -> '_result3'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail3'
+    [EVAL] Found in sigma: X154
+  [EVAL] Var lookup: tripName
+    [EVAL] Resolved base name 'tripName' -> 'tripName3'
+    [EVAL] Found in sigma: X155
+  [EVAL] Var lookup: destination
+    [EVAL] Resolved base name 'destination' -> 'destination3'
+    [EVAL] Found in sigma: X156
+[API_CALL] createTrip has symbolic arguments - skipping actual execution
+  [API_ARG 0] X154 (symbolic: 1)
+  [API_ARG 1] X155 (symbolic: 1)
+  [API_ARG 2] X156 (symbolic: 1)
+[ASSIGN] Result: _result3 := -1 (symbolic placeholder)
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_3 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_3'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Trips_3
+[ASSIGN] Result: tmp_Trips_3 := {}
+
+[ASSERT] Evaluating: in(_result3, dom(tmp_Trips_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result3
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Trips_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: userEmail4 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X157
+[ASSIGN] Result: userEmail4 := X157
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_4 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_4'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_4
+[ASSIGN] Result: tmp_T_4 := {}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail4'
+    [EVAL] Found in sigma: X157
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X157
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'getUserTrips' with symbolic arguments - interruption point
+[SEE] Interruption at statement 41
+
+[ASSIGN] Evaluating: _result4 := getUserTrips(userEmail)
+[SEE] Mapping base name '_result' -> '_result4'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail4'
+    [EVAL] Found in sigma: X157
+[API_CALL] getUserTrips has symbolic arguments - skipping actual execution
+  [API_ARG 0] X157 (symbolic: 1)
+[ASSIGN] Result: _result4 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, And(true, And(false, And(false, And(false, false)))))
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Trips_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Domain non-membership: not_in(key, dom(map))
+[Z3]   Result: not(select(domain_array, key))
+[Z3Solver] Checking satisfiability (grounded in 13 known map(s) from live state)...
+[Z3Solver] Formula: (not (select ((as const (Array String Bool)) false) userEmail))
+[Z3Solver] SAT - Model found!
+[Z3Solver] userEmail = ""
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Trips_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 13 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "userEmail" true)
+        userEmail)
+[Z3Solver] SAT - Model found!
+[Z3Solver] userEmail = "userEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Trips_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 13 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "userEmail" true)
+        userEmail)
+[Z3Solver] SAT - Model found!
+[Z3Solver] userEmail = "userEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Trips_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 13 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "userEmail" true)
+        userEmail)
+[Z3Solver] SAT - Model found!
+[Z3Solver] userEmail = "userEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Trips_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Trips_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 13 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "userEmail" true)
+        userEmail)
+[Z3Solver] SAT - Model found!
+[Z3Solver] userEmail = "userEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS every precondition in this sequence is satisfiable (authoritative) - not UNSAT.
+>>> generateCTC: After symex - Is abstract: 1, Has placeholders: 0
+
+>>> generateCTC: STEP 3 - Generating values with sigma lookup
+    [Found existing] _ -> _
+    [Found existing] tmp_U_ -> tmp_U_0
+    [Found existing] U_old -> U_old
+    [Found existing] _result -> _result0
+    [Found existing] tmp_T_ -> tmp_T_0
+    [Found existing] T_old -> T_old
+    [Found existing] tmp_Trips_ -> tmp_Trips_0
+    [Found existing] Trips_old -> Trips_old
+    userEmail0 = "testuser15@serveez.com"
+    userPassword0 = "TestPassword123!"
+    userEmail1 = (reusing userEmail) "testuser15@serveez.com"
+    userEmail2 = (reusing userEmail) "testuser15@serveez.com"
+    tripName2 = "Test Trip 14"
+    destination2 = "Test Destination"
+    userEmail3 = (reusing userEmail) "testuser15@serveez.com"
+    tripName3 = (reusing tripName) "Test Trip 14"
+    destination3 = (reusing destination) "Test Destination"
+    userEmail4 = (reusing userEmail) "testuser15@serveez.com"
+
+>>> generateCTC: STEP 4 - Resolving placeholders from sigma
+
+>>> generateCTC: STEP 5 - Recursing with 10 concrete values
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 10
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: userEmail0 := "testuser15@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail0'
+  [EVAL] String: "testuser15@serveez.com"
+[ASSIGN] Result: userEmail0 := "testuser15@serveez.com"
+
+[ASSIGN] Evaluating: userPassword0 := "TestPassword123!"
+[SEE] Mapping base name 'userPassword' -> 'userPassword0'
+  [EVAL] String: "TestPassword123!"
+[ASSIGN] Result: userPassword0 := "TestPassword123!"
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_0 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_0'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_0
+[ASSIGN] Result: tmp_U_0 := {}
+
+[ASSIGN] Evaluating: U_old := tmp_U_0
+  [EVAL] Var lookup: tmp_U_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: U_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_1 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_1'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_1
+[ASSIGN] Result: tmp_U_1 := {}
+
+[ASSUME] Evaluating: not_in(userEmail, dom(tmp_U_1))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerUser' ready for actual execution
+
+[ASSIGN] Evaluating: _result0 := registerUser(userEmail, userPassword)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] Var lookup: userPassword
+    [EVAL] Resolved base name 'userPassword' -> 'userPassword0'
+    [EVAL] Found in sigma: "TestPassword123!"
+[API_CALL] Executing API function: registerUser
+  [API_ARG] "testuser15@serveez.com"
+  [API_ARG] "TestPassword123!"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[RegisterUserFunc] Registering user: testuser15@serveez.com
+[HttpClient] POST /api/test/register -> 201
+  [API_CALL] Function returned: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"
+  [API_CALL] Storing result in variable: _result0
+[ASSIGN] Result: _result0 := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_2 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_2'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_U_2
+[ASSIGN] Result: tmp_U_2 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSERT] Evaluating: in(userEmail, dom(tmp_U_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_2
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: userEmail1 := "testuser15@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail1'
+  [EVAL] String: "testuser15@serveez.com"
+[ASSIGN] Result: userEmail1 := "testuser15@serveez.com"
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_0 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_0'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_T_0
+[ASSIGN] Result: tmp_T_0 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSIGN] Evaluating: T_old := tmp_T_0
+  [EVAL] Var lookup: tmp_T_0
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+[ASSIGN] Result: T_old := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_3 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_3'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_U_3
+[ASSIGN] Result: tmp_U_3 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_U_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_3
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'loginUser' ready for actual execution
+
+[ASSIGN] Evaluating: _result1 := loginUser(userEmail)
+[SEE] Mapping base name '_result' -> '_result1'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+[API_CALL] Executing API function: loginUser
+  [API_ARG] "testuser15@serveez.com"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[LoginUserFunc] Logging in user: testuser15@serveez.com
+[HttpClient] POST /api/test/login -> 200
+  [API_CALL] Function returned: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"
+  [API_CALL] Storing result in variable: _result1
+[ASSIGN] Result: _result1 := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_1 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_1'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_T_1
+[ASSIGN] Result: tmp_T_1 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSERT] Evaluating: in(userEmail, dom(tmp_T_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail1'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_1
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: userEmail2 := "testuser15@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail2'
+  [EVAL] String: "testuser15@serveez.com"
+[ASSIGN] Result: userEmail2 := "testuser15@serveez.com"
+
+[ASSIGN] Evaluating: tripName2 := "Test Trip 14"
+[SEE] Mapping base name 'tripName' -> 'tripName2'
+  [EVAL] String: "Test Trip 14"
+[ASSIGN] Result: tripName2 := "Test Trip 14"
+
+[ASSIGN] Evaluating: destination2 := "Test Destination"
+[SEE] Mapping base name 'destination' -> 'destination2'
+  [EVAL] String: "Test Destination"
+[ASSIGN] Result: destination2 := "Test Destination"
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_0 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_0'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Trips_0
+[ASSIGN] Result: tmp_Trips_0 := {}
+
+[ASSIGN] Evaluating: Trips_old := tmp_Trips_0
+  [EVAL] Var lookup: tmp_Trips_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Trips_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_2 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_2'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_T_2
+[ASSIGN] Result: tmp_T_2 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail2'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_2
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'createTrip' ready for actual execution
+
+[ASSIGN] Evaluating: _result2 := createTrip(userEmail, tripName, destination)
+[SEE] Mapping base name '_result' -> '_result2'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail2'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] Var lookup: tripName
+    [EVAL] Resolved base name 'tripName' -> 'tripName2'
+    [EVAL] Found in sigma: "Test Trip 14"
+  [EVAL] Var lookup: destination
+    [EVAL] Resolved base name 'destination' -> 'destination2'
+    [EVAL] Found in sigma: "Test Destination"
+[API_CALL] Executing API function: createTrip
+  [API_ARG] "testuser15@serveez.com"
+  [API_ARG] "Test Trip 14"
+  [API_ARG] "Test Destination"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[CreateTripFunc] Creating trip: Test Trip 14 for testuser15@serveez.com
+[HttpClient] POST /api/trips -> 201
+  [API_CALL] Function returned: "6aedf527906873ed6c64542c"
+  [API_CALL] Storing result in variable: _result2
+[ASSIGN] Result: _result2 := "6aedf527906873ed6c64542c"
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_1 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_1'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+  [API_CALL] Storing result in variable: tmp_Trips_1
+[ASSIGN] Result: tmp_Trips_1 := {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+
+[ASSERT] Evaluating: in(_result2, dom(tmp_Trips_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: "6aedf527906873ed6c64542c"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Trips_1
+    [EVAL] Found in sigma: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+    [EVAL] Map expr evaluated: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "6aedf527906873ed6c64542c"
+    [EVAL] Set: {"6aedf527906873ed6c64542c"}
+    [EVAL] Element: "6aedf527906873ed6c64542c"
+    [EVAL] Set: {"6aedf527906873ed6c64542c"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: userEmail3 := "testuser15@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail3'
+  [EVAL] String: "testuser15@serveez.com"
+[ASSIGN] Result: userEmail3 := "testuser15@serveez.com"
+
+[ASSIGN] Evaluating: tripName3 := "Test Trip 14"
+[SEE] Mapping base name 'tripName' -> 'tripName3'
+  [EVAL] String: "Test Trip 14"
+[ASSIGN] Result: tripName3 := "Test Trip 14"
+
+[ASSIGN] Evaluating: destination3 := "Test Destination"
+[SEE] Mapping base name 'destination' -> 'destination3'
+  [EVAL] String: "Test Destination"
+[ASSIGN] Result: destination3 := "Test Destination"
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_2 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_2'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+  [API_CALL] Storing result in variable: tmp_Trips_2
+[ASSIGN] Result: tmp_Trips_2 := {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+
+[ASSIGN] Evaluating: Trips_old := tmp_Trips_2
+  [EVAL] Var lookup: tmp_Trips_2
+    [EVAL] Found in sigma: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+[ASSIGN] Result: Trips_old := {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33"}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_3 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_3'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+  [API_CALL] Storing result in variable: tmp_T_3
+[ASSIGN] Result: tmp_T_3 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail3'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_3
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODd9.PODzL5sNF0ofacJiBHXtvvUyXYcq2IftGPulJ6ruRxA"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'createTrip' ready for actual execution
+
+[ASSIGN] Evaluating: _result3 := createTrip(userEmail, tripName, destination)
+[SEE] Mapping base name '_result' -> '_result3'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail3'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] Var lookup: tripName
+    [EVAL] Resolved base name 'tripName' -> 'tripName3'
+    [EVAL] Found in sigma: "Test Trip 14"
+  [EVAL] Var lookup: destination
+    [EVAL] Resolved base name 'destination' -> 'destination3'
+    [EVAL] Found in sigma: "Test Destination"
+[API_CALL] Executing API function: createTrip
+  [API_ARG] "testuser15@serveez.com"
+  [API_ARG] "Test Trip 14"
+  [API_ARG] "Test Destination"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[CreateTripFunc] Creating trip: Test Trip 14 for testuser15@serveez.com
+[HttpClient] POST /api/trips -> 201
+  [API_CALL] Function returned: "6aedf527906873ed6c645435"
+  [API_CALL] Storing result in variable: _result3
+[ASSIGN] Result: _result3 := "6aedf527906873ed6c645435"
+[SEE] API call 'get_Trips' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Trips_3 := get_Trips()
+[SEE] Mapping base name 'tmp_Trips_' -> 'tmp_Trips_3'
+[API_CALL] Executing API function: get_Trips
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTripsFunc] Fetching Trips...
+  [API_CALL] Function returned: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33", 6aedf527906873ed6c645435 -> "Test Trip 14|||F8F25CC3"}
+  [API_CALL] Storing result in variable: tmp_Trips_3
+[ASSIGN] Result: tmp_Trips_3 := {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33", 6aedf527906873ed6c645435 -> "Test Trip 14|||F8F25CC3"}
+
+[ASSERT] Evaluating: in(_result3, dom(tmp_Trips_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result3
+    [EVAL] Found in sigma: "6aedf527906873ed6c645435"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Trips_3
+    [EVAL] Found in sigma: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33", 6aedf527906873ed6c645435 -> "Test Trip 14|||F8F25CC3"}
+    [EVAL] Map expr evaluated: {6aedf527906873ed6c64542c -> "Test Trip 14|||460F1A33", 6aedf527906873ed6c645435 -> "Test Trip 14|||F8F25CC3"}
+    [EVAL] Domain has 2 keys
+    [EVAL] Element: "6aedf527906873ed6c64542c"
+    [EVAL] Element: "6aedf527906873ed6c645435"
+    [EVAL] Set: {"6aedf527906873ed6c64542c", "6aedf527906873ed6c645435"}
+    [EVAL] Element: "6aedf527906873ed6c645435"
+    [EVAL] Set: {"6aedf527906873ed6c64542c", "6aedf527906873ed6c645435"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: userEmail4 := "testuser15@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail4'
+  [EVAL] String: "testuser15@serveez.com"
+[ASSIGN] Result: userEmail4 := "testuser15@serveez.com"
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_4 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_4'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODh9.WY1sQyXscCjfDOglYFhM6EUhgvrNZJ4gRSiutTJvLpE"}
+  [API_CALL] Storing result in variable: tmp_T_4
+[ASSIGN] Result: tmp_T_4 := {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODh9.WY1sQyXscCjfDOglYFhM6EUhgvrNZJ4gRSiutTJvLpE"}
+
+[ASSUME] Evaluating: in(userEmail, dom(tmp_T_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail4'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_4
+    [EVAL] Found in sigma: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODh9.WY1sQyXscCjfDOglYFhM6EUhgvrNZJ4gRSiutTJvLpE"}
+    [EVAL] Map expr evaluated: {testuser15@serveez.com -> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWVkZjUyNzkwNjg3M2VkNmM2NDU0MjIiLCJpYXQiOjE3OTM5Nzk2ODh9.WY1sQyXscCjfDOglYFhM6EUhgvrNZJ4gRSiutTJvLpE"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element: "testuser15@serveez.com"
+    [EVAL] Set: {"testuser15@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'getUserTrips' ready for actual execution
+
+[ASSIGN] Evaluating: _result4 := getUserTrips(userEmail)
+[SEE] Mapping base name '_result' -> '_result4'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail4'
+    [EVAL] Found in sigma: "testuser15@serveez.com"
+[API_CALL] Executing API function: getUserTrips
+  [API_ARG] "testuser15@serveez.com"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetUserTripsFunc] Getting trips for: testuser15@serveez.com
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _result4
+[ASSIGN] Result: _result4 := 200
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, And(true, And(true, And(true, And(true, true)))))
+>>> generateCTC: After symex - Is abstract: 0, Has placeholders: 0
+>>> generateCTC: Program is now fully concrete
+
+[FINAL CTC]
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: userEmail0 := "testuser15@serveez.com"
+Statement 2: userPassword0 := "TestPassword123!"
+Statement 3: tmp_U_0 := get_U()
+Statement 4: U_old := tmp_U_0
+Statement 5: tmp_U_1 := get_U()
+Statement 6: assume(not_in(userEmail, dom(tmp_U_1)))
+Statement 7: _result0 := registerUser(userEmail, userPassword)
+Statement 8: tmp_U_2 := get_U()
+Statement 9: assert(in(userEmail, dom(tmp_U_2)))
+Statement 10: userEmail1 := "testuser15@serveez.com"
+Statement 11: tmp_T_0 := get_T()
+Statement 12: T_old := tmp_T_0
+Statement 13: tmp_U_3 := get_U()
+Statement 14: assume(in(userEmail, dom(tmp_U_3)))
+Statement 15: _result1 := loginUser(userEmail)
+Statement 16: tmp_T_1 := get_T()
+Statement 17: assert(in(userEmail, dom(tmp_T_1)))
+Statement 18: userEmail2 := "testuser15@serveez.com"
+Statement 19: tripName2 := "Test Trip 14"
+Statement 20: destination2 := "Test Destination"
+Statement 21: tmp_Trips_0 := get_Trips()
+Statement 22: Trips_old := tmp_Trips_0
+Statement 23: tmp_T_2 := get_T()
+Statement 24: assume(in(userEmail, dom(tmp_T_2)))
+Statement 25: _result2 := createTrip(userEmail, tripName, destination)
+Statement 26: tmp_Trips_1 := get_Trips()
+Statement 27: assert(in(_result2, dom(tmp_Trips_1)))
+Statement 28: userEmail3 := "testuser15@serveez.com"
+Statement 29: tripName3 := "Test Trip 14"
+Statement 30: destination3 := "Test Destination"
+Statement 31: tmp_Trips_2 := get_Trips()
+Statement 32: Trips_old := tmp_Trips_2
+Statement 33: tmp_T_3 := get_T()
+Statement 34: assume(in(userEmail, dom(tmp_T_3)))
+Statement 35: _result3 := createTrip(userEmail, tripName, destination)
+Statement 36: tmp_Trips_3 := get_Trips()
+Statement 37: assert(in(_result3, dom(tmp_Trips_3)))
+Statement 38: userEmail4 := "testuser15@serveez.com"
+Statement 39: tmp_T_4 := get_T()
+Statement 40: assume(in(userEmail, dom(tmp_T_4)))
+Statement 41: _result4 := getUserTrips(userEmail)
+Statement 42: assert(1)
+=== End Program ===
+
+✓ [SAT] Test 15: Register → Login → Create 2 Trips → Get Trips (Depth=5) COMPLETE!

@@ -1,0 +1,43 @@
+TESTING SUMMARY - TRIPVAULT
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - TRIPVAULT TEST SUITE        ║
+║  Total Tests: 25 (21 SAT, 4 UNSAT)    ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 25
+  PASS (assertions succeeded):        21
+  UNSAT (correctly rejected by Z3):   4
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Register_Login_Depth_2.txt                        Register → Login (Depth=2)
+02   SAT    PASS                       test02_sat_Register_Login_Create_Trip_Depth_3.txt            Register → Login → Create Trip (Depth=3)
+03   SAT    PASS                       test03_sat_Register_Login_Create_Trip_Get_Trips_Depth_4.txt  Register → Login → Create Trip → Get Trips (Depth=4)
+04   SAT    PASS                       test04_sat_Register_Login_Create_Trip_Update_Trip_Depth_4.txt Register → Login → Create Trip → Update Trip (Depth=4)
+05   SAT    PASS                       test05_sat_Register_Login_Create_Trip_Delete_Trip_Depth_4.txt Register → Login → Create Trip → Delete Trip (Depth=4)
+06   SAT    PASS                       test06_sat_Two_Users_Create_Trip_Add_Member_Depth_6.txt      Two Users → Create Trip → Add Member (Depth=6)
+07   SAT    PASS                       test07_sat_Two_Users_Create_Trip_Join_By_Invite_Depth_6.txt  Two Users → Create Trip → Join By Invite (Depth=6)
+08   SAT    PASS                       test08_sat_Register_Login_Create_Trip_Create_Expense_Depth_4.txt Register → Login → Create Trip → Create Expense (Depth=4)
+09   SAT    PASS                       test09_sat_Create_Trip_Create_Expense_Get_Expenses_Depth_5.txt Create Trip → Create Expense → Get Expenses (Depth=5)
+10   SAT    PASS                       test10_sat_Create_Trip_Create_Expense_Delete_Expense_Depth_5.txt Create Trip → Create Expense → Delete Expense (Depth=5)
+11   SAT    PASS                       test11_sat_Create_Trip_Create_Proposal_Depth_4.txt           Create Trip → Create Proposal (Depth=4)
+12   SAT    PASS                       test12_sat_Create_Trip_Create_Proposal_Get_Proposals_Depth_5.txt Create Trip → Create Proposal → Get Proposals (Depth=5)
+13   SAT    PASS                       test13_sat_Create_Trip_Create_Proposal_Delete_Proposal_Depth_5.txt Create Trip → Create Proposal → Delete Proposal (Depth=5)
+14   SAT    PASS                       test14_sat_Create_Trip_Create_3_Expenses_Depth_6.txt         Create Trip → Create 3 Expenses (Depth=6)
+15   SAT    PASS                       test15_sat_Register_Login_Create_2_Trips_Get_Trips_Depth_5.txt Register → Login → Create 2 Trips → Get Trips (Depth=5)
+16   SAT    PASS                       test16_sat_Create_Trip_Create_Expense_Create_Proposal_Depth_5.txt Create Trip → Create Expense → Create Proposal (Depth=5)
+17   SAT    PASS                       test17_sat_Two_Users_Add_Member_Create_Expense_Depth_7.txt   Two Users → Add Member → Create Expense (Depth=7)
+18   SAT    PASS                       test18_sat_Full_Lifecycle_Create_Expense_Proposal_Delete_Both_Depth_7.txt Full Lifecycle: Create→Expense→Proposal→Delete Both (Depth=7)
+19   SAT    PASS                       test19_sat_Multi_User_Join_Create_Expense_Depth_7.txt        Multi-User Join → Create Expense (Depth=7)
+20   SAT    PASS                       test20_sat_Create_Expense_Delete_Re_create_Depth_6.txt       Create Expense → Delete → Re-create (Depth=6)
+21   SAT    PASS                       test21_sat_Create_Trip_Create_2_Proposals_Get_All_Depth_6.txt Create Trip → Create 2 Proposals → Get All (Depth=6)
+22   UNSAT  UNSAT (rejected by solver) test22_unsat_Login_Without_Register_Depth_1.txt              Login Without Register (Depth=1)
+23   UNSAT  UNSAT (rejected by solver) test23_unsat_Create_Trip_Without_Login_Depth_1.txt           Create Trip Without Login (Depth=1)
+24   UNSAT  UNSAT (rejected by solver) test24_unsat_Delete_Expense_Without_Auth_Depth_1.txt         Delete Expense Without Auth (Depth=1)
+25   UNSAT  UNSAT (rejected by solver) test25_unsat_Delete_Trip_Without_Login_Depth_1.txt           Delete Trip Without Login (Depth=1)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

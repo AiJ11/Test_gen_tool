@@ -1,0 +1,216 @@
+========================================
+TEST: [SAT] Test 16: TerminateSession Forbidden (no session, Depth=1)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 3 globals: D S U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: userEmail0 := input()
+Statement 2: sessId0 := input()
+Statement 3: tmp_S_0 := get_S()
+Statement 4: assume(not_in(sessId, dom(tmp_S_0)))
+Statement 5: _result0 := terminateSession(userEmail, sessId)
+Statement 6: assert(1)
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GS:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: userEmail0 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X68
+[ASSIGN] Result: userEmail0 := X68
+
+[ASSIGN] Evaluating: sessId0 := input()
+[SEE] Mapping base name 'sessId' -> 'sessId0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X69
+[ASSIGN] Result: sessId0 := X69
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_0 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_0'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GS:GetSFunc] Fetching S...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_0
+[ASSIGN] Result: tmp_S_0 := {}
+
+[ASSUME] Evaluating: not_in(sessId, dom(tmp_S_0))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: sessId
+    [EVAL] Resolved base name 'sessId' -> 'sessId0'
+    [EVAL] Found in sigma: X69
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'terminateSession' with symbolic arguments - interruption point
+[SEE] Interruption at statement 5
+
+[ASSIGN] Evaluating: _result0 := terminateSession(userEmail, sessId)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X68
+  [EVAL] Var lookup: sessId
+    [EVAL] Resolved base name 'sessId' -> 'sessId0'
+    [EVAL] Found in sigma: X69
+[API_CALL] terminateSession has symbolic arguments - skipping actual execution
+  [API_ARG 0] X68 (symbolic: 1)
+  [API_ARG 1] X69 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, true)
+>>> generateCTC: After symex - Is abstract: 1, Has placeholders: 0
+
+>>> generateCTC: STEP 3 - Generating values with sigma lookup
+    [Found existing] _ -> _
+    [Found existing] tmp_S_ -> tmp_S_0
+    [Found existing] _result -> _result0
+    userEmail0 = "testuser16@serveez.com"
+    sessId0 = "value_1"
+
+>>> generateCTC: STEP 4 - Resolving placeholders from sigma
+
+>>> generateCTC: STEP 5 - Recursing with 2 concrete values
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 2
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GS:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: userEmail0 := "testuser16@serveez.com"
+[SEE] Mapping base name 'userEmail' -> 'userEmail0'
+  [EVAL] String: "testuser16@serveez.com"
+[ASSIGN] Result: userEmail0 := "testuser16@serveez.com"
+
+[ASSIGN] Evaluating: sessId0 := "value_1"
+[SEE] Mapping base name 'sessId' -> 'sessId0'
+  [EVAL] String: "value_1"
+[ASSIGN] Result: sessId0 := "value_1"
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_0 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_0'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GS:GetSFunc] Fetching S...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_0
+[ASSIGN] Result: tmp_S_0 := {}
+
+[ASSUME] Evaluating: not_in(sessId, dom(tmp_S_0))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: sessId
+    [EVAL] Resolved base name 'sessId' -> 'sessId0'
+    [EVAL] Found in sigma: "value_1"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'terminateSession' ready for actual execution
+
+[ASSIGN] Evaluating: _result0 := terminateSession(userEmail, sessId)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: "testuser16@serveez.com"
+  [EVAL] Var lookup: sessId
+    [EVAL] Resolved base name 'sessId' -> 'sessId0'
+    [EVAL] Found in sigma: "value_1"
+[API_CALL] Executing API function: terminateSession
+  [API_ARG] "testuser16@serveez.com"
+  [API_ARG] "value_1"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GS:TerminateSessionFunc] Terminating session: value_1
+  [API_CALL] Function returned: 401
+  [API_CALL] Storing result in variable: _result0
+[ASSIGN] Result: _result0 := 401
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, true)
+>>> generateCTC: After symex - Is abstract: 0, Has placeholders: 0
+>>> generateCTC: Program is now fully concrete
+
+[FINAL CTC]
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: userEmail0 := "testuser16@serveez.com"
+Statement 2: sessId0 := "value_1"
+Statement 3: tmp_S_0 := get_S()
+Statement 4: assume(not_in(sessId, dom(tmp_S_0)))
+Statement 5: _result0 := terminateSession(userEmail, sessId)
+Statement 6: assert(1)
+=== End Program ===
+
+✓ [SAT] Test 16: TerminateSession Forbidden (no session, Depth=1) COMPLETE!

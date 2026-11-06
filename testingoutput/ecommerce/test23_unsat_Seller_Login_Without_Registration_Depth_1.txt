@@ -1,0 +1,251 @@
+========================================
+TEST: [UNSAT] Test 23: Seller Login Without Registration (Depth=1)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[EcommerceFunctionFactory] Initialized with baseUrl: http://localhost:3000
+[RewriteGlobalsVisitor] Detected 10 globals: C O OrderStatus P Rev Roles Sellers Stock T U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: sellerEmail0 := input()
+Statement 2: sellerPassword0 := input()
+Statement 3: tmp_T_0 := get_T()
+Statement 4: T_old := tmp_T_0
+Statement 5: tmp_U_0 := get_U()
+Statement 6: tmp_U_1 := get_U()
+Statement 7: tmp_Roles_0 := get_Roles()
+Statement 8: assume(AND(in(sellerEmail, dom(tmp_U_0)), =([](tmp_U_1, sellerEmail), sellerPassword), =([](tmp_Roles_0, sellerEmail), SELLER)))
+Statement 9: _result0 := login(sellerEmail, sellerPassword)
+Statement 10: tmp_T_1 := get_T()
+Statement 11: assert(=([](tmp_T_1, sellerEmail), _result0))
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: reset
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 403
+  [API_CALL] Function returned: 403
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 403
+
+[ASSIGN] Evaluating: sellerEmail0 := input()
+[SEE] Mapping base name 'sellerEmail' -> 'sellerEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X453
+[ASSIGN] Result: sellerEmail0 := X453
+
+[ASSIGN] Evaluating: sellerPassword0 := input()
+[SEE] Mapping base name 'sellerPassword' -> 'sellerPassword0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X454
+[ASSIGN] Result: sellerPassword0 := X454
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_0 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_0'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_0
+[ASSIGN] Result: tmp_T_0 := {}
+
+[ASSIGN] Evaluating: T_old := tmp_T_0
+  [EVAL] Var lookup: tmp_T_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: T_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_0 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_0'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_0
+[ASSIGN] Result: tmp_U_0 := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_1 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_1'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_1
+[ASSIGN] Result: tmp_U_1 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_0 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_0'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_0
+[ASSIGN] Result: tmp_Roles_0 := {}
+[SEE] Interruption at statement 8
+
+[ASSUME] Evaluating: AND(in(sellerEmail, dom(tmp_U_0)), =([](tmp_U_1, sellerEmail), sellerPassword), =([](tmp_Roles_0, sellerEmail), SELLER))
+  [EVAL] FuncCall: AND with 3 args
+    [EVAL] N-ary AND with 3 args
+    [EVAL] Arg[0]: in(sellerEmail, dom(tmp_U_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: sellerEmail
+    [EVAL] Resolved base name 'sellerEmail' -> 'sellerEmail0'
+    [EVAL] Found in sigma: X453
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X453
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_U_1, sellerEmail), sellerPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: sellerEmail
+    [EVAL] Resolved base name 'sellerEmail' -> 'sellerEmail0'
+    [EVAL] Found in sigma: X453
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X453
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: sellerPassword
+    [EVAL] Resolved base name 'sellerPassword' -> 'sellerPassword0'
+    [EVAL] Found in sigma: X454
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X453) X454)
+    [EVAL] Arg[2]: =([](tmp_Roles_0, sellerEmail), SELLER)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_0
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: sellerEmail
+    [EVAL] Resolved base name 'sellerEmail' -> 'sellerEmail0'
+    [EVAL] Found in sigma: X453
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X453
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: SELLER
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[2] result: (= []({}, X453) SELLER)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'login' with symbolic arguments - interruption point
+[SEE] Interruption at statement 9
+
+[ASSIGN] Evaluating: _result0 := login(sellerEmail, sellerPassword)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: sellerEmail
+    [EVAL] Resolved base name 'sellerEmail' -> 'sellerEmail0'
+    [EVAL] Found in sigma: X453
+  [EVAL] Var lookup: sellerPassword
+    [EVAL] Resolved base name 'sellerPassword' -> 'sellerPassword0'
+    [EVAL] Found in sigma: X454
+[API_CALL] login has symbolic arguments - skipping actual execution
+  [API_ARG 0] X453 (symbolic: 1)
+  [API_ARG 1] X454 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_1 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_1'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_1
+[ASSIGN] Result: tmp_T_1 := {}
+
+[ASSERT] Evaluating: =([](tmp_T_1, sellerEmail), _result0)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_T_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: sellerEmail
+    [EVAL] Resolved base name 'sellerEmail' -> 'sellerEmail0'
+    [EVAL] Found in sigma: X453
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X453
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: -1
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+[ASSERT] Result: (= []({}, X453) -1)
+[ASSERT] Adding to path constraints (not fully concrete)
+
+[SEE] Path Constraint: And(true, And(false, (= []({}, X453) -1)))
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 5 known map(s) from live state)...
+[Z3Solver] Formula: (and (select ((as const (Array String Bool)) false) sellerEmail)
+     (= (select ((as const (Array String String)) _unused_default_tmp_U_1)
+                sellerEmail)
+        sellerPassword)
+     (= (select ((as const (Array String String)) _unused_default_tmp_Roles_0)
+                sellerEmail)
+        SELLER))
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ [UNSAT] Test 23: Seller Login Without Registration (Depth=1) UNSAT: Preconditions not satisfiable

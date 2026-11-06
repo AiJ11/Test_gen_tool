@@ -1,0 +1,43 @@
+TESTING SUMMARY - RESTAURANT
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - RESTAURANT TEST SUITE       ║
+║  Total Tests: 25                       ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 25
+  PASS (assertions succeeded):        17
+  UNSAT (correctly rejected by Z3):   8
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Register_Customer_Login_Depth_2.txt               Register Customer-->Login (Depth=2)
+02   SAT    PASS                       test02_sat_loginCustomerErr_Depth_1.txt                      loginCustomerErr (Depth=1)
+03   SAT    PASS                       test03_sat_registerCustomerOk_loginWrongPasswordErr_Depth_2.txt registerCustomerOk → loginWrongPasswordErr (Depth=2)
+04   UNSAT  UNSAT (rejected by solver) test04_unsat_loginCustomerOk_Depth_1_Expected_UNSAT.txt      loginCustomerOk (Depth=1, Expected UNSAT)
+05   UNSAT  UNSAT (rejected by solver) test05_unsat_registerCustomerOk_loginCustomerOk_addToCartRestaurantOk_Depth_3_Expected_UNSAT.txt registerCustomerOk → loginCustomerOk → addToCartRestaurantOk (Depth=3, Expected UNSAT)
+06   UNSAT  UNSAT (rejected by solver) test06_unsat_registerOwnerOk_loginOwnerOk_createRestaurantOk_placeOrderOk_Depth_4_Expected_UNSAT.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → placeOrderOk (Depth=4, Expected UNSAT)
+07   SAT    PASS                       test07_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_Depth_7.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk (Depth=7)
+08   SAT    PASS                       test08_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk (Depth=9)
+09   SAT    PASS                       test09_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk (Depth=10)
+10   SAT    PASS                       test10_sat_Full_Order_Lifecycle_with_Review_Depth_19.txt     Full Order Lifecycle with Review (Depth=19)
+11   SAT    PASS                       test11_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_Depth_3.txt registerOwnerOk → loginOwnerOk → createRestaurantOk (Depth=3)
+12   SAT    PASS                       test12_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_addMenuItemOk_addMenuItemOk_Depth_6.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → addMenuItemOk → addMenuItemOk (Depth=6)
+13   SAT    PASS                       test13_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk (Depth=9)
+14   SAT    PASS                       test14_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk (Depth=10)
+15   SAT    PASS                       test15_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk → updateOrderStatusOwnerOk x3 (Depth=13)
+16   UNSAT  PASS                       test16_unsat_registerCustomerOk_registerCustomerOk_Depth_2_Expected_UNSAT_Duplicate_Registration.txt registerCustomerOk → registerCustomerOk (Depth=2, Expected UNSAT - Duplicate Registration)
+17   UNSAT  UNSAT (rejected by solver) test17_unsat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCart.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk → registerAgentOk → loginAgentOk → updateOrderStatusAgentOk (Depth=13, Expected UNSAT)
+18   UNSAT  UNSAT (rejected by solver) test18_unsat_loginCustomerOk_browseRestaurantsOk_addToCartRestaurantOk_x3_placeOrderOk_Depth_6_Expected_UNSAT_No_Registration.txt loginCustomerOk → browseRestaurantsOk → addToCartRestaurantOk x3 → placeOrderOk (Depth=6, Expected UNSAT - No Registration)
+19   UNSAT  PASS                       test19_unsat_registerCustomerOk_loginCustomerOk_createRestaurantCustomerErr_Depth_3_Expected_UNSAT_Customer_Can_t_Create_Restaurant.txt registerCustomerOk → loginCustomerOk → createRestaurantCustomerErr (Depth=3, Expected UNSAT - Customer Can't Create Restaurant)
+20   UNSAT  UNSAT (rejected by solver) test20_unsat_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRestaurantOk_placeOrderOk_leaveReviewOk_Depth_7_Expected_UNSAT.txt registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk → leaveReviewOk (Depth=7, Expected UNSAT)
+21   SAT    PASS                       test21_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_x3_Depth_6.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk x3 (Depth=6)
+23   SAT    PASS                       test23_sat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_registerCustomerOk_loginCustomerOk_browseRestaurantsOk_viewMenuOk_addToCartRe.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk (Depth=10)
+24   UNSAT  UNSAT (rejected by solver) test24_unsat_registerCustomerOk_loginCustomerOk_leaveReviewOk_Depth_3_Expected_UNSAT_Review_Before_Order.txt registerCustomerOk → loginCustomerOk → leaveReviewOk (Depth=3, Expected UNSAT - Review Before Order)
+25   UNSAT  UNSAT (rejected by solver) test25_unsat_registerOwnerOk_loginOwnerOk_createRestaurantOk_addMenuItemOk_x5_updateOrderStatusOwnerOk_x2_Depth_10_Expected_UNSAT.txt registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk x5 → updateOrderStatusOwnerOk x2 (Depth=10, Expected UNSAT)
+26   UNSAT  PASS                       test26_unsat_registerCustomerOk_registerCustomerOk_Depth_2_Expected_UNSAT_Duplicate_Email.txt registerCustomerOk → registerCustomerOk (Depth=2, Expected UNSAT - Duplicate Email)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

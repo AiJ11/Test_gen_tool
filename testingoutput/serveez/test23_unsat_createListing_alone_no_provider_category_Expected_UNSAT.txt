@@ -1,0 +1,179 @@
+========================================
+TEST: [UNSAT] Test 23: createListing alone — no provider/category (Expected UNSAT)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: A B C L P U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: provEmail0 := input()
+Statement 2: catId0 := input()
+Statement 3: listingTitle0 := input()
+Statement 4: tmp_L_0 := get_L()
+Statement 5: L_old := tmp_L_0
+Statement 6: tmp_C_0 := get_C()
+Statement 7: assume(in(catId, dom(tmp_C_0)))
+Statement 8: _result0 := createListing(provEmail, catId, listingTitle)
+Statement 9: tmp_L_1 := get_L()
+Statement 10: assert(in(_result0, dom(tmp_L_1)))
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: provEmail0 := input()
+[SEE] Mapping base name 'provEmail' -> 'provEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X199
+[ASSIGN] Result: provEmail0 := X199
+
+[ASSIGN] Evaluating: catId0 := input()
+[SEE] Mapping base name 'catId' -> 'catId0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X200
+[ASSIGN] Result: catId0 := X200
+
+[ASSIGN] Evaluating: listingTitle0 := input()
+[SEE] Mapping base name 'listingTitle' -> 'listingTitle0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X201
+[ASSIGN] Result: listingTitle0 := X201
+[SEE] API call 'get_L' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_L_0 := get_L()
+[SEE] Mapping base name 'tmp_L_' -> 'tmp_L_0'
+[API_CALL] Executing API function: get_L
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetLFunc] Fetching L...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_L_0
+[ASSIGN] Result: tmp_L_0 := {}
+
+[ASSIGN] Evaluating: L_old := tmp_L_0
+  [EVAL] Var lookup: tmp_L_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: L_old := {}
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_0 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_0'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_0
+[ASSIGN] Result: tmp_C_0 := {}
+
+[ASSUME] Evaluating: in(catId, dom(tmp_C_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: catId
+    [EVAL] Resolved base name 'catId' -> 'catId0'
+    [EVAL] Found in sigma: X200
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_C_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X200
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'createListing' with symbolic arguments - interruption point
+[SEE] Interruption at statement 8
+
+[ASSIGN] Evaluating: _result0 := createListing(provEmail, catId, listingTitle)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: provEmail
+    [EVAL] Resolved base name 'provEmail' -> 'provEmail0'
+    [EVAL] Found in sigma: X199
+  [EVAL] Var lookup: catId
+    [EVAL] Resolved base name 'catId' -> 'catId0'
+    [EVAL] Found in sigma: X200
+  [EVAL] Var lookup: listingTitle
+    [EVAL] Resolved base name 'listingTitle' -> 'listingTitle0'
+    [EVAL] Found in sigma: X201
+[API_CALL] createListing has symbolic arguments - skipping actual execution
+  [API_ARG 0] X199 (symbolic: 1)
+  [API_ARG 1] X200 (symbolic: 1)
+  [API_ARG 2] X201 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_L' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_L_1 := get_L()
+[SEE] Mapping base name 'tmp_L_' -> 'tmp_L_1'
+[API_CALL] Executing API function: get_L
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetLFunc] Fetching L...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_L_1
+[ASSIGN] Result: tmp_L_1 := {}
+
+[ASSERT] Evaluating: in(_result0, dom(tmp_L_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_L_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[SEE] Path Constraint: And(true, false)
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_L_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_L_1' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 3 known map(s) from live state)...
+[Z3Solver] Formula: (select ((as const (Array String Bool)) false) catId)
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ [UNSAT] Test 23: createListing alone — no provider/category (Expected UNSAT) UNSAT: Preconditions not satisfiable

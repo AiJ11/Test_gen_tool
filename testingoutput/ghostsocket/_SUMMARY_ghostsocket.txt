@@ -1,0 +1,43 @@
+TESTING SUMMARY - GHOSTSOCKET
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - GHOSTSOCKET TEST SUITE      ║
+║  Total Tests: 25 (21 SAT, 4 UNSAT)    ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 25
+  PASS (assertions succeeded):        21
+  UNSAT (correctly rejected by Z3):   4
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Register_User_Depth_1.txt                         Register User (Depth=1)
+02   SAT    PASS                       test02_sat_Register_Two_Users_Depth_2.txt                    Register Two Users (Depth=2)
+03   SAT    PASS                       test03_sat_Register_User_Device_Depth_2.txt                  Register User + Device (Depth=2)
+04   SAT    PASS                       test04_sat_Register_Device_GetMyDevices_Depth_3.txt          Register → Device → GetMyDevices (Depth=3)
+05   SAT    PASS                       test05_sat_Register_Device_GetDeviceInfo_Depth_3.txt         Register → Device → GetDeviceInfo (Depth=3)
+06   SAT    PASS                       test06_sat_Register_Device_CreateSession_Depth_3.txt         Register → Device → CreateSession (Depth=3)
+07   SAT    PASS                       test07_sat_Two_Users_Device_Session_Join_Depth_5.txt         Two Users → Device → Session → Join (Depth=5)
+08   SAT    PASS                       test08_sat_Register_Device_Session_GetSessions_Depth_4.txt   Register → Device → Session → GetSessions (Depth=4)
+09   SAT    PASS                       test09_sat_Register_Device_Session_Terminate_Depth_4.txt     Register → Device → Session → Terminate (Depth=4)
+10   SAT    PASS                       test10_sat_Register_Device_DeleteDevice_Depth_3.txt          Register → Device → DeleteDevice (Depth=3)
+11   SAT    PASS                       test11_sat_Two_Users_Device_Session_Join_GetOtherDevices_Depth_6.txt Two Users → Device → Session → Join → GetOtherDevices (Depth=6)
+12   SAT    PASS                       test12_sat_Register_Device_Session_UpdatePermissions_Depth_4.txt Register → Device → Session → UpdatePermissions (Depth=4)
+13   SAT    PASS                       test13_sat_GetDeviceInfo_Forbidden_no_device_Depth_1.txt     GetDeviceInfo Forbidden (no device, Depth=1)
+14   SAT    PASS                       test14_sat_CreateSession_Forbidden_no_device_Depth_1.txt     CreateSession Forbidden (no device, Depth=1)
+15   SAT    PASS                       test15_sat_JoinSession_NotFound_no_session_Depth_1.txt       JoinSession NotFound (no session, Depth=1)
+16   SAT    PASS                       test16_sat_TerminateSession_Forbidden_no_session_Depth_1.txt TerminateSession Forbidden (no session, Depth=1)
+17   SAT    PASS                       test17_sat_Full_Session_Lifecycle_Depth_6.txt                Full Session Lifecycle (Depth=6)
+18   SAT    PASS                       test18_sat_Register_Device_GetMyDevices_Session_GetSessions_Depth_5.txt Register → Device → GetMyDevices → Session → GetSessions (Depth=5)
+19   SAT    PASS                       test19_sat_Register_Device_DeviceInfo_CreateSession_Depth_4.txt Register → Device → DeviceInfo → CreateSession (Depth=4)
+20   SAT    PASS                       test20_sat_Two_Users_Device_Session_Join_UpdatePermissions_Depth_6.txt Two Users → Device → Session → Join → UpdatePermissions (Depth=6)
+21   SAT    PASS                       test21_sat_Register_Device_Session_GetSessions_Terminate_Depth_5.txt Register → Device → Session → GetSessions → Terminate (Depth=5)
+22   UNSAT  UNSAT (rejected by solver) test22_unsat_CreateSession_alone_no_device_Expected_UNSAT.txt CreateSession alone — no device (Expected UNSAT)
+23   UNSAT  UNSAT (rejected by solver) test23_unsat_JoinSession_alone_no_session_Expected_UNSAT.txt JoinSession alone — no session (Expected UNSAT)
+24   UNSAT  UNSAT (rejected by solver) test24_unsat_TerminateSession_alone_no_session_Expected_UNSAT.txt TerminateSession alone — no session (Expected UNSAT)
+25   UNSAT  UNSAT (rejected by solver) test25_unsat_GetDeviceInfo_alone_no_device_Expected_UNSAT.txt GetDeviceInfo alone — no device (Expected UNSAT)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

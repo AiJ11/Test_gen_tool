@@ -1,0 +1,2040 @@
+========================================
+TEST: Test 24: Full Library Workflow (Depth=8)
+MODE: Full Pipeline (With Backend)
+DEPTH: 8 API calls
+========================================
+
+[LibraryFunctionFactory] Initialized with baseUrl: http://localhost:8080
+[RewriteGlobalsVisitor] Detected 4 globals: B Loans Req S 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: bookTitle0 := input()
+Statement 2: bookAuthor0 := input()
+Statement 3: bookDesc0 := input()
+Statement 4: tmp_B_0 := get_B()
+Statement 5: B_old := tmp_B_0
+Statement 6: assume(1)
+Statement 7: _result0 := saveBook(bookTitle, bookAuthor, bookDesc)
+Statement 8: tmp_B_1 := get_B()
+Statement 9: assert(in(_result0, dom(tmp_B_1)))
+Statement 10: bookTitle1 := input()
+Statement 11: bookAuthor1 := input()
+Statement 12: bookDesc1 := input()
+Statement 13: tmp_B_2 := get_B()
+Statement 14: B_old := tmp_B_2
+Statement 15: assume(1)
+Statement 16: _result1 := saveBook(bookTitle, bookAuthor, bookDesc)
+Statement 17: tmp_B_3 := get_B()
+Statement 18: assert(in(_result1, dom(tmp_B_3)))
+Statement 19: studentName2 := input()
+Statement 20: studentEmail2 := input()
+Statement 21: studentPhone2 := input()
+Statement 22: tmp_S_0 := get_S()
+Statement 23: S_old := tmp_S_0
+Statement 24: assume(1)
+Statement 25: _result2 := saveStudent(studentName, studentEmail, studentPhone)
+Statement 26: tmp_S_1 := get_S()
+Statement 27: assert(in(_result2, dom(tmp_S_1)))
+Statement 28: studentName3 := input()
+Statement 29: studentEmail3 := input()
+Statement 30: studentPhone3 := input()
+Statement 31: tmp_S_2 := get_S()
+Statement 32: S_old := tmp_S_2
+Statement 33: assume(1)
+Statement 34: _result3 := saveStudent(studentName, studentEmail, studentPhone)
+Statement 35: tmp_S_3 := get_S()
+Statement 36: assert(in(_result3, dom(tmp_S_3)))
+Statement 37: studentId4 := input()
+Statement 38: bookCode4 := input()
+Statement 39: startDate4 := input()
+Statement 40: endDate4 := input()
+Statement 41: tmp_Req_0 := get_Req()
+Statement 42: Req_old := tmp_Req_0
+Statement 43: tmp_S_4 := get_S()
+Statement 44: tmp_B_4 := get_B()
+Statement 45: assume(AND(in(studentId, dom(tmp_S_4)), in(bookCode, dom(tmp_B_4))))
+Statement 46: _result4 := saveRequest(studentId, bookCode, startDate, endDate)
+Statement 47: tmp_Req_1 := get_Req()
+Statement 48: assert(in(_result4, dom(tmp_Req_1)))
+Statement 49: requestId5 := input()
+Statement 50: tmp_Loans_0 := get_Loans()
+Statement 51: Loans_old := tmp_Loans_0
+Statement 52: tmp_Req_2 := get_Req()
+Statement 53: Req_old := tmp_Req_2
+Statement 54: tmp_Req_3 := get_Req()
+Statement 55: assume(in(requestId, dom(tmp_Req_3)))
+Statement 56: _result5 := acceptRequest(requestId)
+Statement 57: tmp_Loans_1 := get_Loans()
+Statement 58: tmp_Req_4 := get_Req()
+Statement 59: assert(AND(in(_result5, dom(tmp_Loans_1)), not_in(requestId, dom(tmp_Req_4))))
+Statement 60: loanId6 := input()
+Statement 61: tmp_Loans_2 := get_Loans()
+Statement 62: Loans_old := tmp_Loans_2
+Statement 63: tmp_Loans_3 := get_Loans()
+Statement 64: assume(in(loanId, dom(tmp_Loans_3)))
+Statement 65: _result6 := returnBook(loanId)
+Statement 66: tmp_Loans_4 := get_Loans()
+Statement 67: assert(not_in(loanId, dom(tmp_Loans_4)))
+Statement 68: assume(1)
+Statement 69: _result7 := getAllLoans()
+Statement 70: assert(1)
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: reset
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: bookTitle0 := input()
+[SEE] Mapping base name 'bookTitle' -> 'bookTitle0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X152
+[ASSIGN] Result: bookTitle0 := X152
+
+[ASSIGN] Evaluating: bookAuthor0 := input()
+[SEE] Mapping base name 'bookAuthor' -> 'bookAuthor0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X153
+[ASSIGN] Result: bookAuthor0 := X153
+
+[ASSIGN] Evaluating: bookDesc0 := input()
+[SEE] Mapping base name 'bookDesc' -> 'bookDesc0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X154
+[ASSIGN] Result: bookDesc0 := X154
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_0 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_0'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_0
+[ASSIGN] Result: tmp_B_0 := {}
+
+[ASSIGN] Evaluating: B_old := tmp_B_0
+  [EVAL] Var lookup: tmp_B_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: B_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveBook' with symbolic arguments - interruption point
+[SEE] Interruption at statement 7
+
+[ASSIGN] Evaluating: _result0 := saveBook(bookTitle, bookAuthor, bookDesc)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: bookTitle
+    [EVAL] Resolved base name 'bookTitle' -> 'bookTitle0'
+    [EVAL] Found in sigma: X152
+  [EVAL] Var lookup: bookAuthor
+    [EVAL] Resolved base name 'bookAuthor' -> 'bookAuthor0'
+    [EVAL] Found in sigma: X153
+  [EVAL] Var lookup: bookDesc
+    [EVAL] Resolved base name 'bookDesc' -> 'bookDesc0'
+    [EVAL] Found in sigma: X154
+[API_CALL] saveBook has symbolic arguments - skipping actual execution
+  [API_ARG 0] X152 (symbolic: 1)
+  [API_ARG 1] X153 (symbolic: 1)
+  [API_ARG 2] X154 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_1 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_1'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_1
+[ASSIGN] Result: tmp_B_1 := {}
+
+[ASSERT] Evaluating: in(_result0, dom(tmp_B_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: bookTitle1 := input()
+[SEE] Mapping base name 'bookTitle' -> 'bookTitle1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X155
+[ASSIGN] Result: bookTitle1 := X155
+
+[ASSIGN] Evaluating: bookAuthor1 := input()
+[SEE] Mapping base name 'bookAuthor' -> 'bookAuthor1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X156
+[ASSIGN] Result: bookAuthor1 := X156
+
+[ASSIGN] Evaluating: bookDesc1 := input()
+[SEE] Mapping base name 'bookDesc' -> 'bookDesc1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X157
+[ASSIGN] Result: bookDesc1 := X157
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_2 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_2'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_2
+[ASSIGN] Result: tmp_B_2 := {}
+
+[ASSIGN] Evaluating: B_old := tmp_B_2
+  [EVAL] Var lookup: tmp_B_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: B_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveBook' with symbolic arguments - interruption point
+[SEE] Interruption at statement 16
+
+[ASSIGN] Evaluating: _result1 := saveBook(bookTitle, bookAuthor, bookDesc)
+[SEE] Mapping base name '_result' -> '_result1'
+  [EVAL] Var lookup: bookTitle
+    [EVAL] Resolved base name 'bookTitle' -> 'bookTitle1'
+    [EVAL] Found in sigma: X155
+  [EVAL] Var lookup: bookAuthor
+    [EVAL] Resolved base name 'bookAuthor' -> 'bookAuthor1'
+    [EVAL] Found in sigma: X156
+  [EVAL] Var lookup: bookDesc
+    [EVAL] Resolved base name 'bookDesc' -> 'bookDesc1'
+    [EVAL] Found in sigma: X157
+[API_CALL] saveBook has symbolic arguments - skipping actual execution
+  [API_ARG 0] X155 (symbolic: 1)
+  [API_ARG 1] X156 (symbolic: 1)
+  [API_ARG 2] X157 (symbolic: 1)
+[ASSIGN] Result: _result1 := -1 (symbolic placeholder)
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_3 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_3'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_3
+[ASSIGN] Result: tmp_B_3 := {}
+
+[ASSERT] Evaluating: in(_result1, dom(tmp_B_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result1
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: studentName2 := input()
+[SEE] Mapping base name 'studentName' -> 'studentName2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X158
+[ASSIGN] Result: studentName2 := X158
+
+[ASSIGN] Evaluating: studentEmail2 := input()
+[SEE] Mapping base name 'studentEmail' -> 'studentEmail2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X159
+[ASSIGN] Result: studentEmail2 := X159
+
+[ASSIGN] Evaluating: studentPhone2 := input()
+[SEE] Mapping base name 'studentPhone' -> 'studentPhone2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X160
+[ASSIGN] Result: studentPhone2 := X160
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_0 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_0'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_0
+[ASSIGN] Result: tmp_S_0 := {}
+
+[ASSIGN] Evaluating: S_old := tmp_S_0
+  [EVAL] Var lookup: tmp_S_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: S_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveStudent' with symbolic arguments - interruption point
+[SEE] Interruption at statement 25
+
+[ASSIGN] Evaluating: _result2 := saveStudent(studentName, studentEmail, studentPhone)
+[SEE] Mapping base name '_result' -> '_result2'
+  [EVAL] Var lookup: studentName
+    [EVAL] Resolved base name 'studentName' -> 'studentName2'
+    [EVAL] Found in sigma: X158
+  [EVAL] Var lookup: studentEmail
+    [EVAL] Resolved base name 'studentEmail' -> 'studentEmail2'
+    [EVAL] Found in sigma: X159
+  [EVAL] Var lookup: studentPhone
+    [EVAL] Resolved base name 'studentPhone' -> 'studentPhone2'
+    [EVAL] Found in sigma: X160
+[API_CALL] saveStudent has symbolic arguments - skipping actual execution
+  [API_ARG 0] X158 (symbolic: 1)
+  [API_ARG 1] X159 (symbolic: 1)
+  [API_ARG 2] X160 (symbolic: 1)
+[ASSIGN] Result: _result2 := -1 (symbolic placeholder)
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_1 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_1'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_1
+[ASSIGN] Result: tmp_S_1 := {}
+
+[ASSERT] Evaluating: in(_result2, dom(tmp_S_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: studentName3 := input()
+[SEE] Mapping base name 'studentName' -> 'studentName3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X161
+[ASSIGN] Result: studentName3 := X161
+
+[ASSIGN] Evaluating: studentEmail3 := input()
+[SEE] Mapping base name 'studentEmail' -> 'studentEmail3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X162
+[ASSIGN] Result: studentEmail3 := X162
+
+[ASSIGN] Evaluating: studentPhone3 := input()
+[SEE] Mapping base name 'studentPhone' -> 'studentPhone3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X163
+[ASSIGN] Result: studentPhone3 := X163
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_2 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_2'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_2
+[ASSIGN] Result: tmp_S_2 := {}
+
+[ASSIGN] Evaluating: S_old := tmp_S_2
+  [EVAL] Var lookup: tmp_S_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: S_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveStudent' with symbolic arguments - interruption point
+[SEE] Interruption at statement 34
+
+[ASSIGN] Evaluating: _result3 := saveStudent(studentName, studentEmail, studentPhone)
+[SEE] Mapping base name '_result' -> '_result3'
+  [EVAL] Var lookup: studentName
+    [EVAL] Resolved base name 'studentName' -> 'studentName3'
+    [EVAL] Found in sigma: X161
+  [EVAL] Var lookup: studentEmail
+    [EVAL] Resolved base name 'studentEmail' -> 'studentEmail3'
+    [EVAL] Found in sigma: X162
+  [EVAL] Var lookup: studentPhone
+    [EVAL] Resolved base name 'studentPhone' -> 'studentPhone3'
+    [EVAL] Found in sigma: X163
+[API_CALL] saveStudent has symbolic arguments - skipping actual execution
+  [API_ARG 0] X161 (symbolic: 1)
+  [API_ARG 1] X162 (symbolic: 1)
+  [API_ARG 2] X163 (symbolic: 1)
+[ASSIGN] Result: _result3 := -1 (symbolic placeholder)
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_3 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_3'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_3
+[ASSIGN] Result: tmp_S_3 := {}
+
+[ASSERT] Evaluating: in(_result3, dom(tmp_S_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result3
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: studentId4 := input()
+[SEE] Mapping base name 'studentId' -> 'studentId4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X164
+[ASSIGN] Result: studentId4 := X164
+
+[ASSIGN] Evaluating: bookCode4 := input()
+[SEE] Mapping base name 'bookCode' -> 'bookCode4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X165
+[ASSIGN] Result: bookCode4 := X165
+
+[ASSIGN] Evaluating: startDate4 := input()
+[SEE] Mapping base name 'startDate' -> 'startDate4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X166
+[ASSIGN] Result: startDate4 := X166
+
+[ASSIGN] Evaluating: endDate4 := input()
+[SEE] Mapping base name 'endDate' -> 'endDate4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X167
+[ASSIGN] Result: endDate4 := X167
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_0 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_0'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_0
+[ASSIGN] Result: tmp_Req_0 := {}
+
+[ASSIGN] Evaluating: Req_old := tmp_Req_0
+  [EVAL] Var lookup: tmp_Req_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Req_old := {}
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_4 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_4'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_4
+[ASSIGN] Result: tmp_S_4 := {}
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_4 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_4'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_4
+[ASSIGN] Result: tmp_B_4 := {}
+[SEE] Interruption at statement 45
+
+[ASSUME] Evaluating: AND(in(studentId, dom(tmp_S_4)), in(bookCode, dom(tmp_B_4)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(studentId, dom(tmp_S_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: studentId
+    [EVAL] Resolved base name 'studentId' -> 'studentId4'
+    [EVAL] Found in sigma: X164
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X164
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: in(bookCode, dom(tmp_B_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: bookCode
+    [EVAL] Resolved base name 'bookCode' -> 'bookCode4'
+    [EVAL] Found in sigma: X165
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X165
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[1] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'saveRequest' with symbolic arguments - interruption point
+[SEE] Interruption at statement 46
+
+[ASSIGN] Evaluating: _result4 := saveRequest(studentId, bookCode, startDate, endDate)
+[SEE] Mapping base name '_result' -> '_result4'
+  [EVAL] Var lookup: studentId
+    [EVAL] Resolved base name 'studentId' -> 'studentId4'
+    [EVAL] Found in sigma: X164
+  [EVAL] Var lookup: bookCode
+    [EVAL] Resolved base name 'bookCode' -> 'bookCode4'
+    [EVAL] Found in sigma: X165
+  [EVAL] Var lookup: startDate
+    [EVAL] Resolved base name 'startDate' -> 'startDate4'
+    [EVAL] Found in sigma: X166
+  [EVAL] Var lookup: endDate
+    [EVAL] Resolved base name 'endDate' -> 'endDate4'
+    [EVAL] Found in sigma: X167
+[API_CALL] saveRequest has symbolic arguments - skipping actual execution
+  [API_ARG 0] X164 (symbolic: 1)
+  [API_ARG 1] X165 (symbolic: 1)
+  [API_ARG 2] X166 (symbolic: 1)
+  [API_ARG 3] X167 (symbolic: 1)
+[ASSIGN] Result: _result4 := -1 (symbolic placeholder)
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_1 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_1'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_1
+[ASSIGN] Result: tmp_Req_1 := {}
+
+[ASSERT] Evaluating: in(_result4, dom(tmp_Req_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result4
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: requestId5 := input()
+[SEE] Mapping base name 'requestId' -> 'requestId5'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X168
+[ASSIGN] Result: requestId5 := X168
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_0 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_0'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_0
+[ASSIGN] Result: tmp_Loans_0 := {}
+
+[ASSIGN] Evaluating: Loans_old := tmp_Loans_0
+  [EVAL] Var lookup: tmp_Loans_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Loans_old := {}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_2 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_2'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_2
+[ASSIGN] Result: tmp_Req_2 := {}
+
+[ASSIGN] Evaluating: Req_old := tmp_Req_2
+  [EVAL] Var lookup: tmp_Req_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Req_old := {}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_3 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_3'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_3
+[ASSIGN] Result: tmp_Req_3 := {}
+
+[ASSUME] Evaluating: in(requestId, dom(tmp_Req_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found in sigma: X168
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X168
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'acceptRequest' with symbolic arguments - interruption point
+[SEE] Interruption at statement 56
+
+[ASSIGN] Evaluating: _result5 := acceptRequest(requestId)
+[SEE] Mapping base name '_result' -> '_result5'
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found in sigma: X168
+[API_CALL] acceptRequest has symbolic arguments - skipping actual execution
+  [API_ARG 0] X168 (symbolic: 1)
+[ASSIGN] Result: _result5 := -1 (symbolic placeholder)
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_1 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_1'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_1
+[ASSIGN] Result: tmp_Loans_1 := {}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_4 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_4'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_4
+[ASSIGN] Result: tmp_Req_4 := {}
+[SEE] Interruption at statement 59
+
+[ASSERT] Evaluating: AND(in(_result5, dom(tmp_Loans_1)), not_in(requestId, dom(tmp_Req_4)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(_result5, dom(tmp_Loans_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result5
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: not_in(requestId, dom(tmp_Req_4))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found in sigma: X168
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+    [EVAL] Arg[1] result: true
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: loanId6 := input()
+[SEE] Mapping base name 'loanId' -> 'loanId6'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X169
+[ASSIGN] Result: loanId6 := X169
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_2 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_2'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_2
+[ASSIGN] Result: tmp_Loans_2 := {}
+
+[ASSIGN] Evaluating: Loans_old := tmp_Loans_2
+  [EVAL] Var lookup: tmp_Loans_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Loans_old := {}
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_3 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_3'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_3
+[ASSIGN] Result: tmp_Loans_3 := {}
+
+[ASSUME] Evaluating: in(loanId, dom(tmp_Loans_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found in sigma: X169
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X169
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'returnBook' with symbolic arguments - interruption point
+[SEE] Interruption at statement 65
+
+[ASSIGN] Evaluating: _result6 := returnBook(loanId)
+[SEE] Mapping base name '_result' -> '_result6'
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found in sigma: X169
+[API_CALL] returnBook has symbolic arguments - skipping actual execution
+  [API_ARG 0] X169 (symbolic: 1)
+[ASSIGN] Result: _result6 := -1 (symbolic placeholder)
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_4 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_4'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_4
+[ASSIGN] Result: tmp_Loans_4 := {}
+
+[ASSERT] Evaluating: not_in(loanId, dom(tmp_Loans_4))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found in sigma: X169
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'getAllLoans' ready for actual execution
+
+[ASSIGN] Evaluating: _result7 := getAllLoans()
+[SEE] Mapping base name '_result' -> '_result7'
+[API_CALL] Executing API function: getAllLoans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: getAllLoans
+  [API_CALL] Executing function...
+[GetAllLoansFunc] Getting all loans...
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _result7
+[ASSIGN] Result: _result7 := 200
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, And(1, And(1, And(1, And(1, And(false, And(false, And(false, 1))))))))
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_B_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_B_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_B_4' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Loans_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Loans_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Req_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_S_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_S_4' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 20 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "_result2"
+                                 true)
+                          "_result3"
+                          true)
+                   studentId))
+      (a!2 (select (store (store ((as const (Array String Bool)) false)
+                                 "_result0"
+                                 true)
+                          "_result1"
+                          true)
+                   bookCode)))
+  (and a!1 a!2))
+[Z3Solver] SAT - Model found!
+[Z3Solver] studentId = "_result2"
+[Z3Solver] bookCode = "_result0"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_B_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_B_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_B_4' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Loans_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Loans_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Req_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_S_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_S_4' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 20 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "_result4" true)
+        requestId)
+[Z3Solver] SAT - Model found!
+[Z3Solver] requestId = "_result4"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_B_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_B_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_B_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_B_4' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Loans_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Loans_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Loans_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Req_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Req_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_S_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_S_3' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_S_4' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 20 known map(s) from live state)...
+[Z3Solver] Formula: (select (store ((as const (Array String Bool)) false) "_result5" true) loanId)
+[Z3Solver] SAT - Model found!
+[Z3Solver] loanId = "_result5"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS every precondition in this sequence is satisfiable (authoritative) - not UNSAT.
+>>> generateCTC: After symex - Is abstract: 1, Has placeholders: 0
+
+>>> generateCTC: STEP 3 - Generating values with sigma lookup
+    [Found existing] _ -> _
+    [Found existing] tmp_B_ -> tmp_B_0
+    [Found existing] B_old -> B_old
+    [Found existing] _result -> _result0
+    [Found existing] tmp_S_ -> tmp_S_0
+    [Found existing] S_old -> S_old
+    [Found existing] tmp_Req_ -> tmp_Req_0
+    [Found existing] Req_old -> Req_old
+    [Found existing] tmp_Loans_ -> tmp_Loans_0
+    [Found existing] Loans_old -> Loans_old
+    bookTitle0 = "Test Book 13"
+    bookAuthor0 = "Test Author"
+    bookDesc0 = "A comprehensive test book description"
+    bookTitle1 = (reusing bookTitle) "Test Book 13"
+    bookAuthor1 = (reusing bookAuthor) "Test Author"
+    bookDesc1 = (reusing bookDesc) "A comprehensive test book description"
+    studentName2 = "Test Student 12"
+    studentEmail2 = "student12@library.edu"
+    studentPhone2 = "555-000-1011"
+    studentName3 = (reusing studentName) "Test Student 12"
+    studentEmail3 = (reusing studentEmail) "student12@library.edu"
+    studentPhone3 = (reusing studentPhone) "555-000-1011"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_S_
+    [findKeyFromMapInSigma] tmp_S_4 is empty map
+    [findKeyFromMapInSigma] tmp_S_3 is empty map
+    [findKeyFromMapInSigma] tmp_S_2 is empty map
+    [findKeyFromMapInSigma] tmp_S_1 is empty map
+    [findKeyFromMapInSigma] tmp_S_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_S_
+    [DEFERRED] studentId - no student in sigma yet
+    studentId4 = "__NEEDS_STUDENT_ID__"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_B_
+    [findKeyFromMapInSigma] tmp_B_4 is empty map
+    [findKeyFromMapInSigma] tmp_B_3 is empty map
+    [findKeyFromMapInSigma] tmp_B_2 is empty map
+    [findKeyFromMapInSigma] tmp_B_1 is empty map
+    [findKeyFromMapInSigma] tmp_B_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_B_
+    [DEFERRED] bookCode - no book in sigma yet
+    bookCode4 = "__NEEDS_BOOK_CODE__"
+    startDate4 = "2025-02-16T00:00:00.000Z"
+    endDate4 = "2025-02-25T00:00:00.000Z"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Req_
+    [findKeyFromMapInSigma] tmp_Req_4 is empty map
+    [findKeyFromMapInSigma] tmp_Req_3 is empty map
+    [findKeyFromMapInSigma] tmp_Req_2 is empty map
+    [findKeyFromMapInSigma] tmp_Req_1 is empty map
+    [findKeyFromMapInSigma] tmp_Req_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_Req_
+    [DEFERRED] requestId - no request in sigma yet
+    requestId5 = "__NEEDS_REQUEST_ID__"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Loans_
+    [findKeyFromMapInSigma] tmp_Loans_4 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_3 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_2 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_1 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_Loans_
+    [DEFERRED] loanId - no loan in sigma yet
+    loanId6 = "__NEEDS_LOAN_ID__"
+
+>>> generateCTC: STEP 4 - Resolving placeholders from sigma
+    [findKeyFromMapInSigma] Searching for prefix: tmp_S_
+    [findKeyFromMapInSigma] tmp_S_4 is empty map
+    [findKeyFromMapInSigma] tmp_S_3 is empty map
+    [findKeyFromMapInSigma] tmp_S_2 is empty map
+    [findKeyFromMapInSigma] tmp_S_1 is empty map
+    [findKeyFromMapInSigma] tmp_S_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_S_
+    [STILL PENDING] studentId4 - keeping placeholder for next iteration
+    [findKeyFromMapInSigma] Searching for prefix: tmp_B_
+    [findKeyFromMapInSigma] tmp_B_4 is empty map
+    [findKeyFromMapInSigma] tmp_B_3 is empty map
+    [findKeyFromMapInSigma] tmp_B_2 is empty map
+    [findKeyFromMapInSigma] tmp_B_1 is empty map
+    [findKeyFromMapInSigma] tmp_B_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_B_
+    [STILL PENDING] bookCode4 - keeping placeholder for next iteration
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Req_
+    [findKeyFromMapInSigma] tmp_Req_4 is empty map
+    [findKeyFromMapInSigma] tmp_Req_3 is empty map
+    [findKeyFromMapInSigma] tmp_Req_2 is empty map
+    [findKeyFromMapInSigma] tmp_Req_1 is empty map
+    [findKeyFromMapInSigma] tmp_Req_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_Req_
+    [STILL PENDING] requestId5 - keeping placeholder for next iteration
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Loans_
+    [findKeyFromMapInSigma] tmp_Loans_4 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_3 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_2 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_1 is empty map
+    [findKeyFromMapInSigma] tmp_Loans_0 is empty map
+    [findKeyFromMapInSigma] No non-empty map found for tmp_Loans_
+    [STILL PENDING] loanId6 - keeping placeholder for next iteration
+
+>>> generateCTC: STEP 5 - Recursing with 18 concrete values
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 18
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: reset
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: bookTitle0 := "Test Book 13"
+[SEE] Mapping base name 'bookTitle' -> 'bookTitle0'
+  [EVAL] String: "Test Book 13"
+[ASSIGN] Result: bookTitle0 := "Test Book 13"
+
+[ASSIGN] Evaluating: bookAuthor0 := "Test Author"
+[SEE] Mapping base name 'bookAuthor' -> 'bookAuthor0'
+  [EVAL] String: "Test Author"
+[ASSIGN] Result: bookAuthor0 := "Test Author"
+
+[ASSIGN] Evaluating: bookDesc0 := "A comprehensive test book description"
+[SEE] Mapping base name 'bookDesc' -> 'bookDesc0'
+  [EVAL] String: "A comprehensive test book description"
+[ASSIGN] Result: bookDesc0 := "A comprehensive test book description"
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_0 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_0'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_0
+[ASSIGN] Result: tmp_B_0 := {}
+
+[ASSIGN] Evaluating: B_old := tmp_B_0
+  [EVAL] Var lookup: tmp_B_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: B_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveBook' ready for actual execution
+
+[ASSIGN] Evaluating: _result0 := saveBook(bookTitle, bookAuthor, bookDesc)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: bookTitle
+    [EVAL] Resolved base name 'bookTitle' -> 'bookTitle0'
+    [EVAL] Found in sigma: "Test Book 13"
+  [EVAL] Var lookup: bookAuthor
+    [EVAL] Resolved base name 'bookAuthor' -> 'bookAuthor0'
+    [EVAL] Found in sigma: "Test Author"
+  [EVAL] Var lookup: bookDesc
+    [EVAL] Resolved base name 'bookDesc' -> 'bookDesc0'
+    [EVAL] Found in sigma: "A comprehensive test book description"
+[API_CALL] Executing API function: saveBook
+  [API_ARG] "Test Book 13"
+  [API_ARG] "Test Author"
+  [API_ARG] "A comprehensive test book description"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: saveBook
+  [API_CALL] Executing function...
+[SaveBookFunc] Creating book: Test Book 13
+[HttpClient] POST /books/save -> 200
+[SaveBookFunc] Created book with code: 58
+  [API_CALL] Function returned: "58"
+  [API_CALL] Storing result in variable: _result0
+[ASSIGN] Result: _result0 := "58"
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_1 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_1'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+  [API_CALL] Storing result in variable: tmp_B_1
+[ASSIGN] Result: tmp_B_1 := {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+
+[ASSERT] Evaluating: in(_result0, dom(tmp_B_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: "58"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_1
+    [EVAL] Found in sigma: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Map expr evaluated: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "58"
+    [EVAL] Set: {"58"}
+    [EVAL] Element: "58"
+    [EVAL] Set: {"58"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: bookTitle1 := "Test Book 13"
+[SEE] Mapping base name 'bookTitle' -> 'bookTitle1'
+  [EVAL] String: "Test Book 13"
+[ASSIGN] Result: bookTitle1 := "Test Book 13"
+
+[ASSIGN] Evaluating: bookAuthor1 := "Test Author"
+[SEE] Mapping base name 'bookAuthor' -> 'bookAuthor1'
+  [EVAL] String: "Test Author"
+[ASSIGN] Result: bookAuthor1 := "Test Author"
+
+[ASSIGN] Evaluating: bookDesc1 := "A comprehensive test book description"
+[SEE] Mapping base name 'bookDesc' -> 'bookDesc1'
+  [EVAL] String: "A comprehensive test book description"
+[ASSIGN] Result: bookDesc1 := "A comprehensive test book description"
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_2 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_2'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+  [API_CALL] Storing result in variable: tmp_B_2
+[ASSIGN] Result: tmp_B_2 := {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+
+[ASSIGN] Evaluating: B_old := tmp_B_2
+  [EVAL] Var lookup: tmp_B_2
+    [EVAL] Found in sigma: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+[ASSIGN] Result: B_old := {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveBook' ready for actual execution
+
+[ASSIGN] Evaluating: _result1 := saveBook(bookTitle, bookAuthor, bookDesc)
+[SEE] Mapping base name '_result' -> '_result1'
+  [EVAL] Var lookup: bookTitle
+    [EVAL] Resolved base name 'bookTitle' -> 'bookTitle1'
+    [EVAL] Found in sigma: "Test Book 13"
+  [EVAL] Var lookup: bookAuthor
+    [EVAL] Resolved base name 'bookAuthor' -> 'bookAuthor1'
+    [EVAL] Found in sigma: "Test Author"
+  [EVAL] Var lookup: bookDesc
+    [EVAL] Resolved base name 'bookDesc' -> 'bookDesc1'
+    [EVAL] Found in sigma: "A comprehensive test book description"
+[API_CALL] Executing API function: saveBook
+  [API_ARG] "Test Book 13"
+  [API_ARG] "Test Author"
+  [API_ARG] "A comprehensive test book description"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: saveBook
+  [API_CALL] Executing function...
+[SaveBookFunc] Creating book: Test Book 13
+[HttpClient] POST /books/save -> 200
+[SaveBookFunc] Created book with code: 59
+  [API_CALL] Function returned: "59"
+  [API_CALL] Storing result in variable: _result1
+[ASSIGN] Result: _result1 := "59"
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_3 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_3'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+  [API_CALL] Storing result in variable: tmp_B_3
+[ASSIGN] Result: tmp_B_3 := {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+
+[ASSERT] Evaluating: in(_result1, dom(tmp_B_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result1
+    [EVAL] Found in sigma: "59"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_3
+    [EVAL] Found in sigma: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Map expr evaluated: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Domain has 2 keys
+    [EVAL] Element: "58"
+    [EVAL] Element: "59"
+    [EVAL] Set: {"58", "59"}
+    [EVAL] Element: "59"
+    [EVAL] Set: {"58", "59"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: studentName2 := "Test Student 12"
+[SEE] Mapping base name 'studentName' -> 'studentName2'
+  [EVAL] String: "Test Student 12"
+[ASSIGN] Result: studentName2 := "Test Student 12"
+
+[ASSIGN] Evaluating: studentEmail2 := "student12@library.edu"
+[SEE] Mapping base name 'studentEmail' -> 'studentEmail2'
+  [EVAL] String: "student12@library.edu"
+[ASSIGN] Result: studentEmail2 := "student12@library.edu"
+
+[ASSIGN] Evaluating: studentPhone2 := "555-000-1011"
+[SEE] Mapping base name 'studentPhone' -> 'studentPhone2'
+  [EVAL] String: "555-000-1011"
+[ASSIGN] Result: studentPhone2 := "555-000-1011"
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_0 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_0'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_S_0
+[ASSIGN] Result: tmp_S_0 := {}
+
+[ASSIGN] Evaluating: S_old := tmp_S_0
+  [EVAL] Var lookup: tmp_S_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: S_old := {}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveStudent' ready for actual execution
+
+[ASSIGN] Evaluating: _result2 := saveStudent(studentName, studentEmail, studentPhone)
+[SEE] Mapping base name '_result' -> '_result2'
+  [EVAL] Var lookup: studentName
+    [EVAL] Resolved base name 'studentName' -> 'studentName2'
+    [EVAL] Found in sigma: "Test Student 12"
+  [EVAL] Var lookup: studentEmail
+    [EVAL] Resolved base name 'studentEmail' -> 'studentEmail2'
+    [EVAL] Found in sigma: "student12@library.edu"
+  [EVAL] Var lookup: studentPhone
+    [EVAL] Resolved base name 'studentPhone' -> 'studentPhone2'
+    [EVAL] Found in sigma: "555-000-1011"
+[API_CALL] Executing API function: saveStudent
+  [API_ARG] "Test Student 12"
+  [API_ARG] "student12@library.edu"
+  [API_ARG] "555-000-1011"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: saveStudent
+  [API_CALL] Executing function...
+[SaveStudentFunc] Creating student: Test Student 12
+[SaveStudentFunc] Using /student/save?userId=14
+[HttpClient] POST /student/save?userId=14 -> 200
+[SaveStudentFunc] Created student with id: 48
+  [API_CALL] Function returned: "48"
+  [API_CALL] Storing result in variable: _result2
+[ASSIGN] Result: _result2 := "48"
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_1 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_1'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+  [API_CALL] Storing result in variable: tmp_S_1
+[ASSIGN] Result: tmp_S_1 := {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+
+[ASSERT] Evaluating: in(_result2, dom(tmp_S_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: "48"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_1
+    [EVAL] Found in sigma: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+    [EVAL] Map expr evaluated: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "48"
+    [EVAL] Set: {"48"}
+    [EVAL] Element: "48"
+    [EVAL] Set: {"48"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: studentName3 := "Test Student 12"
+[SEE] Mapping base name 'studentName' -> 'studentName3'
+  [EVAL] String: "Test Student 12"
+[ASSIGN] Result: studentName3 := "Test Student 12"
+
+[ASSIGN] Evaluating: studentEmail3 := "student12@library.edu"
+[SEE] Mapping base name 'studentEmail' -> 'studentEmail3'
+  [EVAL] String: "student12@library.edu"
+[ASSIGN] Result: studentEmail3 := "student12@library.edu"
+
+[ASSIGN] Evaluating: studentPhone3 := "555-000-1011"
+[SEE] Mapping base name 'studentPhone' -> 'studentPhone3'
+  [EVAL] String: "555-000-1011"
+[ASSIGN] Result: studentPhone3 := "555-000-1011"
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_2 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_2'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+  [API_CALL] Storing result in variable: tmp_S_2
+[ASSIGN] Result: tmp_S_2 := {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+
+[ASSIGN] Evaluating: S_old := tmp_S_2
+  [EVAL] Var lookup: tmp_S_2
+    [EVAL] Found in sigma: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+[ASSIGN] Result: S_old := {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}"}
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'saveStudent' ready for actual execution
+
+[ASSIGN] Evaluating: _result3 := saveStudent(studentName, studentEmail, studentPhone)
+[SEE] Mapping base name '_result' -> '_result3'
+  [EVAL] Var lookup: studentName
+    [EVAL] Resolved base name 'studentName' -> 'studentName3'
+    [EVAL] Found in sigma: "Test Student 12"
+  [EVAL] Var lookup: studentEmail
+    [EVAL] Resolved base name 'studentEmail' -> 'studentEmail3'
+    [EVAL] Found in sigma: "student12@library.edu"
+  [EVAL] Var lookup: studentPhone
+    [EVAL] Resolved base name 'studentPhone' -> 'studentPhone3'
+    [EVAL] Found in sigma: "555-000-1011"
+[API_CALL] Executing API function: saveStudent
+  [API_ARG] "Test Student 12"
+  [API_ARG] "student12@library.edu"
+  [API_ARG] "555-000-1011"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: saveStudent
+  [API_CALL] Executing function...
+[SaveStudentFunc] Creating student: Test Student 12
+[SaveStudentFunc] Using /student/save?userId=15
+[HttpClient] POST /student/save?userId=15 -> 200
+[SaveStudentFunc] Created student with id: 49
+  [API_CALL] Function returned: "49"
+  [API_CALL] Storing result in variable: _result3
+[ASSIGN] Result: _result3 := "49"
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_3 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_3'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+  [API_CALL] Storing result in variable: tmp_S_3
+[ASSIGN] Result: tmp_S_3 := {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+
+[ASSERT] Evaluating: in(_result3, dom(tmp_S_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result3
+    [EVAL] Found in sigma: "49"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_3
+    [EVAL] Found in sigma: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+    [EVAL] Map expr evaluated: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+    [EVAL] Domain has 2 keys
+    [EVAL] Element: "48"
+    [EVAL] Element: "49"
+    [EVAL] Set: {"48", "49"}
+    [EVAL] Element: "49"
+    [EVAL] Set: {"48", "49"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: studentId4 := "__NEEDS_STUDENT_ID__"
+[SEE] Mapping base name 'studentId' -> 'studentId4'
+  [EVAL] String: "__NEEDS_STUDENT_ID__"
+[ASSIGN] Result: studentId4 := "__NEEDS_STUDENT_ID__"
+
+[ASSIGN] Evaluating: bookCode4 := "__NEEDS_BOOK_CODE__"
+[SEE] Mapping base name 'bookCode' -> 'bookCode4'
+  [EVAL] String: "__NEEDS_BOOK_CODE__"
+[ASSIGN] Result: bookCode4 := "__NEEDS_BOOK_CODE__"
+
+[ASSIGN] Evaluating: startDate4 := "2025-02-16T00:00:00.000Z"
+[SEE] Mapping base name 'startDate' -> 'startDate4'
+  [EVAL] String: "2025-02-16T00:00:00.000Z"
+[ASSIGN] Result: startDate4 := "2025-02-16T00:00:00.000Z"
+
+[ASSIGN] Evaluating: endDate4 := "2025-02-25T00:00:00.000Z"
+[SEE] Mapping base name 'endDate' -> 'endDate4'
+  [EVAL] String: "2025-02-25T00:00:00.000Z"
+[ASSIGN] Result: endDate4 := "2025-02-25T00:00:00.000Z"
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_0 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_0'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_0
+[ASSIGN] Result: tmp_Req_0 := {}
+
+[ASSIGN] Evaluating: Req_old := tmp_Req_0
+  [EVAL] Var lookup: tmp_Req_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Req_old := {}
+[SEE] API call 'get_S' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_S_4 := get_S()
+[SEE] Mapping base name 'tmp_S_' -> 'tmp_S_4'
+[API_CALL] Executing API function: get_S
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_S
+  [API_CALL] Executing function...
+[GetSFunc] Fetching S (Students)...
+  [API_CALL] Function returned: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+  [API_CALL] Storing result in variable: tmp_S_4
+[ASSIGN] Result: tmp_S_4 := {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_4 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_4'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_B
+  [API_CALL] Executing function...
+[GetBFunc] Fetching B (Books)...
+  [API_CALL] Function returned: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+  [API_CALL] Storing result in variable: tmp_B_4
+[ASSIGN] Result: tmp_B_4 := {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+
+[ASSUME] Evaluating: AND(in(studentId, dom(tmp_S_4)), in(bookCode, dom(tmp_B_4)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(studentId, dom(tmp_S_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: studentId
+    [EVAL] Resolved base name 'studentId' -> 'studentId4'
+    [EVAL] Found placeholder __NEEDS_STUDENT_ID__, attempting runtime resolution
+    [findKeyFromMapInSigma] Searching for prefix: tmp_S_
+    [findKeyFromMapInSigma] tmp_S_0 is empty map
+    [findKeyFromMapInSigma] Found tmp_S_1 with 1 entries, key: 48
+    [findKeyFromMapInSigma] Found tmp_S_2 with 1 entries, key: 48
+    [findKeyFromMapInSigma] Found tmp_S_3 with 2 entries, key: 48
+    [findKeyFromMapInSigma] Found tmp_S_4 with 2 entries, key: 48
+    [EVAL] Resolved to: 48
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_S_4
+    [EVAL] Found in sigma: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+    [EVAL] Map expr evaluated: {48 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":62}", 49 -> "{"email":"student12@library.edu","phone":"555-000-1011","studentName":"Test Student 12","userId":63}"}
+    [EVAL] Domain has 2 keys
+    [EVAL] Element: "48"
+    [EVAL] Element: "49"
+    [EVAL] Set: {"48", "49"}
+    [EVAL] Element: "48"
+    [EVAL] Set: {"48", "49"}
+    [EVAL] Element found in set: true
+    [EVAL] Arg[0] result: true
+    [EVAL] Arg[1]: in(bookCode, dom(tmp_B_4))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: bookCode
+    [EVAL] Resolved base name 'bookCode' -> 'bookCode4'
+    [EVAL] Found placeholder __NEEDS_BOOK_CODE__, attempting runtime resolution
+    [findKeyFromMapInSigma] Searching for prefix: tmp_B_
+    [findKeyFromMapInSigma] tmp_B_0 is empty map
+    [findKeyFromMapInSigma] Found tmp_B_1 with 1 entries, key: 58
+    [findKeyFromMapInSigma] Found tmp_B_2 with 1 entries, key: 58
+    [findKeyFromMapInSigma] Found tmp_B_3 with 2 entries, key: 58
+    [findKeyFromMapInSigma] Found tmp_B_4 with 2 entries, key: 58
+    [EVAL] Resolved to: 58
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_4
+    [EVAL] Found in sigma: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Map expr evaluated: {58 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}", 59 -> "{"author":"Test Author","bookDesc":"A comprehensive test book description","bookTitle":"Test Book 13"}"}
+    [EVAL] Domain has 2 keys
+    [EVAL] Element: "58"
+    [EVAL] Element: "59"
+    [EVAL] Set: {"58", "59"}
+    [EVAL] Element: "58"
+    [EVAL] Set: {"58", "59"}
+    [EVAL] Element found in set: true
+    [EVAL] Arg[1] result: true
+    [EVAL] FuncCall result: AND(...) = true
+[ASSUME] Adding constraint: true
+[SEE] API call 'saveRequest' ready for actual execution
+
+[ASSIGN] Evaluating: _result4 := saveRequest(studentId, bookCode, startDate, endDate)
+[SEE] Mapping base name '_result' -> '_result4'
+  [EVAL] Var lookup: studentId
+    [EVAL] Resolved base name 'studentId' -> 'studentId4'
+    [EVAL] Found in sigma: "48"
+  [EVAL] Var lookup: bookCode
+    [EVAL] Resolved base name 'bookCode' -> 'bookCode4'
+    [EVAL] Found in sigma: "58"
+  [EVAL] Var lookup: startDate
+    [EVAL] Resolved base name 'startDate' -> 'startDate4'
+    [EVAL] Found in sigma: "2025-02-16T00:00:00.000Z"
+  [EVAL] Var lookup: endDate
+    [EVAL] Resolved base name 'endDate' -> 'endDate4'
+    [EVAL] Found in sigma: "2025-02-25T00:00:00.000Z"
+[API_CALL] Executing API function: saveRequest
+  [API_ARG] "48"
+  [API_ARG] "58"
+  [API_ARG] "2025-02-16T00:00:00.000Z"
+  [API_ARG] "2025-02-25T00:00:00.000Z"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: saveRequest
+  [API_CALL] Executing function...
+[SaveRequestFunc] Creating request: student=48 book=58
+[HttpClient] POST /requests/save?userId=1 -> 200
+[SaveRequestFunc] Created request with slno: 19
+  [API_CALL] Function returned: "19"
+  [API_CALL] Storing result in variable: _result4
+[ASSIGN] Result: _result4 := "19"
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_1 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_1'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Req_1
+[ASSIGN] Result: tmp_Req_1 := {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+
+[ASSERT] Evaluating: in(_result4, dom(tmp_Req_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result4
+    [EVAL] Found in sigma: "19"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_1
+    [EVAL] Found in sigma: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Map expr evaluated: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "19"
+    [EVAL] Set: {"19"}
+    [EVAL] Element: "19"
+    [EVAL] Set: {"19"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: requestId5 := "__NEEDS_REQUEST_ID__"
+[SEE] Mapping base name 'requestId' -> 'requestId5'
+  [EVAL] String: "__NEEDS_REQUEST_ID__"
+[ASSIGN] Result: requestId5 := "__NEEDS_REQUEST_ID__"
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_0 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_0'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_0
+[ASSIGN] Result: tmp_Loans_0 := {}
+
+[ASSIGN] Evaluating: Loans_old := tmp_Loans_0
+  [EVAL] Var lookup: tmp_Loans_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Loans_old := {}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_2 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_2'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Req_2
+[ASSIGN] Result: tmp_Req_2 := {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+
+[ASSIGN] Evaluating: Req_old := tmp_Req_2
+  [EVAL] Var lookup: tmp_Req_2
+    [EVAL] Found in sigma: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+[ASSIGN] Result: Req_old := {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_3 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_3'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Req_3
+[ASSIGN] Result: tmp_Req_3 := {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+
+[ASSUME] Evaluating: in(requestId, dom(tmp_Req_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found placeholder __NEEDS_REQUEST_ID__, attempting runtime resolution
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Req_
+    [findKeyFromMapInSigma] tmp_Req_0 is empty map
+    [findKeyFromMapInSigma] Found tmp_Req_1 with 1 entries, key: 19
+    [findKeyFromMapInSigma] Found tmp_Req_2 with 1 entries, key: 19
+    [findKeyFromMapInSigma] Found tmp_Req_3 with 1 entries, key: 19
+    [findKeyFromMapInSigma] tmp_Req_4 is empty map
+    [EVAL] Resolved to: 19
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_3
+    [EVAL] Found in sigma: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Map expr evaluated: {19 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "19"
+    [EVAL] Set: {"19"}
+    [EVAL] Element: "19"
+    [EVAL] Set: {"19"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'acceptRequest' ready for actual execution
+
+[ASSIGN] Evaluating: _result5 := acceptRequest(requestId)
+[SEE] Mapping base name '_result' -> '_result5'
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found in sigma: "19"
+[API_CALL] Executing API function: acceptRequest
+  [API_ARG] "19"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: acceptRequest
+  [API_CALL] Executing function...
+[AcceptRequestFunc] Accepting request: 19
+[HttpClient] POST /bookStudent/accept?userId=1 -> 200
+[AcceptRequestFunc] Created loan 17 from request 19
+  [API_CALL] Function returned: "17"
+  [API_CALL] Storing result in variable: _result5
+[ASSIGN] Result: _result5 := "17"
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_1 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_1'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Loans_1
+[ASSIGN] Result: tmp_Loans_1 := {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+[SEE] API call 'get_Req' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Req_4 := get_Req()
+[SEE] Mapping base name 'tmp_Req_' -> 'tmp_Req_4'
+[API_CALL] Executing API function: get_Req
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Req
+  [API_CALL] Executing function...
+[GetReqFunc] Fetching Req (Requests)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Req_4
+[ASSIGN] Result: tmp_Req_4 := {}
+
+[ASSERT] Evaluating: AND(in(_result5, dom(tmp_Loans_1)), not_in(requestId, dom(tmp_Req_4)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(_result5, dom(tmp_Loans_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result5
+    [EVAL] Found in sigma: "17"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_1
+    [EVAL] Found in sigma: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Map expr evaluated: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "17"
+    [EVAL] Set: {"17"}
+    [EVAL] Element: "17"
+    [EVAL] Set: {"17"}
+    [EVAL] Element found in set: true
+    [EVAL] Arg[0] result: true
+    [EVAL] Arg[1]: not_in(requestId, dom(tmp_Req_4))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: requestId
+    [EVAL] Resolved base name 'requestId' -> 'requestId5'
+    [EVAL] Found in sigma: "19"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Req_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+    [EVAL] Arg[1] result: true
+    [EVAL] FuncCall result: AND(...) = true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSIGN] Evaluating: loanId6 := "__NEEDS_LOAN_ID__"
+[SEE] Mapping base name 'loanId' -> 'loanId6'
+  [EVAL] String: "__NEEDS_LOAN_ID__"
+[ASSIGN] Result: loanId6 := "__NEEDS_LOAN_ID__"
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_2 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_2'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Loans_2
+[ASSIGN] Result: tmp_Loans_2 := {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+
+[ASSIGN] Evaluating: Loans_old := tmp_Loans_2
+  [EVAL] Var lookup: tmp_Loans_2
+    [EVAL] Found in sigma: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+[ASSIGN] Result: Loans_old := {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_3 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_3'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+  [API_CALL] Storing result in variable: tmp_Loans_3
+[ASSIGN] Result: tmp_Loans_3 := {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+
+[ASSUME] Evaluating: in(loanId, dom(tmp_Loans_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found placeholder __NEEDS_LOAN_ID__, attempting runtime resolution
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Loans_
+    [findKeyFromMapInSigma] tmp_Loans_0 is empty map
+    [findKeyFromMapInSigma] Found tmp_Loans_1 with 1 entries, key: 17
+    [findKeyFromMapInSigma] Found tmp_Loans_2 with 1 entries, key: 17
+    [findKeyFromMapInSigma] Found tmp_Loans_3 with 1 entries, key: 17
+    [findKeyFromMapInSigma] tmp_Loans_4 is empty map
+    [EVAL] Resolved to: 17
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_3
+    [EVAL] Found in sigma: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Map expr evaluated: {17 -> "{"bookCode":58,"endDate":"2025-02-25T00:00:00.000+00:00","startDate":"2025-02-16T00:00:00.000+00:00","studentId":48}"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "17"
+    [EVAL] Set: {"17"}
+    [EVAL] Element: "17"
+    [EVAL] Set: {"17"}
+    [EVAL] Element found in set: true
+[ASSUME] Adding constraint: true
+[SEE] API call 'returnBook' ready for actual execution
+
+[ASSIGN] Evaluating: _result6 := returnBook(loanId)
+[SEE] Mapping base name '_result' -> '_result6'
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found in sigma: "17"
+[API_CALL] Executing API function: returnBook
+  [API_ARG] "17"
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: returnBook
+  [API_CALL] Executing function...
+[ReturnBookFunc] Returning book (loan): 17
+[ReturnBookFunc] Book returned successfully
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _result6
+[ASSIGN] Result: _result6 := 200
+[SEE] API call 'get_Loans' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Loans_4 := get_Loans()
+[SEE] Mapping base name 'tmp_Loans_' -> 'tmp_Loans_4'
+[API_CALL] Executing API function: get_Loans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: get_Loans
+  [API_CALL] Executing function...
+[GetLoansFunc] Fetching Loans...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Loans_4
+[ASSIGN] Result: tmp_Loans_4 := {}
+
+[ASSERT] Evaluating: not_in(loanId, dom(tmp_Loans_4))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: loanId
+    [EVAL] Resolved base name 'loanId' -> 'loanId6'
+    [EVAL] Found in sigma: "17"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Loans_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[ASSUME] Evaluating: 1
+  [EVAL] Num: 1
+[ASSUME] Adding constraint: 1
+[SEE] API call 'getAllLoans' ready for actual execution
+
+[ASSIGN] Evaluating: _result7 := getAllLoans()
+[SEE] Mapping base name '_result' -> '_result7'
+[API_CALL] Executing API function: getAllLoans
+  [API_CALL] Getting function from factory...
+[LibraryFactory] Creating function: getAllLoans
+  [API_CALL] Executing function...
+[GetAllLoansFunc] Getting all loans...
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _result7
+[ASSIGN] Result: _result7 := 200
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, And(1, And(1, And(1, And(1, And(true, And(true, And(true, 1))))))))
+>>> generateCTC: After symex - Is abstract: 0, Has placeholders: 1
+
+>>> generateCTC: STEP 3a - Resolving placeholders in AST
+
+>>> Resolving placeholders in program AST
+    [findKeyFromMapInSigma] Searching for prefix: tmp_S_
+    [findKeyFromMapInSigma] Found tmp_S_4 with 2 entries, returning key: 48
+    [AST RESOLVED] studentId4 = "48"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_B_
+    [findKeyFromMapInSigma] Found tmp_B_4 with 2 entries, returning key: 58
+    [AST RESOLVED] bookCode4 = "58"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Req_
+    [findKeyFromMapInSigma] tmp_Req_4 is empty map
+    [findKeyFromMapInSigma] Found tmp_Req_3 with 1 entries, returning key: 19
+    [AST RESOLVED] requestId5 = "19"
+    [findKeyFromMapInSigma] Searching for prefix: tmp_Loans_
+    [findKeyFromMapInSigma] tmp_Loans_4 is empty map
+    [findKeyFromMapInSigma] Found tmp_Loans_3 with 1 entries, returning key: 17
+    [AST RESOLVED] loanId6 = "17"
+>>> generateCTC: All placeholders resolved, program is fully concrete
+
+[FINAL CTC]
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: bookTitle0 := "Test Book 13"
+Statement 2: bookAuthor0 := "Test Author"
+Statement 3: bookDesc0 := "A comprehensive test book description"
+Statement 4: tmp_B_0 := get_B()
+Statement 5: B_old := tmp_B_0
+Statement 6: assume(1)
+Statement 7: _result0 := saveBook(bookTitle, bookAuthor, bookDesc)
+Statement 8: tmp_B_1 := get_B()
+Statement 9: assert(in(_result0, dom(tmp_B_1)))
+Statement 10: bookTitle1 := "Test Book 13"
+Statement 11: bookAuthor1 := "Test Author"
+Statement 12: bookDesc1 := "A comprehensive test book description"
+Statement 13: tmp_B_2 := get_B()
+Statement 14: B_old := tmp_B_2
+Statement 15: assume(1)
+Statement 16: _result1 := saveBook(bookTitle, bookAuthor, bookDesc)
+Statement 17: tmp_B_3 := get_B()
+Statement 18: assert(in(_result1, dom(tmp_B_3)))
+Statement 19: studentName2 := "Test Student 12"
+Statement 20: studentEmail2 := "student12@library.edu"
+Statement 21: studentPhone2 := "555-000-1011"
+Statement 22: tmp_S_0 := get_S()
+Statement 23: S_old := tmp_S_0
+Statement 24: assume(1)
+Statement 25: _result2 := saveStudent(studentName, studentEmail, studentPhone)
+Statement 26: tmp_S_1 := get_S()
+Statement 27: assert(in(_result2, dom(tmp_S_1)))
+Statement 28: studentName3 := "Test Student 12"
+Statement 29: studentEmail3 := "student12@library.edu"
+Statement 30: studentPhone3 := "555-000-1011"
+Statement 31: tmp_S_2 := get_S()
+Statement 32: S_old := tmp_S_2
+Statement 33: assume(1)
+Statement 34: _result3 := saveStudent(studentName, studentEmail, studentPhone)
+Statement 35: tmp_S_3 := get_S()
+Statement 36: assert(in(_result3, dom(tmp_S_3)))
+Statement 37: studentId4 := "48"
+Statement 38: bookCode4 := "58"
+Statement 39: startDate4 := "2025-02-16T00:00:00.000Z"
+Statement 40: endDate4 := "2025-02-25T00:00:00.000Z"
+Statement 41: tmp_Req_0 := get_Req()
+Statement 42: Req_old := tmp_Req_0
+Statement 43: tmp_S_4 := get_S()
+Statement 44: tmp_B_4 := get_B()
+Statement 45: assume(AND(in(studentId, dom(tmp_S_4)), in(bookCode, dom(tmp_B_4))))
+Statement 46: _result4 := saveRequest(studentId, bookCode, startDate, endDate)
+Statement 47: tmp_Req_1 := get_Req()
+Statement 48: assert(in(_result4, dom(tmp_Req_1)))
+Statement 49: requestId5 := "19"
+Statement 50: tmp_Loans_0 := get_Loans()
+Statement 51: Loans_old := tmp_Loans_0
+Statement 52: tmp_Req_2 := get_Req()
+Statement 53: Req_old := tmp_Req_2
+Statement 54: tmp_Req_3 := get_Req()
+Statement 55: assume(in(requestId, dom(tmp_Req_3)))
+Statement 56: _result5 := acceptRequest(requestId)
+Statement 57: tmp_Loans_1 := get_Loans()
+Statement 58: tmp_Req_4 := get_Req()
+Statement 59: assert(AND(in(_result5, dom(tmp_Loans_1)), not_in(requestId, dom(tmp_Req_4))))
+Statement 60: loanId6 := "17"
+Statement 61: tmp_Loans_2 := get_Loans()
+Statement 62: Loans_old := tmp_Loans_2
+Statement 63: tmp_Loans_3 := get_Loans()
+Statement 64: assume(in(loanId, dom(tmp_Loans_3)))
+Statement 65: _result6 := returnBook(loanId)
+Statement 66: tmp_Loans_4 := get_Loans()
+Statement 67: assert(not_in(loanId, dom(tmp_Loans_4)))
+Statement 68: assume(1)
+Statement 69: _result7 := getAllLoans()
+Statement 70: assert(1)
+=== End Program ===
+
+✓ Test 24: Full Library Workflow (Depth=8) COMPLETE!

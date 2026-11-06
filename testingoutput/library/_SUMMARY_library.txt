@@ -1,0 +1,43 @@
+TESTING SUMMARY - LIBRARY
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - LIBRARY TEST SUITE          ║
+║  Total Tests: 25                       ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 25
+  PASS (assertions succeeded):        21
+  UNSAT (correctly rejected by Z3):   4
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Get_All_Books_Depth_1.txt                         Get All Books (Depth=1)
+02   SAT    PASS                       test02_sat_Get_All_Students_Depth_1.txt                      Get All Students (Depth=1)
+03   SAT    PASS                       test03_sat_Save_Book_Depth_1.txt                             Save Book (Depth=1)
+04   SAT    PASS                       test04_sat_Save_Student_Depth_1.txt                          Save Student (Depth=1)
+05   SAT    PASS                       test05_sat_Save_Book_Get_Book_Depth_2.txt                    Save Book → Get Book (Depth=2)
+06   SAT    PASS                       test06_sat_Save_Student_Get_Student_Depth_2.txt              Save Student → Get Student (Depth=2)
+07   SAT    PASS                       test07_sat_Save_Two_Books_Depth_2.txt                        Save Two Books (Depth=2)
+08   SAT    PASS                       test08_sat_Get_Book_Not_Found_Depth_1.txt                    Get Book Not Found (Depth=1)
+09   SAT    PASS                       test09_sat_Book_CRUD_Save_Update_Delete_Depth_3.txt          Book CRUD - Save → Update → Delete (Depth=3)
+10   SAT    PASS                       test10_sat_Student_CRUD_Save_Update_Delete_Depth_3.txt       Student CRUD - Save → Update → Delete (Depth=3)
+11   SAT    PASS                       test11_sat_Create_Book_and_Student_Depth_2.txt               Create Book and Student (Depth=2)
+12   SAT    PASS                       test12_sat_Create_Request_Flow_Depth_3.txt                   Create Request Flow (Depth=3)
+13   SAT    PASS                       test13_sat_Accept_Request_Flow_Depth_4.txt                   Accept Request Flow (Depth=4)
+14   SAT    PASS                       test14_sat_Full_Borrow_Return_Lifecycle_Depth_5.txt          Full Borrow/Return Lifecycle (Depth=5)
+15   SAT    PASS                       test15_sat_Direct_Loan_Creation_Depth_3.txt                  Direct Loan Creation (Depth=3)
+16   SAT    PASS                       test16_sat_Reject_Request_Depth_4.txt                        Reject Request (Depth=4)
+17   SAT    UNSAT (rejected by solver) test17_sat_Request_Without_Book_Should_be_UNSAT.txt          Request Without Book (Should be UNSAT)
+18   SAT    UNSAT (rejected by solver) test18_sat_Request_Without_Student_Should_be_UNSAT.txt       Request Without Student (Should be UNSAT)
+19   SAT    UNSAT (rejected by solver) test19_sat_Accept_Without_Request_Should_be_UNSAT.txt        Accept Without Request (Should be UNSAT)
+20   SAT    UNSAT (rejected by solver) test20_sat_Return_Without_Loan_Should_be_UNSAT.txt           Return Without Loan (Should be UNSAT)
+21   SAT    PASS                       test21_sat_Multiple_Books_Depth_5.txt                        Multiple Books (Depth=5)
+22   SAT    PASS                       test22_sat_Multiple_Students_Depth_5.txt                     Multiple Students (Depth=5)
+23   SAT    PASS                       test23_sat_Multiple_Borrowings_Depth_7.txt                   Multiple Borrowings (Depth=7)
+24   SAT    PASS                       test24_sat_Full_Library_Workflow_Depth_8.txt                 Full Library Workflow (Depth=8)
+25   SAT    PASS                       test25_sat_Complex_Multi_User_Scenario_Depth_10.txt          Complex Multi-User Scenario (Depth=10)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

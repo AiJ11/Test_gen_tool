@@ -1,0 +1,3169 @@
+========================================
+TEST: Test 17: registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk → registerAgentOk → loginAgentOk → updateOrderStatusAgentOk (Depth=13, Expected UNSAT)
+MODE: Full Pipeline (With Backend)
+DEPTH: 13 API calls
+========================================
+
+[RestaurantFunctionFactory] Initialized with baseUrl: http://localhost:5002
+[RewriteGlobalsVisitor] Detected 10 globals: Assignments C M O Owners R Rev Roles T U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: ownerEmail0 := input()
+Statement 2: ownerPassword0 := input()
+Statement 3: ownerFullName0 := input()
+Statement 4: ownerMobile0 := input()
+Statement 5: tmp_Roles_0 := get_Roles()
+Statement 6: Roles_old := tmp_Roles_0
+Statement 7: tmp_U_0 := get_U()
+Statement 8: U_old := tmp_U_0
+Statement 9: tmp_U_1 := get_U()
+Statement 10: assume(not_in(ownerEmail, dom(tmp_U_1)))
+Statement 11: _result0 := registerOwner(ownerEmail, ownerPassword, ownerFullName, ownerMobile)
+Statement 12: tmp_U_2 := get_U()
+Statement 13: tmp_Roles_1 := get_Roles()
+Statement 14: assert(AND(=([](tmp_U_2, ownerEmail), ownerPassword), =([](tmp_Roles_1, ownerEmail), OWNER), =(_result0, 201)))
+Statement 15: ownerEmail1 := input()
+Statement 16: ownerPassword1 := input()
+Statement 17: tmp_T_0 := get_T()
+Statement 18: T_old := tmp_T_0
+Statement 19: tmp_U_3 := get_U()
+Statement 20: tmp_U_4 := get_U()
+Statement 21: assume(AND(in(ownerEmail, dom(tmp_U_3)), =([](tmp_U_4, ownerEmail), ownerPassword)))
+Statement 22: _result1 := login(ownerEmail, ownerPassword)
+Statement 23: tmp_T_1 := get_T()
+Statement 24: assert(=([](tmp_T_1, ownerEmail), _result1))
+Statement 25: ownerEmail2 := input()
+Statement 26: restaurantName2 := input()
+Statement 27: restaurantAddress2 := input()
+Statement 28: restaurantContact2 := input()
+Statement 29: tmp_Owners_0 := get_Owners()
+Statement 30: Owners_old := tmp_Owners_0
+Statement 31: tmp_R_0 := get_R()
+Statement 32: R_old := tmp_R_0
+Statement 33: tmp_T_2 := get_T()
+Statement 34: tmp_Roles_2 := get_Roles()
+Statement 35: assume(AND(in(ownerEmail, dom(tmp_T_2)), =([](tmp_Roles_2, ownerEmail), OWNER)))
+Statement 36: _result2 := createRestaurant(ownerEmail, restaurantName, restaurantAddress, restaurantContact)
+Statement 37: tmp_R_1 := get_R()
+Statement 38: tmp_Owners_1 := get_Owners()
+Statement 39: assert(AND(in(_result2, dom(tmp_R_1)), =([](tmp_Owners_1, _result2), ownerEmail)))
+Statement 40: ownerEmail3 := input()
+Statement 41: restaurantId3 := input()
+Statement 42: itemName3 := input()
+Statement 43: itemPrice3 := input()
+Statement 44: tmp_M_0 := get_M()
+Statement 45: M_old := tmp_M_0
+Statement 46: tmp_T_3 := get_T()
+Statement 47: tmp_Roles_3 := get_Roles()
+Statement 48: tmp_R_2 := get_R()
+Statement 49: assume(AND(in(ownerEmail, dom(tmp_T_3)), =([](tmp_Roles_3, ownerEmail), OWNER), in(restaurantId, dom(tmp_R_2))))
+Statement 50: _result3 := addMenuItem(ownerEmail, restaurantId, itemName, itemPrice)
+Statement 51: tmp_M_1 := get_M()
+Statement 52: assert(in(_result3, dom(tmp_M_1)))
+Statement 53: customerEmail4 := input()
+Statement 54: customerPassword4 := input()
+Statement 55: customerFullName4 := input()
+Statement 56: customerMobile4 := input()
+Statement 57: tmp_Roles_4 := get_Roles()
+Statement 58: Roles_old := tmp_Roles_4
+Statement 59: tmp_U_5 := get_U()
+Statement 60: U_old := tmp_U_5
+Statement 61: tmp_U_6 := get_U()
+Statement 62: assume(not_in(customerEmail, dom(tmp_U_6)))
+Statement 63: _result4 := registerCustomer(customerEmail, customerPassword, customerFullName, customerMobile)
+Statement 64: tmp_U_7 := get_U()
+Statement 65: tmp_Roles_5 := get_Roles()
+Statement 66: assert(AND(=([](tmp_U_7, customerEmail), customerPassword), =([](tmp_Roles_5, customerEmail), CUSTOMER), =(_result4, 201)))
+Statement 67: customerEmail5 := input()
+Statement 68: customerPassword5 := input()
+Statement 69: tmp_T_4 := get_T()
+Statement 70: T_old := tmp_T_4
+Statement 71: tmp_U_8 := get_U()
+Statement 72: tmp_U_9 := get_U()
+Statement 73: assume(AND(in(customerEmail, dom(tmp_U_8)), =([](tmp_U_9, customerEmail), customerPassword)))
+Statement 74: _result5 := login(customerEmail, customerPassword)
+Statement 75: tmp_T_5 := get_T()
+Statement 76: assert(=([](tmp_T_5, customerEmail), _result5))
+Statement 77: customerEmail6 := input()
+Statement 78: tmp_T_6 := get_T()
+Statement 79: assume(in(customerEmail, dom(tmp_T_6)))
+Statement 80: _result6 := browseRestaurants(customerEmail)
+Statement 81: assert(1)
+Statement 82: customerEmail7 := input()
+Statement 83: restaurantId7 := input()
+Statement 84: tmp_T_7 := get_T()
+Statement 85: tmp_R_3 := get_R()
+Statement 86: assume(AND(in(customerEmail, dom(tmp_T_7)), in(restaurantId, dom(tmp_R_3))))
+Statement 87: _result7 := viewMenu(customerEmail, restaurantId)
+Statement 88: assert(1)
+Statement 89: customerEmail8 := input()
+Statement 90: menuItemId8 := input()
+Statement 91: quantity8 := input()
+Statement 92: tmp_C_0 := get_C()
+Statement 93: C_old := tmp_C_0
+Statement 94: tmp_T_8 := get_T()
+Statement 95: tmp_M_2 := get_M()
+Statement 96: assume(AND(in(customerEmail, dom(tmp_T_8)), in(menuItemId, dom(tmp_M_2))))
+Statement 97: _result8 := addToCart(customerEmail, menuItemId, quantity)
+Statement 98: tmp_C_1 := get_C()
+Statement 99: assert(in(customerEmail, dom(tmp_C_1)))
+Statement 100: customerEmail9 := input()
+Statement 101: deliveryAddress9 := input()
+Statement 102: paymentMethod9 := input()
+Statement 103: tmp_C_2 := get_C()
+Statement 104: C_old := tmp_C_2
+Statement 105: tmp_O_0 := get_O()
+Statement 106: O_old := tmp_O_0
+Statement 107: tmp_T_9 := get_T()
+Statement 108: tmp_C_3 := get_C()
+Statement 109: assume(AND(in(customerEmail, dom(tmp_T_9)), in(customerEmail, dom(tmp_C_3))))
+Statement 110: _result9 := placeOrder(customerEmail, deliveryAddress, paymentMethod)
+Statement 111: tmp_O_1 := get_O()
+Statement 112: tmp_C_4 := get_C()
+Statement 113: assert(AND(in(_result9, dom(tmp_O_1)), not_in(customerEmail, dom(tmp_C_4))))
+Statement 114: agentEmail10 := input()
+Statement 115: agentPassword10 := input()
+Statement 116: agentFullName10 := input()
+Statement 117: agentMobile10 := input()
+Statement 118: tmp_Roles_6 := get_Roles()
+Statement 119: Roles_old := tmp_Roles_6
+Statement 120: tmp_U_10 := get_U()
+Statement 121: U_old := tmp_U_10
+Statement 122: tmp_U_11 := get_U()
+Statement 123: assume(not_in(agentEmail, dom(tmp_U_11)))
+Statement 124: _result10 := registerAgent(agentEmail, agentPassword, agentFullName, agentMobile)
+Statement 125: tmp_U_12 := get_U()
+Statement 126: tmp_Roles_7 := get_Roles()
+Statement 127: assert(AND(=([](tmp_U_12, agentEmail), agentPassword), =([](tmp_Roles_7, agentEmail), AGENT)))
+Statement 128: agentEmail11 := input()
+Statement 129: agentPassword11 := input()
+Statement 130: tmp_T_10 := get_T()
+Statement 131: T_old := tmp_T_10
+Statement 132: tmp_U_13 := get_U()
+Statement 133: tmp_U_14 := get_U()
+Statement 134: assume(AND(in(agentEmail, dom(tmp_U_13)), =([](tmp_U_14, agentEmail), agentPassword)))
+Statement 135: _result11 := login(agentEmail, agentPassword)
+Statement 136: tmp_T_11 := get_T()
+Statement 137: assert(=([](tmp_T_11, agentEmail), _result11))
+Statement 138: agentEmail12 := input()
+Statement 139: orderId12 := input()
+Statement 140: orderStatus12 := input()
+Statement 141: tmp_T_12 := get_T()
+Statement 142: tmp_Roles_8 := get_Roles()
+Statement 143: tmp_Assignments_0 := get_Assignments()
+Statement 144: tmp_Assignments_1 := get_Assignments()
+Statement 145: assume(AND(in(agentEmail, dom(tmp_T_12)), =([](tmp_Roles_8, agentEmail), AGENT), in(orderId, dom(tmp_Assignments_0)), =([](tmp_Assignments_1, orderId), agentEmail)))
+Statement 146: _result12 := updateOrderStatusAgent(agentEmail, orderId, orderStatus)
+Statement 147: assert(1)
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: reset
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: ownerEmail0 := input()
+[SEE] Mapping base name 'ownerEmail' -> 'ownerEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X303
+[ASSIGN] Result: ownerEmail0 := X303
+
+[ASSIGN] Evaluating: ownerPassword0 := input()
+[SEE] Mapping base name 'ownerPassword' -> 'ownerPassword0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X304
+[ASSIGN] Result: ownerPassword0 := X304
+
+[ASSIGN] Evaluating: ownerFullName0 := input()
+[SEE] Mapping base name 'ownerFullName' -> 'ownerFullName0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X305
+[ASSIGN] Result: ownerFullName0 := X305
+
+[ASSIGN] Evaluating: ownerMobile0 := input()
+[SEE] Mapping base name 'ownerMobile' -> 'ownerMobile0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X306
+[ASSIGN] Result: ownerMobile0 := X306
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_0 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_0'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_0
+[ASSIGN] Result: tmp_Roles_0 := {}
+
+[ASSIGN] Evaluating: Roles_old := tmp_Roles_0
+  [EVAL] Var lookup: tmp_Roles_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Roles_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_0 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_0'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_0
+[ASSIGN] Result: tmp_U_0 := {}
+
+[ASSIGN] Evaluating: U_old := tmp_U_0
+  [EVAL] Var lookup: tmp_U_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: U_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_1 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_1'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_1
+[ASSIGN] Result: tmp_U_1 := {}
+
+[ASSUME] Evaluating: not_in(ownerEmail, dom(tmp_U_1))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail0'
+    [EVAL] Found in sigma: X303
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerOwner' with symbolic arguments - interruption point
+[SEE] Interruption at statement 11
+
+[ASSIGN] Evaluating: _result0 := registerOwner(ownerEmail, ownerPassword, ownerFullName, ownerMobile)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail0'
+    [EVAL] Found in sigma: X303
+  [EVAL] Var lookup: ownerPassword
+    [EVAL] Resolved base name 'ownerPassword' -> 'ownerPassword0'
+    [EVAL] Found in sigma: X304
+  [EVAL] Var lookup: ownerFullName
+    [EVAL] Resolved base name 'ownerFullName' -> 'ownerFullName0'
+    [EVAL] Found in sigma: X305
+  [EVAL] Var lookup: ownerMobile
+    [EVAL] Resolved base name 'ownerMobile' -> 'ownerMobile0'
+    [EVAL] Found in sigma: X306
+[API_CALL] registerOwner has symbolic arguments - skipping actual execution
+  [API_ARG 0] X303 (symbolic: 1)
+  [API_ARG 1] X304 (symbolic: 1)
+  [API_ARG 2] X305 (symbolic: 1)
+  [API_ARG 3] X306 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_2 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_2'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_2
+[ASSIGN] Result: tmp_U_2 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_1 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_1'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_1
+[ASSIGN] Result: tmp_Roles_1 := {}
+[SEE] Interruption at statement 14
+
+[ASSERT] Evaluating: AND(=([](tmp_U_2, ownerEmail), ownerPassword), =([](tmp_Roles_1, ownerEmail), OWNER), =(_result0, 201))
+  [EVAL] FuncCall: AND with 3 args
+    [EVAL] N-ary AND with 3 args
+    [EVAL] Arg[0]: =([](tmp_U_2, ownerEmail), ownerPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_2
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail0'
+    [EVAL] Found in sigma: X303
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X303
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: ownerPassword
+    [EVAL] Resolved base name 'ownerPassword' -> 'ownerPassword0'
+    [EVAL] Found in sigma: X304
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[0] result: (= []({}, X303) X304)
+    [EVAL] Arg[1]: =([](tmp_Roles_1, ownerEmail), OWNER)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail0'
+    [EVAL] Found in sigma: X303
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X303
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: OWNER
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X303) OWNER)
+    [EVAL] Arg[2]: =(_result0, 201)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: -1
+  [EVAL] Num: 201
+    [EVAL] Eq result: false
+    [EVAL] Arg[2] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: ownerEmail1 := input()
+[SEE] Mapping base name 'ownerEmail' -> 'ownerEmail1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X307
+[ASSIGN] Result: ownerEmail1 := X307
+
+[ASSIGN] Evaluating: ownerPassword1 := input()
+[SEE] Mapping base name 'ownerPassword' -> 'ownerPassword1'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X308
+[ASSIGN] Result: ownerPassword1 := X308
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_0 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_0'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_0
+[ASSIGN] Result: tmp_T_0 := {}
+
+[ASSIGN] Evaluating: T_old := tmp_T_0
+  [EVAL] Var lookup: tmp_T_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: T_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_3 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_3'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_3
+[ASSIGN] Result: tmp_U_3 := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_4 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_4'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_4
+[ASSIGN] Result: tmp_U_4 := {}
+[SEE] Interruption at statement 21
+
+[ASSUME] Evaluating: AND(in(ownerEmail, dom(tmp_U_3)), =([](tmp_U_4, ownerEmail), ownerPassword))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(ownerEmail, dom(tmp_U_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail1'
+    [EVAL] Found in sigma: X307
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X307
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_U_4, ownerEmail), ownerPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_4
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail1'
+    [EVAL] Found in sigma: X307
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X307
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: ownerPassword
+    [EVAL] Resolved base name 'ownerPassword' -> 'ownerPassword1'
+    [EVAL] Found in sigma: X308
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X307) X308)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'login' with symbolic arguments - interruption point
+[SEE] Interruption at statement 22
+
+[ASSIGN] Evaluating: _result1 := login(ownerEmail, ownerPassword)
+[SEE] Mapping base name '_result' -> '_result1'
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail1'
+    [EVAL] Found in sigma: X307
+  [EVAL] Var lookup: ownerPassword
+    [EVAL] Resolved base name 'ownerPassword' -> 'ownerPassword1'
+    [EVAL] Found in sigma: X308
+[API_CALL] login has symbolic arguments - skipping actual execution
+  [API_ARG 0] X307 (symbolic: 1)
+  [API_ARG 1] X308 (symbolic: 1)
+[ASSIGN] Result: _result1 := -1 (symbolic placeholder)
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_1 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_1'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_1
+[ASSIGN] Result: tmp_T_1 := {}
+
+[ASSERT] Evaluating: =([](tmp_T_1, ownerEmail), _result1)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_T_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail1'
+    [EVAL] Found in sigma: X307
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X307
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: _result1
+    [EVAL] Found in sigma: -1
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+[ASSERT] Result: (= []({}, X307) -1)
+[ASSERT] Adding to path constraints (not fully concrete)
+
+[ASSIGN] Evaluating: ownerEmail2 := input()
+[SEE] Mapping base name 'ownerEmail' -> 'ownerEmail2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X309
+[ASSIGN] Result: ownerEmail2 := X309
+
+[ASSIGN] Evaluating: restaurantName2 := input()
+[SEE] Mapping base name 'restaurantName' -> 'restaurantName2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X310
+[ASSIGN] Result: restaurantName2 := X310
+
+[ASSIGN] Evaluating: restaurantAddress2 := input()
+[SEE] Mapping base name 'restaurantAddress' -> 'restaurantAddress2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X311
+[ASSIGN] Result: restaurantAddress2 := X311
+
+[ASSIGN] Evaluating: restaurantContact2 := input()
+[SEE] Mapping base name 'restaurantContact' -> 'restaurantContact2'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X312
+[ASSIGN] Result: restaurantContact2 := X312
+[SEE] API call 'get_Owners' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Owners_0 := get_Owners()
+[SEE] Mapping base name 'tmp_Owners_' -> 'tmp_Owners_0'
+[API_CALL] Executing API function: get_Owners
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Owners
+  [API_CALL] Executing function...
+[GetOwnersFunc] Fetching Owners...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Owners_0
+[ASSIGN] Result: tmp_Owners_0 := {}
+
+[ASSIGN] Evaluating: Owners_old := tmp_Owners_0
+  [EVAL] Var lookup: tmp_Owners_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Owners_old := {}
+[SEE] API call 'get_R' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_R_0 := get_R()
+[SEE] Mapping base name 'tmp_R_' -> 'tmp_R_0'
+[API_CALL] Executing API function: get_R
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_R
+  [API_CALL] Executing function...
+[GetRFunc] Fetching R...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_R_0
+[ASSIGN] Result: tmp_R_0 := {}
+
+[ASSIGN] Evaluating: R_old := tmp_R_0
+  [EVAL] Var lookup: tmp_R_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: R_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_2 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_2'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_2
+[ASSIGN] Result: tmp_T_2 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_2 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_2'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_2
+[ASSIGN] Result: tmp_Roles_2 := {}
+[SEE] Interruption at statement 35
+
+[ASSUME] Evaluating: AND(in(ownerEmail, dom(tmp_T_2)), =([](tmp_Roles_2, ownerEmail), OWNER))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(ownerEmail, dom(tmp_T_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail2'
+    [EVAL] Found in sigma: X309
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X309
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_Roles_2, ownerEmail), OWNER)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_2
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail2'
+    [EVAL] Found in sigma: X309
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X309
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: OWNER
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X309) OWNER)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'createRestaurant' with symbolic arguments - interruption point
+[SEE] Interruption at statement 36
+
+[ASSIGN] Evaluating: _result2 := createRestaurant(ownerEmail, restaurantName, restaurantAddress, restaurantContact)
+[SEE] Mapping base name '_result' -> '_result2'
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail2'
+    [EVAL] Found in sigma: X309
+  [EVAL] Var lookup: restaurantName
+    [EVAL] Resolved base name 'restaurantName' -> 'restaurantName2'
+    [EVAL] Found in sigma: X310
+  [EVAL] Var lookup: restaurantAddress
+    [EVAL] Resolved base name 'restaurantAddress' -> 'restaurantAddress2'
+    [EVAL] Found in sigma: X311
+  [EVAL] Var lookup: restaurantContact
+    [EVAL] Resolved base name 'restaurantContact' -> 'restaurantContact2'
+    [EVAL] Found in sigma: X312
+[API_CALL] createRestaurant has symbolic arguments - skipping actual execution
+  [API_ARG 0] X309 (symbolic: 1)
+  [API_ARG 1] X310 (symbolic: 1)
+  [API_ARG 2] X311 (symbolic: 1)
+  [API_ARG 3] X312 (symbolic: 1)
+[ASSIGN] Result: _result2 := -1 (symbolic placeholder)
+[SEE] API call 'get_R' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_R_1 := get_R()
+[SEE] Mapping base name 'tmp_R_' -> 'tmp_R_1'
+[API_CALL] Executing API function: get_R
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_R
+  [API_CALL] Executing function...
+[GetRFunc] Fetching R...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_R_1
+[ASSIGN] Result: tmp_R_1 := {}
+[SEE] API call 'get_Owners' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Owners_1 := get_Owners()
+[SEE] Mapping base name 'tmp_Owners_' -> 'tmp_Owners_1'
+[API_CALL] Executing API function: get_Owners
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Owners
+  [API_CALL] Executing function...
+[GetOwnersFunc] Fetching Owners...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Owners_1
+[ASSIGN] Result: tmp_Owners_1 := {}
+[SEE] Interruption at statement 39
+
+[ASSERT] Evaluating: AND(in(_result2, dom(tmp_R_1)), =([](tmp_Owners_1, _result2), ownerEmail))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(_result2, dom(tmp_R_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_R_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_Owners_1, _result2), ownerEmail)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Owners_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: _result2
+    [EVAL] Found in sigma: -1
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: -1
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail2'
+    [EVAL] Found in sigma: X309
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, -1) X309)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: ownerEmail3 := input()
+[SEE] Mapping base name 'ownerEmail' -> 'ownerEmail3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X313
+[ASSIGN] Result: ownerEmail3 := X313
+
+[ASSIGN] Evaluating: restaurantId3 := input()
+[SEE] Mapping base name 'restaurantId' -> 'restaurantId3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X314
+[ASSIGN] Result: restaurantId3 := X314
+
+[ASSIGN] Evaluating: itemName3 := input()
+[SEE] Mapping base name 'itemName' -> 'itemName3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X315
+[ASSIGN] Result: itemName3 := X315
+
+[ASSIGN] Evaluating: itemPrice3 := input()
+[SEE] Mapping base name 'itemPrice' -> 'itemPrice3'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X316
+[ASSIGN] Result: itemPrice3 := X316
+[SEE] API call 'get_M' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_M_0 := get_M()
+[SEE] Mapping base name 'tmp_M_' -> 'tmp_M_0'
+[API_CALL] Executing API function: get_M
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_M
+  [API_CALL] Executing function...
+[GetMFunc] Fetching M...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_M_0
+[ASSIGN] Result: tmp_M_0 := {}
+
+[ASSIGN] Evaluating: M_old := tmp_M_0
+  [EVAL] Var lookup: tmp_M_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: M_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_3 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_3'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_3
+[ASSIGN] Result: tmp_T_3 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_3 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_3'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_3
+[ASSIGN] Result: tmp_Roles_3 := {}
+[SEE] API call 'get_R' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_R_2 := get_R()
+[SEE] Mapping base name 'tmp_R_' -> 'tmp_R_2'
+[API_CALL] Executing API function: get_R
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_R
+  [API_CALL] Executing function...
+[GetRFunc] Fetching R...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_R_2
+[ASSIGN] Result: tmp_R_2 := {}
+[SEE] Interruption at statement 49
+
+[ASSUME] Evaluating: AND(in(ownerEmail, dom(tmp_T_3)), =([](tmp_Roles_3, ownerEmail), OWNER), in(restaurantId, dom(tmp_R_2)))
+  [EVAL] FuncCall: AND with 3 args
+    [EVAL] N-ary AND with 3 args
+    [EVAL] Arg[0]: in(ownerEmail, dom(tmp_T_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail3'
+    [EVAL] Found in sigma: X313
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X313
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_Roles_3, ownerEmail), OWNER)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_3
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail3'
+    [EVAL] Found in sigma: X313
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X313
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: OWNER
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X313) OWNER)
+    [EVAL] Arg[2]: in(restaurantId, dom(tmp_R_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: restaurantId
+    [EVAL] Resolved base name 'restaurantId' -> 'restaurantId3'
+    [EVAL] Found in sigma: X314
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_R_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X314
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[2] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'addMenuItem' with symbolic arguments - interruption point
+[SEE] Interruption at statement 50
+
+[ASSIGN] Evaluating: _result3 := addMenuItem(ownerEmail, restaurantId, itemName, itemPrice)
+[SEE] Mapping base name '_result' -> '_result3'
+  [EVAL] Var lookup: ownerEmail
+    [EVAL] Resolved base name 'ownerEmail' -> 'ownerEmail3'
+    [EVAL] Found in sigma: X313
+  [EVAL] Var lookup: restaurantId
+    [EVAL] Resolved base name 'restaurantId' -> 'restaurantId3'
+    [EVAL] Found in sigma: X314
+  [EVAL] Var lookup: itemName
+    [EVAL] Resolved base name 'itemName' -> 'itemName3'
+    [EVAL] Found in sigma: X315
+  [EVAL] Var lookup: itemPrice
+    [EVAL] Resolved base name 'itemPrice' -> 'itemPrice3'
+    [EVAL] Found in sigma: X316
+[API_CALL] addMenuItem has symbolic arguments - skipping actual execution
+  [API_ARG 0] X313 (symbolic: 1)
+  [API_ARG 1] X314 (symbolic: 1)
+  [API_ARG 2] X315 (symbolic: 1)
+  [API_ARG 3] X316 (symbolic: 1)
+[ASSIGN] Result: _result3 := -1 (symbolic placeholder)
+[SEE] API call 'get_M' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_M_1 := get_M()
+[SEE] Mapping base name 'tmp_M_' -> 'tmp_M_1'
+[API_CALL] Executing API function: get_M
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_M
+  [API_CALL] Executing function...
+[GetMFunc] Fetching M...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_M_1
+[ASSIGN] Result: tmp_M_1 := {}
+
+[ASSERT] Evaluating: in(_result3, dom(tmp_M_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result3
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_M_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: customerEmail4 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X317
+[ASSIGN] Result: customerEmail4 := X317
+
+[ASSIGN] Evaluating: customerPassword4 := input()
+[SEE] Mapping base name 'customerPassword' -> 'customerPassword4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X318
+[ASSIGN] Result: customerPassword4 := X318
+
+[ASSIGN] Evaluating: customerFullName4 := input()
+[SEE] Mapping base name 'customerFullName' -> 'customerFullName4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X319
+[ASSIGN] Result: customerFullName4 := X319
+
+[ASSIGN] Evaluating: customerMobile4 := input()
+[SEE] Mapping base name 'customerMobile' -> 'customerMobile4'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X320
+[ASSIGN] Result: customerMobile4 := X320
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_4 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_4'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_4
+[ASSIGN] Result: tmp_Roles_4 := {}
+
+[ASSIGN] Evaluating: Roles_old := tmp_Roles_4
+  [EVAL] Var lookup: tmp_Roles_4
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Roles_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_5 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_5'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_5
+[ASSIGN] Result: tmp_U_5 := {}
+
+[ASSIGN] Evaluating: U_old := tmp_U_5
+  [EVAL] Var lookup: tmp_U_5
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: U_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_6 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_6'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_6
+[ASSIGN] Result: tmp_U_6 := {}
+
+[ASSUME] Evaluating: not_in(customerEmail, dom(tmp_U_6))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail4'
+    [EVAL] Found in sigma: X317
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_6
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerCustomer' with symbolic arguments - interruption point
+[SEE] Interruption at statement 63
+
+[ASSIGN] Evaluating: _result4 := registerCustomer(customerEmail, customerPassword, customerFullName, customerMobile)
+[SEE] Mapping base name '_result' -> '_result4'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail4'
+    [EVAL] Found in sigma: X317
+  [EVAL] Var lookup: customerPassword
+    [EVAL] Resolved base name 'customerPassword' -> 'customerPassword4'
+    [EVAL] Found in sigma: X318
+  [EVAL] Var lookup: customerFullName
+    [EVAL] Resolved base name 'customerFullName' -> 'customerFullName4'
+    [EVAL] Found in sigma: X319
+  [EVAL] Var lookup: customerMobile
+    [EVAL] Resolved base name 'customerMobile' -> 'customerMobile4'
+    [EVAL] Found in sigma: X320
+[API_CALL] registerCustomer has symbolic arguments - skipping actual execution
+  [API_ARG 0] X317 (symbolic: 1)
+  [API_ARG 1] X318 (symbolic: 1)
+  [API_ARG 2] X319 (symbolic: 1)
+  [API_ARG 3] X320 (symbolic: 1)
+[ASSIGN] Result: _result4 := -1 (symbolic placeholder)
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_7 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_7'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_7
+[ASSIGN] Result: tmp_U_7 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_5 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_5'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_5
+[ASSIGN] Result: tmp_Roles_5 := {}
+[SEE] Interruption at statement 66
+
+[ASSERT] Evaluating: AND(=([](tmp_U_7, customerEmail), customerPassword), =([](tmp_Roles_5, customerEmail), CUSTOMER), =(_result4, 201))
+  [EVAL] FuncCall: AND with 3 args
+    [EVAL] N-ary AND with 3 args
+    [EVAL] Arg[0]: =([](tmp_U_7, customerEmail), customerPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_7
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail4'
+    [EVAL] Found in sigma: X317
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X317
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: customerPassword
+    [EVAL] Resolved base name 'customerPassword' -> 'customerPassword4'
+    [EVAL] Found in sigma: X318
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[0] result: (= []({}, X317) X318)
+    [EVAL] Arg[1]: =([](tmp_Roles_5, customerEmail), CUSTOMER)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_5
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail4'
+    [EVAL] Found in sigma: X317
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X317
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: CUSTOMER
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X317) CUSTOMER)
+    [EVAL] Arg[2]: =(_result4, 201)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] Var lookup: _result4
+    [EVAL] Found in sigma: -1
+  [EVAL] Num: 201
+    [EVAL] Eq result: false
+    [EVAL] Arg[2] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: customerEmail5 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail5'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X321
+[ASSIGN] Result: customerEmail5 := X321
+
+[ASSIGN] Evaluating: customerPassword5 := input()
+[SEE] Mapping base name 'customerPassword' -> 'customerPassword5'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X322
+[ASSIGN] Result: customerPassword5 := X322
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_4 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_4'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_4
+[ASSIGN] Result: tmp_T_4 := {}
+
+[ASSIGN] Evaluating: T_old := tmp_T_4
+  [EVAL] Var lookup: tmp_T_4
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: T_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_8 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_8'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_8
+[ASSIGN] Result: tmp_U_8 := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_9 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_9'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_9
+[ASSIGN] Result: tmp_U_9 := {}
+[SEE] Interruption at statement 73
+
+[ASSUME] Evaluating: AND(in(customerEmail, dom(tmp_U_8)), =([](tmp_U_9, customerEmail), customerPassword))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(customerEmail, dom(tmp_U_8))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail5'
+    [EVAL] Found in sigma: X321
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_8
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X321
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_U_9, customerEmail), customerPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_9
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail5'
+    [EVAL] Found in sigma: X321
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X321
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: customerPassword
+    [EVAL] Resolved base name 'customerPassword' -> 'customerPassword5'
+    [EVAL] Found in sigma: X322
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X321) X322)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'login' with symbolic arguments - interruption point
+[SEE] Interruption at statement 74
+
+[ASSIGN] Evaluating: _result5 := login(customerEmail, customerPassword)
+[SEE] Mapping base name '_result' -> '_result5'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail5'
+    [EVAL] Found in sigma: X321
+  [EVAL] Var lookup: customerPassword
+    [EVAL] Resolved base name 'customerPassword' -> 'customerPassword5'
+    [EVAL] Found in sigma: X322
+[API_CALL] login has symbolic arguments - skipping actual execution
+  [API_ARG 0] X321 (symbolic: 1)
+  [API_ARG 1] X322 (symbolic: 1)
+[ASSIGN] Result: _result5 := -1 (symbolic placeholder)
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_5 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_5'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_5
+[ASSIGN] Result: tmp_T_5 := {}
+
+[ASSERT] Evaluating: =([](tmp_T_5, customerEmail), _result5)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_T_5
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail5'
+    [EVAL] Found in sigma: X321
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X321
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: _result5
+    [EVAL] Found in sigma: -1
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+[ASSERT] Result: (= []({}, X321) -1)
+[ASSERT] Adding to path constraints (not fully concrete)
+
+[ASSIGN] Evaluating: customerEmail6 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail6'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X323
+[ASSIGN] Result: customerEmail6 := X323
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_6 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_6'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_6
+[ASSIGN] Result: tmp_T_6 := {}
+
+[ASSUME] Evaluating: in(customerEmail, dom(tmp_T_6))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail6'
+    [EVAL] Found in sigma: X323
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_6
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X323
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'browseRestaurants' with symbolic arguments - interruption point
+[SEE] Interruption at statement 80
+
+[ASSIGN] Evaluating: _result6 := browseRestaurants(customerEmail)
+[SEE] Mapping base name '_result' -> '_result6'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail6'
+    [EVAL] Found in sigma: X323
+[API_CALL] browseRestaurants has symbolic arguments - skipping actual execution
+  [API_ARG 0] X323 (symbolic: 1)
+[ASSIGN] Result: _result6 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[ASSIGN] Evaluating: customerEmail7 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail7'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X324
+[ASSIGN] Result: customerEmail7 := X324
+
+[ASSIGN] Evaluating: restaurantId7 := input()
+[SEE] Mapping base name 'restaurantId' -> 'restaurantId7'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X325
+[ASSIGN] Result: restaurantId7 := X325
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_7 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_7'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_7
+[ASSIGN] Result: tmp_T_7 := {}
+[SEE] API call 'get_R' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_R_3 := get_R()
+[SEE] Mapping base name 'tmp_R_' -> 'tmp_R_3'
+[API_CALL] Executing API function: get_R
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_R
+  [API_CALL] Executing function...
+[GetRFunc] Fetching R...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_R_3
+[ASSIGN] Result: tmp_R_3 := {}
+[SEE] Interruption at statement 86
+
+[ASSUME] Evaluating: AND(in(customerEmail, dom(tmp_T_7)), in(restaurantId, dom(tmp_R_3)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(customerEmail, dom(tmp_T_7))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail7'
+    [EVAL] Found in sigma: X324
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_7
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X324
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: in(restaurantId, dom(tmp_R_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: restaurantId
+    [EVAL] Resolved base name 'restaurantId' -> 'restaurantId7'
+    [EVAL] Found in sigma: X325
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_R_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X325
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[1] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'viewMenu' with symbolic arguments - interruption point
+[SEE] Interruption at statement 87
+
+[ASSIGN] Evaluating: _result7 := viewMenu(customerEmail, restaurantId)
+[SEE] Mapping base name '_result' -> '_result7'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail7'
+    [EVAL] Found in sigma: X324
+  [EVAL] Var lookup: restaurantId
+    [EVAL] Resolved base name 'restaurantId' -> 'restaurantId7'
+    [EVAL] Found in sigma: X325
+[API_CALL] viewMenu has symbolic arguments - skipping actual execution
+  [API_ARG 0] X324 (symbolic: 1)
+  [API_ARG 1] X325 (symbolic: 1)
+[ASSIGN] Result: _result7 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[ASSIGN] Evaluating: customerEmail8 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail8'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X326
+[ASSIGN] Result: customerEmail8 := X326
+
+[ASSIGN] Evaluating: menuItemId8 := input()
+[SEE] Mapping base name 'menuItemId' -> 'menuItemId8'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X327
+[ASSIGN] Result: menuItemId8 := X327
+
+[ASSIGN] Evaluating: quantity8 := input()
+[SEE] Mapping base name 'quantity' -> 'quantity8'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X328
+[ASSIGN] Result: quantity8 := X328
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_0 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_0'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_C
+  [API_CALL] Executing function...
+[GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_0
+[ASSIGN] Result: tmp_C_0 := {}
+
+[ASSIGN] Evaluating: C_old := tmp_C_0
+  [EVAL] Var lookup: tmp_C_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: C_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_8 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_8'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_8
+[ASSIGN] Result: tmp_T_8 := {}
+[SEE] API call 'get_M' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_M_2 := get_M()
+[SEE] Mapping base name 'tmp_M_' -> 'tmp_M_2'
+[API_CALL] Executing API function: get_M
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_M
+  [API_CALL] Executing function...
+[GetMFunc] Fetching M...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_M_2
+[ASSIGN] Result: tmp_M_2 := {}
+[SEE] Interruption at statement 96
+
+[ASSUME] Evaluating: AND(in(customerEmail, dom(tmp_T_8)), in(menuItemId, dom(tmp_M_2)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(customerEmail, dom(tmp_T_8))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail8'
+    [EVAL] Found in sigma: X326
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_8
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X326
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: in(menuItemId, dom(tmp_M_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: menuItemId
+    [EVAL] Resolved base name 'menuItemId' -> 'menuItemId8'
+    [EVAL] Found in sigma: X327
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_M_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X327
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[1] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'addToCart' with symbolic arguments - interruption point
+[SEE] Interruption at statement 97
+
+[ASSIGN] Evaluating: _result8 := addToCart(customerEmail, menuItemId, quantity)
+[SEE] Mapping base name '_result' -> '_result8'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail8'
+    [EVAL] Found in sigma: X326
+  [EVAL] Var lookup: menuItemId
+    [EVAL] Resolved base name 'menuItemId' -> 'menuItemId8'
+    [EVAL] Found in sigma: X327
+  [EVAL] Var lookup: quantity
+    [EVAL] Resolved base name 'quantity' -> 'quantity8'
+    [EVAL] Found in sigma: X328
+[API_CALL] addToCart has symbolic arguments - skipping actual execution
+  [API_ARG 0] X326 (symbolic: 1)
+  [API_ARG 1] X327 (symbolic: 1)
+  [API_ARG 2] X328 (symbolic: 1)
+[ASSIGN] Result: _result8 := -1 (symbolic placeholder)
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_1 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_1'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_C
+  [API_CALL] Executing function...
+[GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_1
+[ASSIGN] Result: tmp_C_1 := {}
+
+[ASSERT] Evaluating: in(customerEmail, dom(tmp_C_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail8'
+    [EVAL] Found in sigma: X326
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_C_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X326
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: customerEmail9 := input()
+[SEE] Mapping base name 'customerEmail' -> 'customerEmail9'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X329
+[ASSIGN] Result: customerEmail9 := X329
+
+[ASSIGN] Evaluating: deliveryAddress9 := input()
+[SEE] Mapping base name 'deliveryAddress' -> 'deliveryAddress9'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X330
+[ASSIGN] Result: deliveryAddress9 := X330
+
+[ASSIGN] Evaluating: paymentMethod9 := input()
+[SEE] Mapping base name 'paymentMethod' -> 'paymentMethod9'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X331
+[ASSIGN] Result: paymentMethod9 := X331
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_2 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_2'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_C
+  [API_CALL] Executing function...
+[GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_2
+[ASSIGN] Result: tmp_C_2 := {}
+
+[ASSIGN] Evaluating: C_old := tmp_C_2
+  [EVAL] Var lookup: tmp_C_2
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: C_old := {}
+[SEE] API call 'get_O' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_O_0 := get_O()
+[SEE] Mapping base name 'tmp_O_' -> 'tmp_O_0'
+[API_CALL] Executing API function: get_O
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_O
+  [API_CALL] Executing function...
+[GetOFunc] Fetching O...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_O_0
+[ASSIGN] Result: tmp_O_0 := {}
+
+[ASSIGN] Evaluating: O_old := tmp_O_0
+  [EVAL] Var lookup: tmp_O_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: O_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_9 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_9'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_9
+[ASSIGN] Result: tmp_T_9 := {}
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_3 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_3'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_C
+  [API_CALL] Executing function...
+[GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_3
+[ASSIGN] Result: tmp_C_3 := {}
+[SEE] Interruption at statement 109
+
+[ASSUME] Evaluating: AND(in(customerEmail, dom(tmp_T_9)), in(customerEmail, dom(tmp_C_3)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(customerEmail, dom(tmp_T_9))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail9'
+    [EVAL] Found in sigma: X329
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_9
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X329
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: in(customerEmail, dom(tmp_C_3))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail9'
+    [EVAL] Found in sigma: X329
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_C_3
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X329
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[1] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'placeOrder' with symbolic arguments - interruption point
+[SEE] Interruption at statement 110
+
+[ASSIGN] Evaluating: _result9 := placeOrder(customerEmail, deliveryAddress, paymentMethod)
+[SEE] Mapping base name '_result' -> '_result9'
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail9'
+    [EVAL] Found in sigma: X329
+  [EVAL] Var lookup: deliveryAddress
+    [EVAL] Resolved base name 'deliveryAddress' -> 'deliveryAddress9'
+    [EVAL] Found in sigma: X330
+  [EVAL] Var lookup: paymentMethod
+    [EVAL] Resolved base name 'paymentMethod' -> 'paymentMethod9'
+    [EVAL] Found in sigma: X331
+[API_CALL] placeOrder has symbolic arguments - skipping actual execution
+  [API_ARG 0] X329 (symbolic: 1)
+  [API_ARG 1] X330 (symbolic: 1)
+  [API_ARG 2] X331 (symbolic: 1)
+[ASSIGN] Result: _result9 := -1 (symbolic placeholder)
+[SEE] API call 'get_O' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_O_1 := get_O()
+[SEE] Mapping base name 'tmp_O_' -> 'tmp_O_1'
+[API_CALL] Executing API function: get_O
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_O
+  [API_CALL] Executing function...
+[GetOFunc] Fetching O...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_O_1
+[ASSIGN] Result: tmp_O_1 := {}
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_4 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_4'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_C
+  [API_CALL] Executing function...
+[GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_4
+[ASSIGN] Result: tmp_C_4 := {}
+[SEE] Interruption at statement 113
+
+[ASSERT] Evaluating: AND(in(_result9, dom(tmp_O_1)), not_in(customerEmail, dom(tmp_C_4)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(_result9, dom(tmp_O_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result9
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_O_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: not_in(customerEmail, dom(tmp_C_4))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: customerEmail
+    [EVAL] Resolved base name 'customerEmail' -> 'customerEmail9'
+    [EVAL] Found in sigma: X329
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_C_4
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+    [EVAL] Arg[1] result: true
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[ASSIGN] Evaluating: agentEmail10 := input()
+[SEE] Mapping base name 'agentEmail' -> 'agentEmail10'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X332
+[ASSIGN] Result: agentEmail10 := X332
+
+[ASSIGN] Evaluating: agentPassword10 := input()
+[SEE] Mapping base name 'agentPassword' -> 'agentPassword10'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X333
+[ASSIGN] Result: agentPassword10 := X333
+
+[ASSIGN] Evaluating: agentFullName10 := input()
+[SEE] Mapping base name 'agentFullName' -> 'agentFullName10'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X334
+[ASSIGN] Result: agentFullName10 := X334
+
+[ASSIGN] Evaluating: agentMobile10 := input()
+[SEE] Mapping base name 'agentMobile' -> 'agentMobile10'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X335
+[ASSIGN] Result: agentMobile10 := X335
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_6 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_6'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_6
+[ASSIGN] Result: tmp_Roles_6 := {}
+
+[ASSIGN] Evaluating: Roles_old := tmp_Roles_6
+  [EVAL] Var lookup: tmp_Roles_6
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: Roles_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_10 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_10'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_10
+[ASSIGN] Result: tmp_U_10 := {}
+
+[ASSIGN] Evaluating: U_old := tmp_U_10
+  [EVAL] Var lookup: tmp_U_10
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: U_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_11 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_11'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_11
+[ASSIGN] Result: tmp_U_11 := {}
+
+[ASSUME] Evaluating: not_in(agentEmail, dom(tmp_U_11))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail10'
+    [EVAL] Found in sigma: X332
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_11
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerAgent' with symbolic arguments - interruption point
+[SEE] Interruption at statement 124
+
+[ASSIGN] Evaluating: _result10 := registerAgent(agentEmail, agentPassword, agentFullName, agentMobile)
+[SEE] Mapping base name '_result' -> '_result10'
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail10'
+    [EVAL] Found in sigma: X332
+  [EVAL] Var lookup: agentPassword
+    [EVAL] Resolved base name 'agentPassword' -> 'agentPassword10'
+    [EVAL] Found in sigma: X333
+  [EVAL] Var lookup: agentFullName
+    [EVAL] Resolved base name 'agentFullName' -> 'agentFullName10'
+    [EVAL] Found in sigma: X334
+  [EVAL] Var lookup: agentMobile
+    [EVAL] Resolved base name 'agentMobile' -> 'agentMobile10'
+    [EVAL] Found in sigma: X335
+[API_CALL] registerAgent has symbolic arguments - skipping actual execution
+  [API_ARG 0] X332 (symbolic: 1)
+  [API_ARG 1] X333 (symbolic: 1)
+  [API_ARG 2] X334 (symbolic: 1)
+  [API_ARG 3] X335 (symbolic: 1)
+[ASSIGN] Result: _result10 := -1 (symbolic placeholder)
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_12 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_12'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_12
+[ASSIGN] Result: tmp_U_12 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_7 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_7'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_7
+[ASSIGN] Result: tmp_Roles_7 := {}
+[SEE] Interruption at statement 127
+
+[ASSERT] Evaluating: AND(=([](tmp_U_12, agentEmail), agentPassword), =([](tmp_Roles_7, agentEmail), AGENT))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: =([](tmp_U_12, agentEmail), agentPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_12
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail10'
+    [EVAL] Found in sigma: X332
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X332
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: agentPassword
+    [EVAL] Resolved base name 'agentPassword' -> 'agentPassword10'
+    [EVAL] Found in sigma: X333
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[0] result: (= []({}, X332) X333)
+    [EVAL] Arg[1]: =([](tmp_Roles_7, agentEmail), AGENT)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_7
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail10'
+    [EVAL] Found in sigma: X332
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X332
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: AGENT
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X332) AGENT)
+    [EVAL] FuncCall result: AND((= []({}, X332) X333), (= []({}, X332) AGENT))
+[ASSERT] Result: AND((= []({}, X332) X333), (= []({}, X332) AGENT))
+[ASSERT] Adding to path constraints (not fully concrete)
+
+[ASSIGN] Evaluating: agentEmail11 := input()
+[SEE] Mapping base name 'agentEmail' -> 'agentEmail11'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X336
+[ASSIGN] Result: agentEmail11 := X336
+
+[ASSIGN] Evaluating: agentPassword11 := input()
+[SEE] Mapping base name 'agentPassword' -> 'agentPassword11'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X337
+[ASSIGN] Result: agentPassword11 := X337
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_10 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_10'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_10
+[ASSIGN] Result: tmp_T_10 := {}
+
+[ASSIGN] Evaluating: T_old := tmp_T_10
+  [EVAL] Var lookup: tmp_T_10
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: T_old := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_13 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_13'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_13
+[ASSIGN] Result: tmp_U_13 := {}
+[SEE] API call 'get_U' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_U_14 := get_U()
+[SEE] Mapping base name 'tmp_U_' -> 'tmp_U_14'
+[API_CALL] Executing API function: get_U
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_U
+  [API_CALL] Executing function...
+[GetUFunc] Fetching U...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_U_14
+[ASSIGN] Result: tmp_U_14 := {}
+[SEE] Interruption at statement 134
+
+[ASSUME] Evaluating: AND(in(agentEmail, dom(tmp_U_13)), =([](tmp_U_14, agentEmail), agentPassword))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(agentEmail, dom(tmp_U_13))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail11'
+    [EVAL] Found in sigma: X336
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_U_13
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X336
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_U_14, agentEmail), agentPassword)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_U_14
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail11'
+    [EVAL] Found in sigma: X336
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X336
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: agentPassword
+    [EVAL] Resolved base name 'agentPassword' -> 'agentPassword11'
+    [EVAL] Found in sigma: X337
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X336) X337)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'login' with symbolic arguments - interruption point
+[SEE] Interruption at statement 135
+
+[ASSIGN] Evaluating: _result11 := login(agentEmail, agentPassword)
+[SEE] Mapping base name '_result' -> '_result11'
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail11'
+    [EVAL] Found in sigma: X336
+  [EVAL] Var lookup: agentPassword
+    [EVAL] Resolved base name 'agentPassword' -> 'agentPassword11'
+    [EVAL] Found in sigma: X337
+[API_CALL] login has symbolic arguments - skipping actual execution
+  [API_ARG 0] X336 (symbolic: 1)
+  [API_ARG 1] X337 (symbolic: 1)
+[ASSIGN] Result: _result11 := -1 (symbolic placeholder)
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_11 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_11'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_11
+[ASSIGN] Result: tmp_T_11 := {}
+
+[ASSERT] Evaluating: =([](tmp_T_11, agentEmail), _result11)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_T_11
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail11'
+    [EVAL] Found in sigma: X336
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X336
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: _result11
+    [EVAL] Found in sigma: -1
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+[ASSERT] Result: (= []({}, X336) -1)
+[ASSERT] Adding to path constraints (not fully concrete)
+
+[ASSIGN] Evaluating: agentEmail12 := input()
+[SEE] Mapping base name 'agentEmail' -> 'agentEmail12'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X338
+[ASSIGN] Result: agentEmail12 := X338
+
+[ASSIGN] Evaluating: orderId12 := input()
+[SEE] Mapping base name 'orderId' -> 'orderId12'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X339
+[ASSIGN] Result: orderId12 := X339
+
+[ASSIGN] Evaluating: orderStatus12 := input()
+[SEE] Mapping base name 'orderStatus' -> 'orderStatus12'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X340
+[ASSIGN] Result: orderStatus12 := X340
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_12 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_12'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_T
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_12
+[ASSIGN] Result: tmp_T_12 := {}
+[SEE] API call 'get_Roles' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Roles_8 := get_Roles()
+[SEE] Mapping base name 'tmp_Roles_' -> 'tmp_Roles_8'
+[API_CALL] Executing API function: get_Roles
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Roles
+  [API_CALL] Executing function...
+[GetRolesFunc] Fetching Roles...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Roles_8
+[ASSIGN] Result: tmp_Roles_8 := {}
+[SEE] API call 'get_Assignments' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Assignments_0 := get_Assignments()
+[SEE] Mapping base name 'tmp_Assignments_' -> 'tmp_Assignments_0'
+[API_CALL] Executing API function: get_Assignments
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Assignments
+  [API_CALL] Executing function...
+[GetAssignmentsFunc] Fetching Assignments...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Assignments_0
+[ASSIGN] Result: tmp_Assignments_0 := {}
+[SEE] API call 'get_Assignments' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_Assignments_1 := get_Assignments()
+[SEE] Mapping base name 'tmp_Assignments_' -> 'tmp_Assignments_1'
+[API_CALL] Executing API function: get_Assignments
+  [API_CALL] Getting function from factory...
+[Factory] Creating function: get_Assignments
+  [API_CALL] Executing function...
+[GetAssignmentsFunc] Fetching Assignments...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_Assignments_1
+[ASSIGN] Result: tmp_Assignments_1 := {}
+[SEE] Interruption at statement 145
+
+[ASSUME] Evaluating: AND(in(agentEmail, dom(tmp_T_12)), =([](tmp_Roles_8, agentEmail), AGENT), in(orderId, dom(tmp_Assignments_0)), =([](tmp_Assignments_1, orderId), agentEmail))
+  [EVAL] FuncCall: AND with 4 args
+    [EVAL] N-ary AND with 4 args
+    [EVAL] Arg[0]: in(agentEmail, dom(tmp_T_12))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail12'
+    [EVAL] Found in sigma: X338
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_12
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X338
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: =([](tmp_Roles_8, agentEmail), AGENT)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Roles_8
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail12'
+    [EVAL] Found in sigma: X338
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X338
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: AGENT
+    [EVAL] Not found in sigma, returning as-is
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[1] result: (= []({}, X338) AGENT)
+    [EVAL] Arg[2]: in(orderId, dom(tmp_Assignments_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: orderId
+    [EVAL] Resolved base name 'orderId' -> 'orderId12'
+    [EVAL] Found in sigma: X339
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_Assignments_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X339
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[2] result: false
+    [EVAL] Arg[3]: =([](tmp_Assignments_1, orderId), agentEmail)
+  [EVAL] FuncCall: = with 2 args
+    [EVAL] Equality: Eq
+  [EVAL] FuncCall: [] with 2 args
+    [EVAL] Map access: []
+  [EVAL] Var lookup: tmp_Assignments_1
+    [EVAL] Found in sigma: {}
+  [EVAL] Var lookup: orderId
+    [EVAL] Resolved base name 'orderId' -> 'orderId12'
+    [EVAL] Found in sigma: X339
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Key expr evaluated: X339
+    [EVAL] Key not found in map
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail12'
+    [EVAL] Found in sigma: X338
+    [EVAL] Symbolic Eq, returning BinaryOpExpr(EQ)
+    [EVAL] Arg[3] result: (= []({}, X339) X338)
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'updateOrderStatusAgent' with symbolic arguments - interruption point
+[SEE] Interruption at statement 146
+
+[ASSIGN] Evaluating: _result12 := updateOrderStatusAgent(agentEmail, orderId, orderStatus)
+[SEE] Mapping base name '_result' -> '_result12'
+  [EVAL] Var lookup: agentEmail
+    [EVAL] Resolved base name 'agentEmail' -> 'agentEmail12'
+    [EVAL] Found in sigma: X338
+  [EVAL] Var lookup: orderId
+    [EVAL] Resolved base name 'orderId' -> 'orderId12'
+    [EVAL] Found in sigma: X339
+  [EVAL] Var lookup: orderStatus
+    [EVAL] Resolved base name 'orderStatus' -> 'orderStatus12'
+    [EVAL] Found in sigma: X340
+[API_CALL] updateOrderStatusAgent has symbolic arguments - skipping actual execution
+  [API_ARG 0] X338 (symbolic: 1)
+  [API_ARG 1] X339 (symbolic: 1)
+  [API_ARG 2] X340 (symbolic: 1)
+[ASSIGN] Result: _result12 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, And(true, And(false, And((= []({}, X307) -1), And(false, And(false, And(true, And(false, And((= []({}, X321) -1), And(false, And(false, And(false, And(false, And(true, And(AND((= []({}, X332) X333), (= []({}, X332) AGENT)), And(false, And((= []({}, X336) -1), false)))))))))))))))))
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain non-membership: not_in(key, dom(map))
+[Z3]   Result: not(select(domain_array, key))
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (not (select ((as const (Array String Bool)) false) ownerEmail))
+[Z3Solver] SAT - Model found!
+[Z3Solver] ownerEmail = ""
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (= (select (store ((as const (Array String String))
+                               _unused_default_tmp_U_4)
+                             "ownerEmail"
+                             "ownerPassword")
+                      ownerEmail)
+              ownerPassword)))
+  (and (select (store ((as const (Array String Bool)) false) "ownerEmail" true)
+               ownerEmail)
+       a!1))
+[Z3Solver] SAT - Model found!
+[Z3Solver] ownerEmail = "ownerEmail"
+[Z3Solver] ownerPassword = "ownerPassword"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (= (select (store ((as const (Array String String))
+                               _unused_default_tmp_Roles_2)
+                             "ownerEmail"
+                             "OWNER")
+                      ownerEmail)
+              OWNER)))
+  (and (select (store ((as const (Array String Bool)) false) "ownerEmail" true)
+               ownerEmail)
+       a!1))
+[Z3Solver] SAT - Model found!
+[Z3Solver] ownerEmail = "ownerEmail"
+[Z3Solver] OWNER = "OWNER"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (= (select (store ((as const (Array String String))
+                               _unused_default_tmp_Roles_3)
+                             "ownerEmail"
+                             "OWNER")
+                      ownerEmail)
+              OWNER)))
+  (and (select (store ((as const (Array String Bool)) false) "ownerEmail" true)
+               ownerEmail)
+       a!1
+       (select (store ((as const (Array String Bool)) false) "_result2" true)
+               restaurantId)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] ownerEmail = "ownerEmail"
+[Z3Solver] OWNER = "OWNER"
+[Z3Solver] restaurantId = "_result2"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain non-membership: not_in(key, dom(map))
+[Z3]   Result: not(select(domain_array, key))
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (not (select (store ((as const (Array String Bool)) false) "ownerEmail" true)
+             customerEmail))
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = ""
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "ownerEmail"
+                                 true)
+                          "customerEmail"
+                          true)
+                   customerEmail))
+      (a!2 (select (store (store ((as const (Array String String))
+                                   _unused_default_tmp_U_9)
+                                 "ownerEmail"
+                                 "ownerPassword")
+                          "customerEmail"
+                          "customerPassword")
+                   customerEmail)))
+  (and a!1 (= a!2 customerPassword)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = "ownerEmail"
+[Z3Solver] customerPassword = "ownerPassword"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (select (store (store ((as const (Array String Bool)) false) "ownerEmail" true)
+               "customerEmail"
+               true)
+        customerEmail)
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = "ownerEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "ownerEmail"
+                                 true)
+                          "customerEmail"
+                          true)
+                   customerEmail)))
+  (and a!1
+       (select (store ((as const (Array String Bool)) false) "_result2" true)
+               restaurantId)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = "ownerEmail"
+[Z3Solver] restaurantId = "_result2"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "ownerEmail"
+                                 true)
+                          "customerEmail"
+                          true)
+                   customerEmail)))
+  (and a!1
+       (select (store ((as const (Array String Bool)) false) "_result3" true)
+               menuItemId)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = "ownerEmail"
+[Z3Solver] menuItemId = "_result3"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "ownerEmail"
+                                 true)
+                          "customerEmail"
+                          true)
+                   customerEmail)))
+  (and a!1
+       (select (store ((as const (Array String Bool)) false)
+                      "customerEmail"
+                      true)
+               customerEmail)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] customerEmail = "customerEmail"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain non-membership: not_in(key, dom(map))
+[Z3]   Result: not(select(domain_array, key))
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (select (store (store ((as const (Array String Bool)) false)
+                                 "ownerEmail"
+                                 true)
+                          "customerEmail"
+                          true)
+                   agentEmail)))
+  (not a!1))
+[Z3Solver] SAT - Model found!
+[Z3Solver] agentEmail = "o"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (store (store (store ((as const (Array String Bool)) false)
+                                "ownerEmail"
+                                true)
+                         "customerEmail"
+                         true)
+                  "agentEmail"
+                  true))
+      (a!2 (store (store (store ((as const (Array String String))
+                                  _unused_default_tmp_U_14)
+                                "ownerEmail"
+                                "ownerPassword")
+                         "customerEmail"
+                         "customerPassword")
+                  "agentEmail"
+                  "agentPassword")))
+  (and (select a!1 agentEmail) (= (select a!2 agentEmail) agentPassword)))
+[Z3Solver] SAT - Model found!
+[Z3Solver] agentEmail = "customerEmail"
+[Z3Solver] agentPassword = "customerPassword"
+[Z3 VERDICT] This precondition is SAT given this run's intended effects.
+[Z3] Bound known map 'tmp_Assignments_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Assignments_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_C_4' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_M_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_M_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_O_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_O_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Owners_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Owners_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_R_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_R_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_Roles_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_Roles_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_Roles_7' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_Roles_8' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_1' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_11' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_T_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_T_5' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_6' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_T_9' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_U_10' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_11' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_12' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_13' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_14' to its real current content (3 entries)
+[Z3] Bound known map 'tmp_U_2' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_3' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_4' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_5' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_6' to its real current content (1 entries)
+[Z3] Bound known map 'tmp_U_7' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_8' to its real current content (2 entries)
+[Z3] Bound known map 'tmp_U_9' to its real current content (2 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Map access: []
+[Z3Solver] Checking satisfiability (grounded in 55 known map(s) from live state)...
+[Z3Solver] Formula: (let ((a!1 (store (store (store ((as const (Array String Bool)) false)
+                                "ownerEmail"
+                                true)
+                         "customerEmail"
+                         true)
+                  "agentEmail"
+                  true))
+      (a!2 (store (store (store ((as const (Array String String))
+                                  _unused_default_tmp_Roles_8)
+                                "ownerEmail"
+                                "OWNER")
+                         "customerEmail"
+                         "CUSTOMER")
+                  "agentEmail"
+                  "AGENT")))
+  (and (select a!1 agentEmail)
+       (= (select a!2 agentEmail) AGENT)
+       (select ((as const (Array String Bool)) false) orderId)
+       (= (select ((as const (Array String String))
+                    _unused_default_tmp_Assignments_1)
+                  orderId)
+          agentEmail)))
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ Test 17: registerOwnerOk → loginOwnerOk → createRestaurantOk → addMenuItemOk → registerCustomerOk → loginCustomerOk → browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → placeOrderOk → registerAgentOk → loginAgentOk → updateOrderStatusAgentOk (Depth=13, Expected UNSAT) UNSAT: Preconditions not satisfiable

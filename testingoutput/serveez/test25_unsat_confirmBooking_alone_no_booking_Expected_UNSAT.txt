@@ -1,0 +1,128 @@
+========================================
+TEST: [UNSAT] Test 25: confirmBooking alone — no booking (Expected UNSAT)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: A B C L P U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: provEmail0 := input()
+Statement 2: bookingId0 := input()
+Statement 3: tmp_B_0 := get_B()
+Statement 4: assume(in(bookingId, dom(tmp_B_0)))
+Statement 5: _result0 := confirmBooking(provEmail, bookingId)
+Statement 6: assert(1)
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: provEmail0 := input()
+[SEE] Mapping base name 'provEmail' -> 'provEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X204
+[ASSIGN] Result: provEmail0 := X204
+
+[ASSIGN] Evaluating: bookingId0 := input()
+[SEE] Mapping base name 'bookingId' -> 'bookingId0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X205
+[ASSIGN] Result: bookingId0 := X205
+[SEE] API call 'get_B' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_B_0 := get_B()
+[SEE] Mapping base name 'tmp_B_' -> 'tmp_B_0'
+[API_CALL] Executing API function: get_B
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetBFunc] Fetching B...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_B_0
+[ASSIGN] Result: tmp_B_0 := {}
+
+[ASSUME] Evaluating: in(bookingId, dom(tmp_B_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: bookingId
+    [EVAL] Resolved base name 'bookingId' -> 'bookingId0'
+    [EVAL] Found in sigma: X205
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_B_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X205
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'confirmBooking' with symbolic arguments - interruption point
+[SEE] Interruption at statement 5
+
+[ASSIGN] Evaluating: _result0 := confirmBooking(provEmail, bookingId)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: provEmail
+    [EVAL] Resolved base name 'provEmail' -> 'provEmail0'
+    [EVAL] Found in sigma: X204
+  [EVAL] Var lookup: bookingId
+    [EVAL] Resolved base name 'bookingId' -> 'bookingId0'
+    [EVAL] Found in sigma: X205
+[API_CALL] confirmBooking has symbolic arguments - skipping actual execution
+  [API_ARG 0] X204 (symbolic: 1)
+  [API_ARG 1] X205 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+
+[ASSERT] Evaluating: 1
+  [EVAL] Num: 1
+[ASSERT] Result: 1
+[ASSERT] ✓ Assertion PASSED (numeric true)
+
+[SEE] Path Constraint: And(true, false)
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_B_0' to its real current content (0 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 1 known map(s) from live state)...
+[Z3Solver] Formula: (select ((as const (Array String Bool)) false) bookingId)
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ [UNSAT] Test 25: confirmBooking alone — no booking (Expected UNSAT) UNSAT: Preconditions not satisfiable
+
+
+╔════════════════════════════════════════╗
+║  ALL SERVEEZ TESTS COMPLETE            ║
+╚════════════════════════════════════════╝

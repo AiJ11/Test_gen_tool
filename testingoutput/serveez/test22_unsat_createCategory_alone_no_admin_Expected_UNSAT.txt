@@ -1,0 +1,168 @@
+========================================
+TEST: [UNSAT] Test 22: createCategory alone — no admin (Expected UNSAT)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: A B C L P U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: adminEmail0 := input()
+Statement 2: catName0 := input()
+Statement 3: tmp_C_0 := get_C()
+Statement 4: C_old := tmp_C_0
+Statement 5: tmp_A_0 := get_A()
+Statement 6: assume(in(adminEmail, dom(tmp_A_0)))
+Statement 7: _result0 := createCategory(adminEmail, catName)
+Statement 8: tmp_C_1 := get_C()
+Statement 9: assert(in(_result0, dom(tmp_C_1)))
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: adminEmail0 := input()
+[SEE] Mapping base name 'adminEmail' -> 'adminEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X197
+[ASSIGN] Result: adminEmail0 := X197
+
+[ASSIGN] Evaluating: catName0 := input()
+[SEE] Mapping base name 'catName' -> 'catName0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X198
+[ASSIGN] Result: catName0 := X198
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_0 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_0'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_0
+[ASSIGN] Result: tmp_C_0 := {}
+
+[ASSIGN] Evaluating: C_old := tmp_C_0
+  [EVAL] Var lookup: tmp_C_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: C_old := {}
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_0 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_0'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_0
+[ASSIGN] Result: tmp_A_0 := {}
+
+[ASSUME] Evaluating: in(adminEmail, dom(tmp_A_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: X197
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_A_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X197
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSUME] Adding constraint: false
+[SEE] API call 'createCategory' with symbolic arguments - interruption point
+[SEE] Interruption at statement 7
+
+[ASSIGN] Evaluating: _result0 := createCategory(adminEmail, catName)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: X197
+  [EVAL] Var lookup: catName
+    [EVAL] Resolved base name 'catName' -> 'catName0'
+    [EVAL] Found in sigma: X198
+[API_CALL] createCategory has symbolic arguments - skipping actual execution
+  [API_ARG 0] X197 (symbolic: 1)
+  [API_ARG 1] X198 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_C' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_C_1 := get_C()
+[SEE] Mapping base name 'tmp_C_' -> 'tmp_C_1'
+[API_CALL] Executing API function: get_C
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetCFunc] Fetching C...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_C_1
+[ASSIGN] Result: tmp_C_1 := {}
+
+[ASSERT] Evaluating: in(_result0, dom(tmp_C_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: _result0
+    [EVAL] Found in sigma: -1
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_C_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: -1
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[SEE] Path Constraint: And(true, false)
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_A_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_C_1' to its real current content (1 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 3 known map(s) from live state)...
+[Z3Solver] Formula: (select ((as const (Array String Bool)) false) adminEmail)
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ [UNSAT] Test 22: createCategory alone — no admin (Expected UNSAT) UNSAT: Preconditions not satisfiable

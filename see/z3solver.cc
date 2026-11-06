@@ -232,6 +232,16 @@ vector<z3::expr> Z3InputMaker::getVariables() {
     return variables;
 }
 
+void Z3InputMaker::bindSymVarAsString(unsigned int num) {
+    if (symVarMap.find(num) != symVarMap.end()) {
+        return; // Already bound (e.g. this SymVar was already converted) - don't re-create.
+    }
+    string varName = "X" + to_string(num);
+    z3::expr* z3Var = new z3::expr(ctx.constant(varName.c_str(), getStringSort()));
+    symVarMap[num] = z3Var;
+    variables.push_back(*z3Var);
+}
+
 // ============================================================================
 // Expression Visitors
 // ============================================================================
@@ -998,6 +1008,36 @@ Result Z3Solver::solve(unique_ptr<Expr> formula, const map<string, vector<pair<s
         return Result(true, std::move(var_values));
     } else {
         cout << "[Z3Solver] UNSAT - No solution exists given the real current state" << endl;
+        return Result(false, map<string, unique_ptr<ResultValue>>());
+    }
+}
+
+Result Z3Solver::solve(unique_ptr<Expr> formula, const set<unsigned int>& stringSymVars) const {
+    Z3InputMaker inputMaker(typeMap);
+
+    // Register each known-string SymVar's sort BEFORE conversion, so convertArg()'s lazy
+    // creation finds it already bound instead of defaulting it to Int.
+    for (unsigned int num : stringSymVars) {
+        inputMaker.bindSymVarAsString(num);
+    }
+
+    z3::expr z3Formula = inputMaker.makeZ3Input(formula);
+
+    z3::solver s(inputMaker.getContext());
+    s.add(z3Formula);
+
+    cout << "[Z3Solver] Checking satisfiability (" << stringSymVars.size()
+         << " SymVar(s) bound as String)..." << endl;
+    cout << "[Z3Solver] Formula: " << z3Formula << endl;
+
+    if (s.check() == z3::sat) {
+        cout << "[Z3Solver] SAT - Model found!" << endl;
+        z3::model m = s.get_model();
+        vector<z3::expr> vars = inputMaker.getVariables();
+        auto var_values = extractModel(m, inputMaker.getContext(), vars);
+        return Result(true, std::move(var_values));
+    } else {
+        cout << "[Z3Solver] UNSAT - No solution exists for this constraint" << endl;
         return Result(false, map<string, unique_ptr<ResultValue>>());
     }
 }

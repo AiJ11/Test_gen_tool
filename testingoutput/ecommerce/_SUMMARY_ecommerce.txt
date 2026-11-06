@@ -1,0 +1,48 @@
+TESTING SUMMARY - ECOMMERCE
+============================================================
+╔════════════════════════════════════════╗
+║  TESTGEN - E-COMMERCE TEST SUITE       ║
+║  Total Tests: 30 (21 SAT, 9 UNSAT)     ║
+╚════════════════════════════════════════╝
+============================================================
+
+Total tests run: 30
+  PASS (assertions succeeded):        23
+  UNSAT (correctly rejected by Z3):   7
+  FAIL (unexpected failure):          0
+
+#    Cat    Verdict                    File                                                         Test
+--------------------------------------------------------------------------------------------------------------------------------------------
+01   SAT    PASS                       test01_sat_Register_Buyer_Depth_1.txt                        Register Buyer (Depth=1)
+02   SAT    PASS                       test02_sat_Register_Seller_Depth_1.txt                       Register Seller (Depth=1)
+03   SAT    PASS                       test03_sat_Browse_All_Products_Public_Depth_1.txt            Browse All Products - Public (Depth=1)
+04   SAT    PASS                       test04_sat_Register_Buyer_Login_Depth_2.txt                  Register Buyer → Login (Depth=2)
+05   SAT    PASS                       test05_sat_Register_Seller_Login_Depth_2.txt                 Register Seller → Login (Depth=2)
+06   SAT    PASS                       test06_sat_Seller_Creates_Product_Depth_3.txt                Seller Creates Product (Depth=3)
+07   SAT    PASS                       test07_sat_Seller_Creates_3_Products_Depth_5.txt             Seller Creates 3 Products (Depth=5)
+08   SAT    PASS                       test08_sat_Seller_Creates_Updates_Product_Depth_4.txt        Seller Creates → Updates Product (Depth=4)
+09   SAT    PASS                       test09_sat_Seller_Creates_Deletes_Product_Depth_4.txt        Seller Creates → Deletes Product (Depth=4)
+10   SAT    PASS                       test10_sat_Seller_Creates_Views_Inventory_Depth_4.txt        Seller Creates → Views Inventory (Depth=4)
+11   SAT    PASS                       test11_sat_Seller_Setup_Buyer_Browses_Depth_6.txt            Seller Setup → Buyer Browses (Depth=6)
+12   SAT    PASS                       test12_sat_Seller_Setup_Buyer_Adds_to_Cart_Depth_7.txt       Seller Setup → Buyer Adds to Cart (Depth=7)
+13   SAT    PASS                       test13_sat_Seller_Setup_Buyer_Adds_Views_Cart_Depth_8.txt    Seller Setup → Buyer Adds & Views Cart (Depth=8)
+14   SAT    PASS                       test14_sat_Seller_Setup_Buyer_Creates_Order_Depth_8.txt      Seller Setup → Buyer Creates Order (Depth=8)
+15   SAT    PASS                       test15_sat_Full_Order_Flow_Buyer_Views_Orders_Depth_9.txt    Full Order Flow → Buyer Views Orders (Depth=9)
+16   SAT    PASS                       test16_sat_Full_Order_Seller_Views_Orders_Depth_9.txt        Full Order → Seller Views Orders (Depth=9)
+17   SAT    PASS                       test17_sat_Full_Order_Buyer_Creates_Review_Depth_9.txt       Full Order → Buyer Creates Review (Depth=9)
+18   SAT    PASS                       test18_sat_Complete_E_Commerce_Flow_Depth_12.txt             Complete E-Commerce Flow (Depth=12)
+19   SAT    PASS                       test19_sat_Buyer_Places_Multiple_Orders_Depth_12.txt         Buyer Places Multiple Orders (Depth=12)
+20   SAT    PASS                       test20_sat_Seller_Full_Product_Management_Depth_10.txt       Seller Full Product Management (Depth=10)
+21   SAT    PASS                       test21_sat_Deep_E_Commerce_Workflow_Depth_15.txt             Deep E-Commerce Workflow (Depth=15)
+22   UNSAT  UNSAT (rejected by solver) test22_unsat_Buyer_Login_Without_Registration_Depth_1.txt    Buyer Login Without Registration (Depth=1)
+23   UNSAT  UNSAT (rejected by solver) test23_unsat_Seller_Login_Without_Registration_Depth_1.txt   Seller Login Without Registration (Depth=1)
+24   UNSAT  PASS                       test24_unsat_Duplicate_Buyer_Registration_Depth_2.txt        Duplicate Buyer Registration (Depth=2)
+25   UNSAT  PASS                       test25_unsat_Buyer_Cannot_Create_Product_Depth_3.txt         Buyer Cannot Create Product (Depth=3)
+26   UNSAT  UNSAT (rejected by solver) test26_unsat_Seller_Cannot_Add_to_Cart_Depth_3.txt           Seller Cannot Add to Cart (Depth=3)
+27   UNSAT  UNSAT (rejected by solver) test27_unsat_Seller_Cannot_Create_Order_Depth_4.txt          Seller Cannot Create Order (Depth=4)
+28   UNSAT  UNSAT (rejected by solver) test28_unsat_Add_to_Cart_No_Product_Exists_Depth_3.txt       Add to Cart - No Product Exists (Depth=3)
+29   UNSAT  UNSAT (rejected by solver) test29_unsat_Create_Order_Empty_Cart_Depth_6.txt             Create Order - Empty Cart (Depth=6)
+30   UNSAT  UNSAT (rejected by solver) test30_unsat_Create_Review_No_Order_Placed_Depth_7.txt       Create Review - No Order Placed (Depth=7)
+
+RESULT: No regressions detected. All tests behaved as expected after the
+seed-verify-then-solve (Option B) change — zero unexpected FAILs.

@@ -1,0 +1,285 @@
+========================================
+TEST: [SAT] Test 03: Register ADMIN (Depth=1)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: A B C L P U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: adminEmail0 := input()
+Statement 2: tmp_A_0 := get_A()
+Statement 3: A_old := tmp_A_0
+Statement 4: tmp_A_1 := get_A()
+Statement 5: assume(not_in(adminEmail, dom(tmp_A_1)))
+Statement 6: _result0 := registerAdmin(adminEmail)
+Statement 7: tmp_A_2 := get_A()
+Statement 8: assert(in(adminEmail, dom(tmp_A_2)))
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: adminEmail0 := input()
+[SEE] Mapping base name 'adminEmail' -> 'adminEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X2
+[ASSIGN] Result: adminEmail0 := X2
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_0 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_0'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_0
+[ASSIGN] Result: tmp_A_0 := {}
+
+[ASSIGN] Evaluating: A_old := tmp_A_0
+  [EVAL] Var lookup: tmp_A_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: A_old := {}
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_1 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_1'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_1
+[ASSIGN] Result: tmp_A_1 := {}
+
+[ASSUME] Evaluating: not_in(adminEmail, dom(tmp_A_1))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: X2
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_A_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerAdmin' with symbolic arguments - interruption point
+[SEE] Interruption at statement 6
+
+[ASSIGN] Evaluating: _result0 := registerAdmin(adminEmail)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: X2
+[API_CALL] registerAdmin has symbolic arguments - skipping actual execution
+  [API_ARG 0] X2 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_2 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_2'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_2
+[ASSIGN] Result: tmp_A_2 := {}
+
+[ASSERT] Evaluating: in(adminEmail, dom(tmp_A_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: X2
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_A_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X2
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+[ASSERT] Result: false
+[ASSERT] ✗ Assertion FAILED
+
+[SEE] Path Constraint: And(true, true)
+>>> generateCTC: After symex - Is abstract: 1, Has placeholders: 0
+
+>>> generateCTC: STEP 3 - Generating values with sigma lookup
+    [Found existing] _ -> _
+    [Found existing] tmp_A_ -> tmp_A_0
+    [Found existing] A_old -> A_old
+    [Found existing] _result -> _result0
+    adminEmail0 = "admin1@serveez.com"
+
+>>> generateCTC: STEP 4 - Resolving placeholders from sigma
+
+>>> generateCTC: STEP 5 - Recursing with 1 concrete values
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 1
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: adminEmail0 := "admin1@serveez.com"
+[SEE] Mapping base name 'adminEmail' -> 'adminEmail0'
+  [EVAL] String: "admin1@serveez.com"
+[ASSIGN] Result: adminEmail0 := "admin1@serveez.com"
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_0 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_0'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_0
+[ASSIGN] Result: tmp_A_0 := {}
+
+[ASSIGN] Evaluating: A_old := tmp_A_0
+  [EVAL] Var lookup: tmp_A_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: A_old := {}
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_1 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_1'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_A_1
+[ASSIGN] Result: tmp_A_1 := {}
+
+[ASSUME] Evaluating: not_in(adminEmail, dom(tmp_A_1))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: "admin1@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_A_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSUME] Adding constraint: true
+[SEE] API call 'registerAdmin' ready for actual execution
+
+[ASSIGN] Evaluating: _result0 := registerAdmin(adminEmail)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: "admin1@serveez.com"
+[API_CALL] Executing API function: registerAdmin
+  [API_ARG] "admin1@serveez.com"
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:RegisterAdminFunc] Registering ADMIN: admin1@serveez.com
+[HttpClient] POST /api/test/register -> 200
+  [API_CALL] Function returned: "admin1@serveez.com"
+  [API_CALL] Storing result in variable: _result0
+[ASSIGN] Result: _result0 := "admin1@serveez.com"
+[SEE] API call 'get_A' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_A_2 := get_A()
+[SEE] Mapping base name 'tmp_A_' -> 'tmp_A_2'
+[API_CALL] Executing API function: get_A
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[SV:GetAFunc] Fetching A...
+  [API_CALL] Function returned: {admin1@serveez.com -> "admin1@serveez.com"}
+  [API_CALL] Storing result in variable: tmp_A_2
+[ASSIGN] Result: tmp_A_2 := {admin1@serveez.com -> "admin1@serveez.com"}
+
+[ASSERT] Evaluating: in(adminEmail, dom(tmp_A_2))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: adminEmail
+    [EVAL] Resolved base name 'adminEmail' -> 'adminEmail0'
+    [EVAL] Found in sigma: "admin1@serveez.com"
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_A_2
+    [EVAL] Found in sigma: {admin1@serveez.com -> "admin1@serveez.com"}
+    [EVAL] Map expr evaluated: {admin1@serveez.com -> "admin1@serveez.com"}
+    [EVAL] Domain has 1 keys
+    [EVAL] Element: "admin1@serveez.com"
+    [EVAL] Set: {"admin1@serveez.com"}
+    [EVAL] Element: "admin1@serveez.com"
+    [EVAL] Set: {"admin1@serveez.com"}
+    [EVAL] Element found in set: true
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[SEE] Path Constraint: And(true, true)
+>>> generateCTC: After symex - Is abstract: 0, Has placeholders: 0
+>>> generateCTC: Program is now fully concrete
+
+[FINAL CTC]
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: adminEmail0 := "admin1@serveez.com"
+Statement 2: tmp_A_0 := get_A()
+Statement 3: A_old := tmp_A_0
+Statement 4: tmp_A_1 := get_A()
+Statement 5: assume(not_in(adminEmail, dom(tmp_A_1)))
+Statement 6: _result0 := registerAdmin(adminEmail)
+Statement 7: tmp_A_2 := get_A()
+Statement 8: assert(in(adminEmail, dom(tmp_A_2)))
+=== End Program ===
+
+✓ [SAT] Test 03: Register ADMIN (Depth=1) COMPLETE!

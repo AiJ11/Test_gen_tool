@@ -1,0 +1,206 @@
+========================================
+TEST: [UNSAT] Test 24: Delete Expense Without Auth (Depth=1)
+MODE: Full Pipeline (With Backend)
+DEPTH: 1 API calls
+========================================
+
+[RewriteGlobalsVisitor] Detected 6 globals: E Members Proposals T Trips U 
+[RewriteGlobalsVisitor] Generated 0 statements in rewritten program
+
+=== TEST-API ATC (After Rewrite) ===
+=== Program ===
+Statement 0: _ := reset()
+Statement 1: userEmail0 := input()
+Statement 2: expenseId0 := input()
+Statement 3: tmp_E_0 := get_E()
+Statement 4: E_old := tmp_E_0
+Statement 5: tmp_T_0 := get_T()
+Statement 6: tmp_E_1 := get_E()
+Statement 7: assume(AND(in(userEmail, dom(tmp_T_0)), in(expenseId, dom(tmp_E_1))))
+Statement 8: _result0 := deleteExpense(userEmail, expenseId)
+Statement 9: tmp_E_2 := get_E()
+Statement 10: assert(not_in(expenseId, dom(tmp_E_2)))
+=== End Program ===
+
+========================================
+>>> generateCTC: Starting iteration
+========================================
+>>> generateCTC: Program needs processing
+>>> generateCTC: Concrete values provided: 0
+>>> generateCTC: Is abstract: 1
+>>> generateCTC: Has placeholders: 0
+
+>>> generateCTC: STEP 1 - Rewriting ATC with concrete values
+
+>>> generateCTC: STEP 2 - Running symbolic execution
+[SEE] API call 'reset' ready for actual execution
+
+[ASSIGN] Evaluating: _ := reset()
+[API_CALL] Executing API function: reset
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[ResetFunc] Clearing all collections...
+[HttpClient] POST /api/test/reset -> 200
+  [API_CALL] Function returned: 200
+  [API_CALL] Storing result in variable: _
+[ASSIGN] Result: _ := 200
+
+[ASSIGN] Evaluating: userEmail0 := input()
+[SEE] Mapping base name 'userEmail' -> 'userEmail0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X263
+[ASSIGN] Result: userEmail0 := X263
+
+[ASSIGN] Evaluating: expenseId0 := input()
+[SEE] Mapping base name 'expenseId' -> 'expenseId0'
+  [EVAL] FuncCall: input with 0 args
+    [EVAL] input() returns new symbolic variable: X264
+[ASSIGN] Result: expenseId0 := X264
+[SEE] API call 'get_E' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_E_0 := get_E()
+[SEE] Mapping base name 'tmp_E_' -> 'tmp_E_0'
+[API_CALL] Executing API function: get_E
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetEFunc] Fetching E (Expenses)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_E_0
+[ASSIGN] Result: tmp_E_0 := {}
+
+[ASSIGN] Evaluating: E_old := tmp_E_0
+  [EVAL] Var lookup: tmp_E_0
+    [EVAL] Found in sigma: {}
+[ASSIGN] Result: E_old := {}
+[SEE] API call 'get_T' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_T_0 := get_T()
+[SEE] Mapping base name 'tmp_T_' -> 'tmp_T_0'
+[API_CALL] Executing API function: get_T
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetTFunc] Fetching T...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_T_0
+[ASSIGN] Result: tmp_T_0 := {}
+[SEE] API call 'get_E' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_E_1 := get_E()
+[SEE] Mapping base name 'tmp_E_' -> 'tmp_E_1'
+[API_CALL] Executing API function: get_E
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetEFunc] Fetching E (Expenses)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_E_1
+[ASSIGN] Result: tmp_E_1 := {}
+[SEE] Interruption at statement 7
+
+[ASSUME] Evaluating: AND(in(userEmail, dom(tmp_T_0)), in(expenseId, dom(tmp_E_1)))
+  [EVAL] FuncCall: AND with 2 args
+    [EVAL] N-ary AND with 2 args
+    [EVAL] Arg[0]: in(userEmail, dom(tmp_T_0))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X263
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_T_0
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X263
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[0] result: false
+    [EVAL] Arg[1]: in(expenseId, dom(tmp_E_1))
+  [EVAL] FuncCall: in with 2 args
+    [EVAL] Set membership: in
+  [EVAL] Var lookup: expenseId
+    [EVAL] Resolved base name 'expenseId' -> 'expenseId0'
+    [EVAL] Found in sigma: X264
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_E_1
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] Element: X264
+    [EVAL] Set: {}
+    [EVAL] Element not found in set: false
+    [EVAL] Arg[1] result: false
+    [EVAL] FuncCall result: AND(...) = false (short-circuit)
+[ASSUME] Adding constraint: false
+[SEE] API call 'deleteExpense' with symbolic arguments - interruption point
+[SEE] Interruption at statement 8
+
+[ASSIGN] Evaluating: _result0 := deleteExpense(userEmail, expenseId)
+[SEE] Mapping base name '_result' -> '_result0'
+  [EVAL] Var lookup: userEmail
+    [EVAL] Resolved base name 'userEmail' -> 'userEmail0'
+    [EVAL] Found in sigma: X263
+  [EVAL] Var lookup: expenseId
+    [EVAL] Resolved base name 'expenseId' -> 'expenseId0'
+    [EVAL] Found in sigma: X264
+[API_CALL] deleteExpense has symbolic arguments - skipping actual execution
+  [API_ARG 0] X263 (symbolic: 1)
+  [API_ARG 1] X264 (symbolic: 1)
+[ASSIGN] Result: _result0 := -1 (symbolic placeholder)
+[SEE] API call 'get_E' ready for actual execution
+
+[ASSIGN] Evaluating: tmp_E_2 := get_E()
+[SEE] Mapping base name 'tmp_E_' -> 'tmp_E_2'
+[API_CALL] Executing API function: get_E
+  [API_CALL] Getting function from factory...
+  [API_CALL] Executing function...
+[GetEFunc] Fetching E (Expenses)...
+  [API_CALL] Function returned: {}
+  [API_CALL] Storing result in variable: tmp_E_2
+[ASSIGN] Result: tmp_E_2 := {}
+
+[ASSERT] Evaluating: not_in(expenseId, dom(tmp_E_2))
+  [EVAL] FuncCall: not_in with 2 args
+    [EVAL] Set non-membership: not_in
+  [EVAL] Var lookup: expenseId
+    [EVAL] Resolved base name 'expenseId' -> 'expenseId0'
+    [EVAL] Found in sigma: X264
+  [EVAL] FuncCall: dom with 1 args
+    [EVAL] Map domain: dom
+  [EVAL] Var lookup: tmp_E_2
+    [EVAL] Found in sigma: {}
+    [EVAL] Map expr evaluated: {}
+    [EVAL] Domain has 0 keys
+    [EVAL] Set: {}
+    [EVAL] not_in result: true (element not found)
+[ASSERT] Result: true
+[ASSERT] ✓ Assertion PASSED
+
+[SEE] Path Constraint: And(true, false)
+
+[UNSAT-CHECK] Path constraint contains FALSE - asking Z3 for the authoritative verdict, grounded in this run's intended (backend-independent) effects...
+[Z3] Bound known map 'tmp_E_0' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_E_1' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_E_2' to its real current content (0 entries)
+[Z3] Bound known map 'tmp_T_0' to its real current content (0 entries)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3] Domain membership: in(key, dom(map))
+[Z3]   Result: select(domain_array, key)
+[Z3Solver] Checking satisfiability (grounded in 4 known map(s) from live state)...
+[Z3Solver] Formula: (and (select ((as const (Array String Bool)) false) userEmail)
+     (select ((as const (Array String Bool)) false) expenseId))
+[Z3Solver] UNSAT - No solution exists given the real current state
+[Z3 VERDICT] This precondition is UNSAT given this run's intended effects.
+[UNSAT-CHECK] Z3 CONFIRMS this sequence is UNSATISFIABLE (authoritative).
+
+>>> generateCTC: UNSAT DETECTED!
+>>> Precondition cannot be satisfied with current database state.
+>>> This test sequence requires prerequisite operations.
+
+[RESULT] UNSAT - Test preconditions cannot be satisfied
+
+⊘ [UNSAT] Test 24: Delete Expense Without Auth (Depth=1) UNSAT: Preconditions not satisfiable

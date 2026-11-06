@@ -2235,6 +2235,183 @@ map<string, vector<pair<string, string>>> buildIntendedMapState(const Program &r
     return result;
 }
 
+// ============================================================================
+// Seed-verify-then-solve helpers (genuine Category-B Z3 usage for free-form
+// inputs — see.cc's input() already creates a real SymVar and preserves it
+// symbolically through Eq/Neq/And/Or; these helpers are what's needed to
+// actually consult that symbolic state instead of only ever picking a
+// hardcoded template value from generateValueForBaseName).
+// ============================================================================
+
+// Does `e` (a possibly-symbolic constraint built by SEE::evaluateExpr) mention
+// the SymVar numbered `num` anywhere in its tree?
+static bool exprMentionsSymVar(const Expr *e, unsigned int num)
+{
+    if (!e)
+        return false;
+    if (e->exprType == ExprType::SYMVAR)
+    {
+        const SymVar *sv = dynamic_cast<const SymVar *>(e);
+        return sv && sv->getNum() == num;
+    }
+    if (e->exprType == ExprType::BINARY_OP)
+    {
+        const BinaryOpExpr *b = dynamic_cast<const BinaryOpExpr *>(e);
+        return b && (exprMentionsSymVar(b->left.get(), num) || exprMentionsSymVar(b->right.get(), num));
+    }
+    if (e->exprType == ExprType::UNARY_OP)
+    {
+        const UnaryOpExpr *u = dynamic_cast<const UnaryOpExpr *>(e);
+        return u && exprMentionsSymVar(u->operand.get(), num);
+    }
+    if (e->exprType == ExprType::FUNCCALL)
+    {
+        const FuncCall *fc = dynamic_cast<const FuncCall *>(e);
+        if (!fc)
+            return false;
+        for (const auto &arg : fc->args)
+        {
+            if (exprMentionsSymVar(arg.get(), num))
+                return true;
+        }
+        return false;
+    }
+    return false;
+}
+
+// Fold a vector of constraints into a single conjunction (nested BinaryOpExpr(AND, ...)),
+// cloning each so the caller's path-constraint entries are left untouched.
+static unique_ptr<Expr> foldConjunction(const vector<Expr *> &exprs)
+{
+    CloneVisitor cloner;
+    unique_ptr<Expr> result = nullptr;
+    for (Expr *e : exprs)
+    {
+        unique_ptr<Expr> clone = cloner.cloneExpr(e);
+        if (!result)
+        {
+            result = std::move(clone);
+        }
+        else
+        {
+            result = make_unique<BinaryOpExpr>(BinOp::AND, std::move(result), std::move(clone));
+        }
+    }
+    return result;
+}
+
+// Seed-verify-then-solve for ONE free-form input variable, per the paper's Algorithm 2
+// (L is meant to be solver output) while staying additive to the existing, validated
+// template-seeding behaviour: only acts when `varName` is CURRENTLY bound to a genuine
+// SymVar in sigma (i.e. SEE actually evaluated a symbolic constraint mentioning it earlier
+// in this same round - see see.cc's Eq/Neq/And/Or handlers) AND that SymVar appears in at
+// least one collected path-constraint entry. In every other case (the overwhelming
+// majority today — no existing *Spec.cpp constrains a not-yet-concretized future input)
+// this returns the seed completely unchanged, so the 7 already-validated case studies see
+// zero behavioural difference.
+//
+// - If the seed satisfies the relevant constraints (checked via SymVar == seed, sent to
+//   Z3): Category A, keep the seed (matches the user's own "preferred seed tried first").
+// - If it doesn't: Category B, ask Z3 to solve the constraints alone and substitute its
+//   model's value for this variable instead of the seed.
+Expr *verifyOrSolveSeed(SEE &see, Z3Solver &solver, const string &varName, Expr *seed)
+{
+    ValueEnvironment &sigma = see.getSigma();
+    if (!sigma.hasValue(varName))
+        return seed;
+
+    Expr *current = sigma.getValue(varName);
+    if (current->exprType != ExprType::SYMVAR)
+        return seed; // Not symbolic right now - nothing for Z3 to do.
+
+    unsigned int num = dynamic_cast<SymVar *>(current)->getNum();
+
+    vector<Expr *> relevant;
+    for (Expr *c : see.getPathConstraint())
+    {
+        if (exprMentionsSymVar(c, num))
+            relevant.push_back(c);
+    }
+    if (relevant.empty())
+        return seed; // No symbolic constraint on this variable - identical to today.
+
+    bool isStringSeed = (seed->exprType == ExprType::STRING);
+    set<unsigned int> stringSymVars;
+    if (isStringSeed)
+        stringSymVars.insert(num);
+
+    unique_ptr<Expr> constraintsOnly = foldConjunction(relevant);
+
+    // --- Category A: does the seed satisfy the constraints? ---
+    CloneVisitor cloner;
+    unique_ptr<Expr> seedEq = make_unique<BinaryOpExpr>(
+        BinOp::EQ,
+        make_unique<SymVar>(num),
+        cloner.cloneExpr(seed));
+    unique_ptr<Expr> checkFormula = make_unique<BinaryOpExpr>(
+        BinOp::AND, cloner.cloneExpr(constraintsOnly.get()), std::move(seedEq));
+
+    cout << "    [SEED-VERIFY] " << varName << ": checking preferred seed against "
+         << relevant.size() << " collected constraint(s) via Z3..." << endl;
+    try
+    {
+        Result verifyResult = solver.solve(std::move(checkFormula), stringSymVars);
+        if (verifyResult.isSat)
+        {
+            cout << "    [SEED-VERIFY] " << varName << ": seed SAT - keeping preferred value." << endl;
+            return seed;
+        }
+        cout << "    [SEED-VERIFY] " << varName
+             << ": seed UNSAT against collected constraints - asking Z3 to solve for an alternative." << endl;
+    }
+    catch (const exception &ex)
+    {
+        cout << "    [SEED-VERIFY] " << varName << ": Z3 could not evaluate the check ("
+             << ex.what() << ") - keeping preferred seed." << endl;
+        return seed;
+    }
+
+    // --- Category B: solve the constraints alone and substitute the model ---
+    try
+    {
+        Result solveResult = solver.solve(std::move(constraintsOnly), stringSymVars);
+        if (!solveResult.isSat)
+        {
+            cout << "    [SEED-VERIFY] " << varName
+                 << ": constraints themselves are UNSAT - keeping preferred seed (will likely fail downstream)." << endl;
+            return seed;
+        }
+        string key = "X" + to_string(num);
+        auto it = solveResult.model.find(key);
+        if (it == solveResult.model.end())
+        {
+            cout << "    [SEED-VERIFY] " << varName << ": Z3 model had no binding for " << key
+                 << " - keeping preferred seed." << endl;
+            return seed;
+        }
+        if (it->second->type == ResultType::STRING)
+        {
+            string v = dynamic_cast<StringResultValue *>(it->second.get())->value;
+            cout << "    [SEED-VERIFY] " << varName << ": Z3-generated value = \"" << v << "\"" << endl;
+            return new String(v);
+        }
+        if (it->second->type == ResultType::INT)
+        {
+            int v = dynamic_cast<IntResultValue *>(it->second.get())->value;
+            cout << "    [SEED-VERIFY] " << varName << ": Z3-generated value = " << v << endl;
+            return new Num(v);
+        }
+        cout << "    [SEED-VERIFY] " << varName << ": Z3 model had an unsupported result type - keeping preferred seed." << endl;
+        return seed;
+    }
+    catch (const exception &ex)
+    {
+        cout << "    [SEED-VERIFY] " << varName << ": Z3 could not solve the constraints ("
+             << ex.what() << ") - keeping preferred seed." << endl;
+        return seed;
+    }
+}
+
 bool isPathConstraintUnsat(SEE &see, const std::vector<std::string> &sequence, Program *atc,
                             Program *rewrittenProgram, Z3Solver &solver)
 {
@@ -2487,12 +2664,14 @@ unique_ptr<Program> Tester::generateCTC(unique_ptr<Program> atc, vector<Expr *> 
             {
                 value = generateValueForBaseName(baseName, varName, inputIndex, baseNameToValue, true);
             }
+            value = verifyOrSolveSeed(see, solver, varName, value);
             cout << "    " << varName << " = (reusing " << baseName << ") ";
         }
         else
         {
             // Generate with sigma lookup ENABLED
             value = generateValueForBaseName(baseName, varName, inputIndex, baseNameToValue, true);
+            value = verifyOrSolveSeed(see, solver, varName, value);
             cout << "    " << varName << " = ";
         }
 
